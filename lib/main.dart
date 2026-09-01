@@ -4,6 +4,7 @@ import 'package:kazumi/app_module.dart';
 import 'package:kazumi/app_widget.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:kazumi/bean/settings/theme_provider.dart';
+import 'package:kazumi/bean/settings/locale_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:kazumi/services/storage/storage.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
@@ -19,6 +20,7 @@ import 'package:kazumi/utils/device.dart';
 import 'package:kazumi/services/platform/webview_feature_service.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
 import 'package:kazumi/navigation.dart';
+import 'package:kazumi/l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,14 +55,13 @@ void main() async {
       });
     }
     runApp(MaterialApp(
-        title: '初始化失败',
-        localizationsDelegates: GlobalMaterialLocalizations.delegates,
-        supportedLocales: const [
-          Locale.fromSubtags(
-              languageCode: 'zh', scriptCode: 'Hans', countryCode: "CN")
+        onGenerateTitle: (context) =>
+            AppLocalizations.of(context).internalError,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          ...GlobalMaterialLocalizations.delegates,
         ],
-        locale: const Locale.fromSubtags(
-            languageCode: 'zh', scriptCode: 'Hans', countryCode: "CN"),
+        supportedLocales: AppLocalizations.supportedLocales,
         builder: (context, child) {
           return const StorageErrorPage();
         }));
@@ -101,6 +102,7 @@ void main() async {
       defaultTransition: TransitionType.material,
       provide: (scoped) {
         scoped.addChangeNotifier<ThemeProvider>(ThemeProvider.new);
+        scoped.addChangeNotifier<LocaleProvider>(LocaleProvider.new);
       },
       child: const AppWidget(),
     ),

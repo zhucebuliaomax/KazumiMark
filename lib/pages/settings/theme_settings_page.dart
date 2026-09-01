@@ -6,6 +6,8 @@ import 'package:kazumi/utils/constants.dart';
 import 'package:kazumi/services/storage/storage.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
 import 'package:kazumi/bean/settings/theme_provider.dart';
+import 'package:kazumi/bean/settings/locale_provider.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/bean/settings/color_type.dart';
 import 'package:kazumi/bean/settings/settings_detail_scaffold.dart';
 import 'package:kazumi/bean/settings/settings_list.dart';
@@ -29,7 +31,9 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
   late bool showWindowButton;
   late bool useSystemFont;
   late final ThemeProvider themeProvider;
+  late final LocaleProvider localeProvider;
   final MenuController menuController = MenuController();
+  final MenuController languageMenuController = MenuController();
 
   @override
   void initState() {
@@ -41,6 +45,7 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
     showWindowButton = GStorage.getSetting(SettingsKeys.showWindowButton);
     useSystemFont = GStorage.getSetting(SettingsKeys.useSystemFont);
     themeProvider = context.read<ThemeProvider>();
+    localeProvider = context.read<LocaleProvider>();
   }
 
   void onBackPressed(BuildContext context) {
@@ -135,17 +140,29 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final colorLabels = [
+      l10n.colorDefault,
+      l10n.colorTeal,
+      l10n.colorBlue,
+      l10n.colorIndigo,
+      l10n.colorViolet,
+      l10n.colorPink,
+      l10n.colorYellow,
+      l10n.colorOrange,
+      l10n.colorDeepOrange,
+    ];
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: (bool didPop, Object? result) {
         onBackPressed(context);
       },
       child: SettingsDetailScaffold(
-        title: const Text('外观设置'),
+        title: Text(l10n.appearanceSettings),
         body: SettingsList(
           sections: [
             SettingsSection(
-              title: Text('外观'),
+              title: Text(l10n.appearance),
               tiles: [
                 SettingsTile(
                   leading: Icons.dark_mode_rounded,
@@ -156,15 +173,17 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
                       menuController.open();
                     }
                   },
-                  title: Text('深色模式'),
+                  title: Text(l10n.darkMode),
                   value: MenuAnchor(
                     consumeOutsideTap: true,
                     controller: menuController,
                     builder: (_, __, ___) {
                       return Text(
                         defaultThemeMode == 'light'
-                            ? '浅色'
-                            : (defaultThemeMode == 'dark' ? '深色' : '跟随系统'),
+                            ? l10n.light
+                            : (defaultThemeMode == 'dark'
+                                ? l10n.dark
+                                : l10n.followSystem),
                       );
                     },
                     menuChildren: [
@@ -186,7 +205,7 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
                                 ),
                                 SizedBox(width: 8),
                                 Text(
-                                  '跟随系统',
+                                  l10n.followSystem,
                                   style: TextStyle(
                                     color: defaultThemeMode == 'system'
                                         ? Theme.of(context).colorScheme.primary
@@ -216,7 +235,7 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
                                 ),
                                 SizedBox(width: 8),
                                 Text(
-                                  '浅色',
+                                  l10n.light,
                                   style: TextStyle(
                                       color: defaultThemeMode == 'light'
                                           ? Theme.of(context)
@@ -247,7 +266,7 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
                                 ),
                                 SizedBox(width: 8),
                                 Text(
-                                  '深色',
+                                  l10n.dark,
                                   style: TextStyle(
                                     color: defaultThemeMode == 'dark'
                                         ? Theme.of(context).colorScheme.primary
@@ -268,7 +287,7 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
                   onPressed: (_) async {
                     KazumiDialog.show(builder: (context) {
                       return AlertDialog(
-                        title: Text('配色方案'),
+                        title: Text(l10n.colorScheme),
                         content: StatefulBuilder(builder:
                             (BuildContext context, StateSetter setState) {
                           final List<Map<String, dynamic>> colorThemes =
@@ -299,7 +318,7 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
                                               (defaultThemeColor == 'default' &&
                                                   index == 0)),
                                         ),
-                                        Text(e['label']),
+                                        Text(colorLabels[index]),
                                       ],
                                     ),
                                   );
@@ -311,7 +330,7 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
                       );
                     });
                   },
-                  title: Text('配色方案'),
+                  title: Text(l10n.colorScheme),
                 ),
                 SettingsTile.switchTile(
                   leading: Icons.colorize_rounded,
@@ -323,7 +342,7 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
                     themeProvider.setDynamic(useDynamicColor);
                     setState(() {});
                   },
-                  title: Text('动态配色'),
+                  title: Text(l10n.dynamicColor),
                   initialValue: useDynamicColor,
                 ),
                 SettingsTile.switchTile(
@@ -342,16 +361,60 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
                     setTheme(color);
                     setState(() {});
                   },
-                  title: Text('使用系统字体'),
-                  description: Text('关闭后使用 MI Sans 字体'),
+                  title: Text(l10n.useSystemFont),
+                  description: Text(l10n.useMiSansDescription),
                   initialValue: useSystemFont,
                 ),
               ],
-              bottomInfo: Text('动态配色仅支持安卓12及以上和桌面平台'),
+              bottomInfo: Text(l10n.dynamicColorDescription),
             ),
             SettingsSection(
-              title: Text('显示'),
+              title: Text(l10n.display),
               tiles: [
+                SettingsTile(
+                  leading: Icons.language_rounded,
+                  onPressed: (_) {
+                    if (languageMenuController.isOpen) {
+                      languageMenuController.close();
+                    } else {
+                      languageMenuController.open();
+                    }
+                  },
+                  title: Text(l10n.language),
+                  value: MenuAnchor(
+                    consumeOutsideTap: true,
+                    controller: languageMenuController,
+                    builder: (_, __, ___) => Text(
+                      localeProvider.preference == 'zh'
+                          ? l10n.simplifiedChinese
+                          : localeProvider.preference == 'en'
+                              ? l10n.english
+                              : l10n.followSystem,
+                    ),
+                    menuChildren: [
+                      for (final option in [
+                        ('system', l10n.followSystem),
+                        ('zh', l10n.simplifiedChinese),
+                        ('en', l10n.english),
+                      ])
+                        MenuItemButton(
+                          requestFocusOnHover: false,
+                          onPressed: () async {
+                            await localeProvider.setPreference(option.$1);
+                            if (mounted) setState(() {});
+                          },
+                          child: SizedBox(
+                            height: 48,
+                            width: 144,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(option.$2),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
                 SettingsTile.switchTile(
                   leading: Icons.contrast_rounded,
                   onToggle: (value) async {
@@ -361,15 +424,15 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
                     updateOledEnhance();
                     setState(() {});
                   },
-                  title: Text('OLED优化'),
-                  description: Text('深色模式下使用纯黑背景'),
+                  title: Text(l10n.oledOptimization),
+                  description: Text(l10n.oledOptimizationDescription),
                   initialValue: oledEnhance,
                 ),
               ],
             ),
             if (isDesktop())
               SettingsSection(
-                title: Text('窗口'),
+                title: Text(l10n.window),
                 tiles: [
                   SettingsTile.switchTile(
                     leading: Icons.web_asset_rounded,
@@ -379,22 +442,22 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
                           SettingsKeys.showWindowButton, showWindowButton);
                       setState(() {});
                     },
-                    title: Text('使用系统标题栏'),
-                    description: Text('重启应用生效'),
+                    title: Text(l10n.useSystemTitleBar),
+                    description: Text(l10n.restartToApply),
                     initialValue: showWindowButton,
                   ),
                 ],
               ),
             if (Platform.isAndroid)
               SettingsSection(
-                title: Text('屏幕'),
+                title: Text(l10n.screen),
                 tiles: [
                   SettingsTile(
                     leading: Icons.sixty_fps_rounded,
                     onPressed: (_) async {
                       context.pushNamed('/settings/theme/display');
                     },
-                    title: Text('屏幕帧率'),
+                    title: Text(l10n.screenRefreshRate),
                   ),
                 ],
               ),

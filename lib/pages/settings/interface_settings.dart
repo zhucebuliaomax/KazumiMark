@@ -2,6 +2,7 @@ import 'package:kazumi/bean/settings/settings_list.dart';
 import 'package:flutter/material.dart';
 import 'package:kazumi/bean/settings/settings_detail_scaffold.dart';
 import 'package:kazumi/services/storage/storage.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 class InterfaceSettingsPage extends StatefulWidget {
   const InterfaceSettingsPage({super.key});
@@ -16,12 +17,19 @@ class _InterfaceSettingsPageState extends State<InterfaceSettingsPage> {
   late String defaultPage;
   final MenuController defaultPageMenuController = MenuController();
 
-  static const Map<String, String> defaultPageMap = {
-    '/tab/popular/': '推荐',
-    '/tab/timeline/': '时间表',
-    '/tab/collect/': '追番',
-    '/tab/my/': '我的',
-  };
+  static const defaultPages = [
+    '/tab/popular/',
+    '/tab/timeline/',
+    '/tab/collect/',
+    '/tab/my/',
+  ];
+
+  String defaultPageLabel(String page) => switch (page) {
+        '/tab/timeline/' => context.l10n.pageTimeline,
+        '/tab/collect/' => context.l10n.pageCollection,
+        '/tab/my/' => context.l10n.pageMy,
+        _ => context.l10n.pagePopular,
+      };
 
   @override
   void initState() {
@@ -41,10 +49,10 @@ class _InterfaceSettingsPageState extends State<InterfaceSettingsPage> {
   @override
   Widget build(BuildContext context) {
     return SettingsDetailScaffold(
-      title: Text('界面设置'),
+      title: Text(context.l10n.interfaceSettings),
       body: SettingsList(
         sections: [
-          SettingsSection(title: Text('启动'), tiles: [
+          SettingsSection(title: Text(context.l10n.startup), tiles: [
             SettingsTile(
               leading: Icons.home_rounded,
               onPressed: (_) async {
@@ -54,30 +62,30 @@ class _InterfaceSettingsPageState extends State<InterfaceSettingsPage> {
                   defaultPageMenuController.open();
                 }
               },
-              title: Text('启动界面设置'),
-              description: Text('设置应用开启时的默认页面'),
+              title: Text(context.l10n.startupPage),
+              description: Text(context.l10n.startupPageDescription),
               value: MenuAnchor(
                 consumeOutsideTap: true,
                 controller: defaultPageMenuController,
                 builder: (_, __, ___) {
                   return Text(
-                    defaultPageMap[defaultPage] ?? '推荐',
+                    defaultPageLabel(defaultPage),
                   );
                 },
                 menuChildren: [
-                  for (final entry in defaultPageMap.entries)
+                  for (final page in defaultPages)
                     MenuItemButton(
                       requestFocusOnHover: false,
-                      onPressed: () => updateDefaultPage(entry.key),
+                      onPressed: () => updateDefaultPage(page),
                       child: Container(
                         height: 48,
                         constraints: BoxConstraints(minWidth: 112),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            entry.value,
+                            defaultPageLabel(page),
                             style: TextStyle(
-                              color: entry.key == defaultPage
+                              color: page == defaultPage
                                   ? Theme.of(context).colorScheme.primary
                                   : null,
                             ),
@@ -89,31 +97,34 @@ class _InterfaceSettingsPageState extends State<InterfaceSettingsPage> {
               ),
             ),
           ]),
-          SettingsSection(title: Text('展示信息'), tiles: [
-            SettingsTile.switchTile(
-              leading: Icons.star_rounded,
-              onToggle: (value) async {
-                showRating = value ?? !showRating;
-                await GStorage.putSetting(SettingsKeys.showRating, showRating);
-                setState(() {});
-              },
-              title: Text('显示评分'),
-              description: Text('关闭后将在概览中隐藏评分信息'),
-              initialValue: showRating,
-            ),
-            SettingsTile.switchTile(
-              leading: Icons.insights_rounded,
-              onToggle: (value) async {
-                showAnimeCounter = value ?? !showAnimeCounter;
-                await GStorage.putSetting(
-                    SettingsKeys.showAnimeCounter, showAnimeCounter);
-                setState(() {});
-              },
-              title: Text('显示追番统计'),
-              description: Text('在追番页面的分类标签上显示数量'),
-              initialValue: showAnimeCounter,
-            ),
-          ]),
+          SettingsSection(
+              title: Text(context.l10n.displayedInformation),
+              tiles: [
+                SettingsTile.switchTile(
+                  leading: Icons.star_rounded,
+                  onToggle: (value) async {
+                    showRating = value ?? !showRating;
+                    await GStorage.putSetting(
+                        SettingsKeys.showRating, showRating);
+                    setState(() {});
+                  },
+                  title: Text(context.l10n.showRating),
+                  description: Text(context.l10n.showRatingDescription),
+                  initialValue: showRating,
+                ),
+                SettingsTile.switchTile(
+                  leading: Icons.insights_rounded,
+                  onToggle: (value) async {
+                    showAnimeCounter = value ?? !showAnimeCounter;
+                    await GStorage.putSetting(
+                        SettingsKeys.showAnimeCounter, showAnimeCounter);
+                    setState(() {});
+                  },
+                  title: Text(context.l10n.showAnimeCounter),
+                  description: Text(context.l10n.showAnimeCounterDescription),
+                  initialValue: showAnimeCounter,
+                ),
+              ]),
         ],
       ),
     );

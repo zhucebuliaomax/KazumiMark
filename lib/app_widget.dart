@@ -10,6 +10,9 @@ import 'package:kazumi/services/logging/logger.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
 import 'package:kazumi/bean/settings/theme_provider.dart';
+import 'package:kazumi/bean/settings/locale_provider.dart';
+import 'package:kazumi/l10n/app_localizations.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/navigation.dart';
 import 'package:kazumi/utils/constants.dart';
 import 'package:kazumi/utils/device.dart';
@@ -28,6 +31,7 @@ class _AppWidgetState extends State<AppWidget>
   bool showingExitDialog = false;
   bool _didApplyStoredThemeSettings = false;
   Brightness? _lastTitleBarBrightness;
+  Locale? _lastTrayLocale;
 
   @override
   void initState() {
@@ -41,7 +45,10 @@ class _AppWidgetState extends State<AppWidget>
   Future<void> _initializePlatformIntegrations() async {
     if (isDesktop()) {
       await windowManager.setPreventClose(true);
-      await _handleTray();
+      final preference = GStorage.getSetting(SettingsKeys.localePreference);
+      final locale = effectiveAppLocale(preference);
+      _lastTrayLocale = locale;
+      await _handleTray(locale);
     }
     await _configurePreferredDisplayMode();
   }
@@ -206,12 +213,12 @@ class _AppWidgetState extends State<AppWidget>
           bool saveExitBehavior = false; // 下次不再询问？
 
           return AlertDialog(
-            title: const Text('退出确认'),
+            title: Text(context.l10n.exitConfirmation),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text('您想要退出 Kazumi 吗？'),
+                Text(context.l10n.exitQuestion),
                 const SizedBox(height: 24),
                 StatefulBuilder(builder: (context, setState) {
                   onChanged(value) {
@@ -224,7 +231,7 @@ class _AppWidgetState extends State<AppWidget>
                     spacing: 8,
                     children: [
                       Checkbox(value: saveExitBehavior, onChanged: onChanged),
-                      const Text('下次不再询问'),
+                      Text(context.l10n.doNotAskAgain),
                     ],
                   );
                 }),
@@ -238,7 +245,7 @@ class _AppWidgetState extends State<AppWidget>
                     }
                     exit(0);
                   },
-                  child: const Text('退出 Kazumi')),
+                  child: Text(context.l10n.exitApp)),
               TextButton(
                   onPressed: () async {
                     if (saveExitBehavior) {
@@ -247,9 +254,10 @@ class _AppWidgetState extends State<AppWidget>
                     KazumiDialog.dismiss();
                     windowManager.hide();
                   },
-                  child: const Text('最小化至托盘')),
-              const TextButton(
-                  onPressed: KazumiDialog.dismiss, child: Text('取消')),
+                  child: Text(context.l10n.minimizeToTray)),
+              TextButton(
+                  onPressed: KazumiDialog.dismiss,
+                  child: Text(context.l10n.cancel)),
             ],
           );
         });
@@ -283,7 +291,8 @@ class _AppWidgetState extends State<AppWidget>
     _syncWindowsTitleBarBrightness(themeProvider);
   }
 
-  Future<void> _handleTray() async {
+  Future<void> _handleTray(Locale locale) async {
+    final l10n = lookupAppLocalizations(locale);
     if (Platform.isWindows) {
       await trayManager.setIcon('assets/images/logo/logo_lanczos.ico');
     } else if (Platform.environment.containsKey('FLATPAK_ID') ||
@@ -298,9 +307,9 @@ class _AppWidgetState extends State<AppWidget>
     }
 
     Menu trayMenu = Menu(items: [
-      MenuItem(key: 'show_window', label: '显示窗口'),
+      MenuItem(key: 'show_window', label: l10n.showWindow),
       MenuItem.separator(),
-      MenuItem(key: 'exit', label: '退出 Kazumi')
+      MenuItem(key: 'exit', label: l10n.exitApp)
     ]);
     await trayManager.setContextMenu(trayMenu);
   }
@@ -308,6 +317,13 @@ class _AppWidgetState extends State<AppWidget>
   @override
   Widget build(BuildContext context) {
     final ThemeProvider themeProvider = context.watch<ThemeProvider>();
+    final LocaleProvider localeProvider = context.watch<LocaleProvider>();
+    if (isDesktop() && _lastTrayLocale != localeProvider.effectiveLocale) {
+      _lastTrayLocale = localeProvider.effectiveLocale;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _handleTray(localeProvider.effectiveLocale);
+      });
+    }
     bool oledEnhance = GStorage.getSetting(SettingsKeys.oledEnhance);
 
     var app = DynamicColorBuilder(
@@ -334,13 +350,13 @@ class _AppWidgetState extends State<AppWidget>
 
         return MaterialApp.router(
           title: "Kazumi Max",
-          localizationsDelegates: GlobalMaterialLocalizations.delegates,
-          supportedLocales: const [
-            Locale.fromSubtags(
-                languageCode: 'zh', scriptCode: 'Hans', countryCode: "CN")
+          onGenerateTitle: (context) => context.l10n.appTitle,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            ...GlobalMaterialLocalizations.delegates,
           ],
-          locale: const Locale.fromSubtags(
-              languageCode: 'zh', scriptCode: 'Hans', countryCode: "CN"),
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: localeProvider.locale,
           theme: lightTheme,
           darkTheme: effectiveDarkTheme,
           themeMode: themeProvider.themeMode,

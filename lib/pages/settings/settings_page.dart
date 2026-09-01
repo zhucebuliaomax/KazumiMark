@@ -16,122 +16,135 @@ import 'package:kazumi/pages/settings/theme_settings_page.dart';
 import 'package:kazumi/pages/webdav_editor/webdav_setting.dart';
 import 'package:kazumi/plugins/plugins_controller.dart';
 import 'package:kazumi/utils/constants.dart';
+import 'package:kazumi/l10n/app_localizations.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 class _SettingsCategory {
   const _SettingsCategory({
     required this.id,
-    required this.label,
-    required this.description,
     required this.icon,
     required this.builder,
   });
 
   final String id;
-  final String label;
-  final String description;
   final IconData icon;
   final WidgetBuilder builder;
 }
 
 class _SettingsGroup {
-  const _SettingsGroup({required this.title, required this.categories});
+  const _SettingsGroup({required this.id, required this.categories});
 
-  final String title;
+  final String id;
   final List<_SettingsCategory> categories;
 }
 
 final List<_SettingsGroup> _settingsGroups = [
   _SettingsGroup(
-    title: '播放',
+    id: 'playback',
     categories: [
       _SettingsCategory(
         id: 'player',
-        label: '播放设置',
-        description: '解码、渲染与播放行为',
         icon: Icons.display_settings_rounded,
         builder: (_) => const PlayerSettingsPage(),
       ),
       _SettingsCategory(
         id: 'danmaku',
-        label: '弹幕设置',
-        description: '弹幕来源与显示效果',
         icon: Icons.subtitles_rounded,
         builder: (_) => const DanmakuSettingsPage(),
       ),
       _SettingsCategory(
         id: 'keyboard',
-        label: '操作设置',
-        description: '播放器按键映射',
         icon: Icons.keyboard_rounded,
         builder: (_) => const KeyboardSettingsPage(),
       ),
     ],
   ),
   _SettingsGroup(
-    title: '资源',
+    id: 'resources',
     categories: [
       _SettingsCategory(
         id: 'plugin',
-        label: '规则管理',
-        description: '番剧资源规则',
         icon: Icons.extension_rounded,
         builder: (_) => PluginViewPage(controller: inject<PluginsController>()),
       ),
       _SettingsCategory(
         id: 'download',
-        label: '下载设置',
-        description: '并发数与弹幕缓存',
         icon: Icons.downloading_rounded,
         builder: (_) => const DownloadSettingsPage(),
       ),
     ],
   ),
   _SettingsGroup(
-    title: '应用',
+    id: 'application',
     categories: [
       _SettingsCategory(
         id: 'theme',
-        label: '外观设置',
-        description: '主题、配色与字体',
         icon: Icons.palette_rounded,
         builder: (_) => const ThemeSettingsPage(),
       ),
       _SettingsCategory(
         id: 'interface',
-        label: '界面设置',
-        description: '启动页与展示信息',
         icon: Icons.pages_rounded,
         builder: (_) => const InterfaceSettingsPage(),
       ),
       _SettingsCategory(
         id: 'sync',
-        label: '同步设置',
-        description: 'WebDav 与 Bangumi 同步',
         icon: Icons.cloud_rounded,
         builder: (_) => const WebDavSettingsPage(),
       ),
       _SettingsCategory(
         id: 'proxy',
-        label: '代理设置',
-        description: 'HTTP 代理服务器',
         icon: Icons.vpn_key_rounded,
         builder: (_) => const ProxySettingsPage(),
       ),
     ],
   ),
   _SettingsGroup(
-    title: '其他',
+    id: 'other',
     categories: [
       _SettingsCategory(
         id: 'about',
-        label: '关于',
-        description: '版本、日志与开源许可',
         icon: Icons.info_outline_rounded,
         builder: (_) => AboutPage(controller: inject<MyController>()),
       ),
     ],
   ),
 ];
+
+String _localizedGroupTitle(AppLocalizations l10n, String id) => switch (id) {
+      'playback' => l10n.settingsGroupPlayback,
+      'resources' => l10n.settingsGroupResources,
+      'application' => l10n.settingsGroupApplication,
+      _ => l10n.settingsGroupOther,
+    };
+
+String _localizedCategoryLabel(AppLocalizations l10n, String id) =>
+    switch (id) {
+      'player' => l10n.playerSettings,
+      'danmaku' => l10n.danmakuSettings,
+      'keyboard' => l10n.controlSettings,
+      'plugin' => l10n.pluginManagement,
+      'download' => l10n.downloadSettings,
+      'theme' => l10n.appearanceSettings,
+      'interface' => l10n.interfaceSettings,
+      'sync' => l10n.syncSettings,
+      'proxy' => l10n.proxySettings,
+      _ => l10n.about,
+    };
+
+String _localizedCategoryDescription(AppLocalizations l10n, String id) =>
+    switch (id) {
+      'player' => l10n.playerSettingsDescription,
+      'danmaku' => l10n.danmakuSettingsDescription,
+      'keyboard' => l10n.controlSettingsDescription,
+      'plugin' => l10n.pluginManagementDescription,
+      'download' => l10n.downloadSettingsDescription,
+      'theme' => l10n.appearanceSettingsDescription,
+      'interface' => l10n.interfaceSettingsDescription,
+      'sync' => l10n.syncSettingsDescription,
+      'proxy' => l10n.proxySettingsDescription,
+      _ => l10n.aboutDescription,
+    };
 
 /// Adds and removes pages without a transition, so a breakpoint reflow is
 /// carried by the rail animation alone instead of two animations at once.
@@ -251,7 +264,7 @@ class _SettingsPageState extends State<SettingsPage> {
   ) {
     return Scaffold(
       appBar: SysAppBar(
-        title: const Text('设置'),
+        title: Text(context.l10n.settings),
         // First route of the nested Navigator, so back must pop the outer one.
         leading: IconButton(
           onPressed: () => context.maybePop(),
@@ -330,7 +343,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(28, 16, 28, 8),
               child: Text(
-                group.title,
+                _localizedGroupTitle(context.l10n, group.id),
                 style:
                     textTheme.titleSmall?.copyWith(color: colorScheme.primary),
               ),
@@ -357,7 +370,7 @@ class _SettingsPageState extends State<SettingsPage> {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
             child: Text(
-              group.title,
+              _localizedGroupTitle(context.l10n, group.id),
               style: textTheme.titleSmall?.copyWith(color: colorScheme.primary),
             ),
           ),
@@ -366,8 +379,9 @@ class _SettingsPageState extends State<SettingsPage> {
               for (final category in group.categories)
                 SettingsCategoryTile(
                   icon: category.icon,
-                  title: category.label,
-                  description: category.description,
+                  title: _localizedCategoryLabel(context.l10n, category.id),
+                  description:
+                      _localizedCategoryDescription(context.l10n, category.id),
                   onTap: () => setState(() => _selected = category),
                 ),
             ],
@@ -413,7 +427,7 @@ class _RailDestination extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    category.label,
+                    _localizedCategoryLabel(context.l10n, category.id),
                     style: textTheme.labelLarge?.copyWith(color: foreground),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

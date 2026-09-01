@@ -8,6 +8,7 @@ import 'package:kazumi/services/storage/storage.dart';
 import 'package:kazumi/utils/file_system.dart';
 import 'package:kazumi/bean/settings/settings_list.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 class DownloadSettingsPage extends StatefulWidget {
   const DownloadSettingsPage({super.key});
@@ -54,8 +55,9 @@ class _DownloadSettingsPageState extends State<DownloadSettingsPage> {
   }
 
   Future<void> _selectDownloadDirectory() async {
+    final l10n = context.l10n;
     if (!_canPickDirectory) {
-      KazumiDialog.showToast(message: '当前平台不支持手动选择目录');
+      KazumiDialog.showToast(message: l10n.directorySelectionUnsupported);
       return;
     }
     if (isSelectingDirectory) return;
@@ -68,14 +70,14 @@ class _DownloadSettingsPageState extends State<DownloadSettingsPage> {
           ? effectiveDirectory
           : null;
       final selectedPath = await FilePicker.platform.getDirectoryPath(
-        dialogTitle: '选择下载位置',
+        dialogTitle: l10n.selectDownloadLocation,
         initialDirectory: initialDirectory,
       );
       if (selectedPath == null || selectedPath.isEmpty) return;
 
       await ensureDirectoryWritable(selectedPath);
       if (!await SecureBookmarkService.persist(selectedPath)) {
-        KazumiDialog.showToast(message: '无法获得该目录的持久访问权限，请更换目录');
+        KazumiDialog.showToast(message: l10n.directoryAccessFailed);
         return;
       }
       await GStorage.putSetting(
@@ -85,11 +87,12 @@ class _DownloadSettingsPageState extends State<DownloadSettingsPage> {
       if (mounted) {
         setState(() => downloadDirectory = selectedPath);
       }
-      KazumiDialog.showToast(message: '下载位置已更新，仅对新下载生效');
+      KazumiDialog.showToast(message: l10n.downloadLocationUpdated);
     } on FileSystemException catch (e) {
-      KazumiDialog.showToast(message: '无法写入该目录: ${e.message}');
+      KazumiDialog.showToast(message: l10n.directoryWriteFailed(e.message));
     } catch (e) {
-      KazumiDialog.showToast(message: '选择下载位置失败: $e');
+      KazumiDialog.showToast(
+          message: l10n.downloadLocationSelectionFailed('$e'));
     } finally {
       if (mounted) {
         setState(() => isSelectingDirectory = false);
@@ -98,32 +101,33 @@ class _DownloadSettingsPageState extends State<DownloadSettingsPage> {
   }
 
   Future<void> _resetDownloadDirectory() async {
+    final message = context.l10n.defaultDownloadLocationRestored;
     await SecureBookmarkService.clear();
     await GStorage.putSetting(SettingsKeys.downloadDirectory, '');
     if (mounted) {
       setState(() => downloadDirectory = '');
     }
-    KazumiDialog.showToast(message: '已恢复默认下载位置，仅对新下载生效');
+    KazumiDialog.showToast(message: message);
   }
 
   @override
   Widget build(BuildContext context) {
     return SettingsDetailScaffold(
-      title: const Text('下载设置'),
+      title: Text(context.l10n.downloadSettings),
       body: SettingsList(
         sections: [
           SettingsSection(
-            title: Text('并发设置'),
+            title: Text(context.l10n.concurrencySettings),
             tiles: [
               SettingsSliderTile(
                 leading: Icons.video_library_rounded,
-                title: Text('同时下载集数'),
-                description: Text('并行下载的剧集数量'),
+                title: Text(context.l10n.parallelEpisodes),
+                description: Text(context.l10n.parallelEpisodesDescription),
                 value: parallelEpisodes.toDouble(),
                 min: 1,
                 max: 5,
                 divisions: 4,
-                valueLabel: '$parallelEpisodes 集',
+                valueLabel: context.l10n.episodeCount(parallelEpisodes),
                 onChanged: (value) {
                   setState(() => parallelEpisodes = value.toInt());
                   GStorage.putSetting(
@@ -134,13 +138,13 @@ class _DownloadSettingsPageState extends State<DownloadSettingsPage> {
               ),
               SettingsSliderTile(
                 leading: Icons.call_split_rounded,
-                title: Text('分片并发数'),
-                description: Text('每集同时下载的分片数量'),
+                title: Text(context.l10n.parallelSegments),
+                description: Text(context.l10n.parallelSegmentsDescription),
                 value: parallelSegments.toDouble(),
                 min: 1,
                 max: 10,
                 divisions: 9,
-                valueLabel: '$parallelSegments 个',
+                valueLabel: context.l10n.itemCount(parallelSegments),
                 onChanged: (value) {
                   setState(() => parallelSegments = value.toInt());
                   GStorage.putSetting(
@@ -152,24 +156,24 @@ class _DownloadSettingsPageState extends State<DownloadSettingsPage> {
             ],
           ),
           SettingsSection(
-            title: Text('缓存设置'),
+            title: Text(context.l10n.cacheSettings),
             tiles: [
               SettingsTile(
                 leading: Icons.folder_rounded,
-                title: Text('下载位置'),
+                title: Text(context.l10n.downloadLocation),
                 description: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       _effectiveDownloadDirectory.isEmpty
-                          ? '正在读取默认位置...'
+                          ? context.l10n.readingDefaultLocation
                           : _effectiveDownloadDirectory,
                     ),
                     const SizedBox(height: 8),
                     Text(
                       _hasCustomDirectory
-                          ? '当前使用自定义下载位置，修改后仅对新下载生效'
-                          : '当前使用默认下载位置，修改后仅对新下载生效',
+                          ? context.l10n.customDownloadLocationDescription
+                          : context.l10n.defaultDownloadLocationDescription,
                       style: TextStyle(
                         color: Theme.of(context).textTheme.bodySmall?.color,
                       ),
@@ -184,7 +188,7 @@ class _DownloadSettingsPageState extends State<DownloadSettingsPage> {
                       )
                     : _hasCustomDirectory
                         ? IconButton(
-                            tooltip: '恢复默认',
+                            tooltip: context.l10n.restoreDefault,
                             icon: const Icon(Icons.restore_rounded),
                             onPressed: _resetDownloadDirectory,
                           )
@@ -198,26 +202,19 @@ class _DownloadSettingsPageState extends State<DownloadSettingsPage> {
                   GStorage.putSetting(
                       SettingsKeys.downloadDanmaku, downloadDanmaku);
                 },
-                title: Text('缓存弹幕'),
-                description: Text(
-                  '下载视频时同时缓存弹幕数据',
-                ),
+                title: Text(context.l10n.cacheDanmaku),
+                description: Text(context.l10n.cacheDanmakuDescription),
                 initialValue: downloadDanmaku,
               ),
             ],
           ),
           SettingsSection(
-            title: Text('说明'),
+            title: Text(context.l10n.information),
             tiles: [
               SettingsTile(
                 leading: Icons.info_outline_rounded,
-                title: Text('关于并发设置'),
-                description: Text(
-                  '• 集数并发：同时下载多少集视频\n'
-                  '• 分片并发：每集内同时下载多少个视频片段\n'
-                  '• 较高的并发可提升速度，但可能被服务器限制\n'
-                  '• 修改后对新开始的下载生效',
-                ),
+                title: Text(context.l10n.aboutConcurrency),
+                description: Text(context.l10n.concurrencyExplanation),
               ),
             ],
           ),

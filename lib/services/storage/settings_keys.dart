@@ -393,6 +393,11 @@ class SettingsKeys {
     false,
     group: SettingGroup.theme,
   );
+  static const localePreference = SettingKey<String>(
+    'localePreference',
+    'system',
+    group: SettingGroup.interface,
+  );
   static const forceAdBlocker = SettingKey<bool>(
     _SettingBoxKey.forceAdBlocker,
     false,
@@ -592,6 +597,7 @@ class SettingsKeys {
     timelineNotShowWatchedBangumis,
     timelineOnlyShowWatchingBangumis,
     useSystemFont,
+    localePreference,
     forceAdBlocker,
     backgroundPlayback,
     proxyEnable,

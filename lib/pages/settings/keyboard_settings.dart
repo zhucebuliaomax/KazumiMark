@@ -4,25 +4,26 @@ import 'package:kazumi/services/storage/storage.dart';
 import 'package:kazumi/utils/constants.dart';
 import 'package:kazumi/bean/settings/settings_detail_scaffold.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 /// Display group for the shortcut list. Functions missing from every group
 /// fall back to a trailing "其他" group so new shortcuts never disappear.
 class _ShortcutGroup {
-  const _ShortcutGroup(this.title, this.icon, this.functions);
+  const _ShortcutGroup(this.id, this.icon, this.functions);
 
-  final String title;
+  final String id;
   final IconData icon;
   final List<String> functions;
 }
 
 const List<_ShortcutGroup> _shortcutGroups = [
-  _ShortcutGroup('播放控制', Icons.play_arrow_rounded,
+  _ShortcutGroup('playback', Icons.play_arrow_rounded,
       ['playorpause', 'forward', 'rewind', 'skip', 'next', 'prev']),
-  _ShortcutGroup(
-      '音量', Icons.volume_up_rounded, ['volumeup', 'volumedown', 'togglemute']),
-  _ShortcutGroup('画面与弹幕', Icons.fullscreen_rounded,
+  _ShortcutGroup('volume', Icons.volume_up_rounded,
+      ['volumeup', 'volumedown', 'togglemute']),
+  _ShortcutGroup('visuals', Icons.fullscreen_rounded,
       ['fullscreen', 'exitfullscreen', 'screenshot', 'toggledanmaku']),
-  _ShortcutGroup('倍速', Icons.speed_rounded,
+  _ShortcutGroup('speed', Icons.speed_rounded,
       ['speed1', 'speed2', 'speed3', 'speedup', 'speeddown']),
 ];
 
@@ -46,6 +47,43 @@ class _KeyboardSettingsPageState extends State<KeyboardSettingsPage> {
   final FocusNode focusNode = FocusNode();
 
   bool get isListening => listeningFunction != null && listeningIndex != null;
+
+  String shortcutGroupLabel(String id) => switch (id) {
+        'playback' => context.l10n.shortcutGroupPlayback,
+        'volume' => context.l10n.shortcutGroupVolume,
+        'visuals' => context.l10n.shortcutGroupVisuals,
+        'speed' => context.l10n.shortcutGroupSpeed,
+        _ => context.l10n.shortcutGroupOther,
+      };
+
+  String shortcutLabel(String id) => switch (id) {
+        'playorpause' => context.l10n.shortcutPlayPause,
+        'forward' => context.l10n.shortcutForward,
+        'rewind' => context.l10n.shortcutRewind,
+        'next' => context.l10n.shortcutNext,
+        'prev' => context.l10n.shortcutPrevious,
+        'volumeup' => context.l10n.shortcutVolumeUp,
+        'volumedown' => context.l10n.shortcutVolumeDown,
+        'togglemute' => context.l10n.shortcutMute,
+        'fullscreen' => context.l10n.shortcutFullscreen,
+        'exitfullscreen' => context.l10n.shortcutExitFullscreen,
+        'toggledanmaku' => context.l10n.shortcutToggleDanmaku,
+        'screenshot' => context.l10n.shortcutScreenshot,
+        'skip' => context.l10n.shortcutSkip,
+        'speed1' => context.l10n.shortcutSpeedPreset(1),
+        'speed2' => context.l10n.shortcutSpeedPreset(2),
+        'speed3' => context.l10n.shortcutSpeedPreset(3),
+        'speedup' => context.l10n.shortcutSpeedUp,
+        'speeddown' => context.l10n.shortcutSpeedDown,
+        _ => id,
+      };
+
+  String keyLabel(String key) => switch (key) {
+        ' ' => context.l10n.keySpace,
+        'Enter' => context.l10n.keyEnter,
+        'Backspace' => context.l10n.keyBackspace,
+        _ => keyAliases[key] ?? key,
+      };
 
   @override
   void initState() {
@@ -128,8 +166,10 @@ class _KeyboardSettingsPageState extends State<KeyboardSettingsPage> {
       for (int i = 0; i < otherKeys.length; i++) {
         if (otherFunc == func && i == index) continue;
         if (otherKeys[i] == rawKey) {
-          final name = shortcutsChineseName[otherFunc] ?? otherFunc;
-          KazumiDialog.showToast(message: "按键已被【$name】占用，请重新输入");
+          KazumiDialog.showToast(
+              message: context.l10n.shortcutConflict(
+            shortcutLabel(otherFunc),
+          ));
           return true;
         }
       }
@@ -191,7 +231,7 @@ class _KeyboardSettingsPageState extends State<KeyboardSettingsPage> {
         GStorage.putStringListSettingByName('shortcut_$func', shortcuts[func]!);
       }
     });
-    KazumiDialog.showToast(message: '已恢复默认快捷键');
+    KazumiDialog.showToast(message: context.l10n.shortcutsRestored);
   }
 
   List<_ShortcutGroup> get displayGroups {
@@ -201,13 +241,13 @@ class _KeyboardSettingsPageState extends State<KeyboardSettingsPage> {
       final funcs = group.functions.where(shortcuts.containsKey).toList();
       covered.addAll(funcs);
       if (funcs.isNotEmpty) {
-        groups.add(_ShortcutGroup(group.title, group.icon, funcs));
+        groups.add(_ShortcutGroup(group.id, group.icon, funcs));
       }
     }
     final leftovers =
         shortcuts.keys.where((func) => !covered.contains(func)).toList();
     if (leftovers.isNotEmpty) {
-      groups.add(_ShortcutGroup('其他', Icons.keyboard_rounded, leftovers));
+      groups.add(_ShortcutGroup('other', Icons.keyboard_rounded, leftovers));
     }
     return groups;
   }
@@ -218,11 +258,11 @@ class _KeyboardSettingsPageState extends State<KeyboardSettingsPage> {
     final textTheme = Theme.of(context).textTheme;
 
     return SettingsDetailScaffold(
-      title: const Text('操作设置'),
+      title: Text(context.l10n.controlSettings),
       actions: [
         IconButton(
           icon: const Icon(Icons.settings_backup_restore_rounded),
-          tooltip: '恢复默认',
+          tooltip: context.l10n.restoreDefault,
           onPressed: restoreDefaults,
         ),
       ],
@@ -254,7 +294,7 @@ class _KeyboardSettingsPageState extends State<KeyboardSettingsPage> {
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: Text(
-                      '点按按键标签，再按下新按键完成修改',
+                      context.l10n.shortcutInstruction,
                       style: textTheme.bodySmall?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
@@ -308,7 +348,7 @@ class _KeyboardSettingsPageState extends State<KeyboardSettingsPage> {
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  group.title,
+                  shortcutGroupLabel(group.id),
                   style: textTheme.titleMedium
                       ?.copyWith(fontWeight: FontWeight.w700),
                 ),
@@ -330,7 +370,7 @@ class _KeyboardSettingsPageState extends State<KeyboardSettingsPage> {
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
-          Text(shortcutsChineseName[func] ?? func, style: textTheme.bodyMedium),
+          Text(shortcutLabel(func), style: textTheme.bodyMedium),
           const SizedBox(width: 12),
           Expanded(
             child: Wrap(
@@ -356,7 +396,7 @@ class _KeyboardSettingsPageState extends State<KeyboardSettingsPage> {
     // 否则单绑定时点「添加」会让原按键出现删除按钮，可被误删成空绑定
     final realCount = keys.where((value) => value != '...').length;
     return _KeyCap(
-      label: listening ? '按任意键' : keyAliases[keys[i]] ?? keys[i],
+      label: listening ? context.l10n.pressAnyKey : keyLabel(keys[i]),
       listening: listening,
       onTap: () => onKeyCapTap(func, i),
       onDelete:
@@ -442,7 +482,7 @@ class _AddKeyButton extends StatelessWidget {
     );
 
     return Tooltip(
-      message: '添加按键',
+      message: context.l10n.addKey,
       child: Material(
         color: Colors.transparent,
         shape: shape,

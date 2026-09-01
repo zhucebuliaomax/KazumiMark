@@ -3,6 +3,7 @@ import 'package:kazumi/bean/appbar/sys_app_bar.dart';
 import 'package:kazumi/services/storage/storage.dart';
 import 'package:kazumi/utils/constants.dart';
 import 'package:kazumi/bean/settings/settings_list.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 class RendererSettings extends StatefulWidget {
   const RendererSettings({super.key});
@@ -22,16 +23,24 @@ class _RendererSettingsState extends State<RendererSettings> {
     super.dispose();
   }
 
+  String rendererDescription(String renderer) => switch (renderer) {
+        'auto' => context.l10n.rendererAutomatic,
+        'gpu' => context.l10n.rendererGpu,
+        'gpu-next' => context.l10n.rendererGpuNext,
+        'mediacodec_embed' => context.l10n.rendererMediaCodec,
+        _ => renderer,
+      };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const SysAppBar(
-        title: Text('视频渲染器'),
+      appBar: SysAppBar(
+        title: Text(context.l10n.videoRenderer),
       ),
       body: SettingsList(
         sections: [
           SettingsRadioSection<String>(
-            title: Text('选择合适的渲染器以获得最佳播放体验'),
+            title: Text(context.l10n.selectRendererDescription),
             groupValue: renderer.value,
             onChanged: (String? value) {
               if (value != null) {
@@ -45,7 +54,7 @@ class _RendererSettingsState extends State<RendererSettings> {
             tiles: androidVideoRenderersList.entries
                 .map((e) => SettingsTile<String>.radioTile(
                       title: Text(e.key),
-                      description: Text(e.value),
+                      description: Text(rendererDescription(e.key)),
                       radioValue: e.key,
                     ))
                 .toList(),

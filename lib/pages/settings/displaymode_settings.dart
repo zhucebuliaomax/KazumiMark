@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:kazumi/services/storage/storage.dart';
 import 'package:kazumi/bean/settings/settings_list.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 class SetDisplayMode extends StatefulWidget {
   const SetDisplayMode({super.key});
@@ -68,13 +69,13 @@ class _SetDisplayModeState extends State<SetDisplayMode> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('屏幕帧率设置')),
+      appBar: AppBar(title: Text(context.l10n.displayRefreshRateSettings)),
       body: (modes.isEmpty)
           ? const CircularProgressIndicator()
           : SettingsList(
               sections: [
                 SettingsRadioSection<DisplayMode>(
-                  title: Text('没有生效? 重启app试试'),
+                  title: Text(context.l10n.restartIfRefreshRateNotApplied),
                   groupValue: preferred,
                   onChanged: (DisplayMode? newMode) async {
                     await FlutterDisplayMode.setPreferredMode(newMode!);
@@ -87,8 +88,9 @@ class _SetDisplayModeState extends State<SetDisplayMode> {
                       .map((e) => SettingsTile<DisplayMode>.radioTile(
                             radioValue: e,
                             title: e == DisplayMode.auto
-                                ? Text('自动')
-                                : Text('$e${e == active ? "  [系统]" : ""}'),
+                                ? Text(context.l10n.automatic)
+                                : Text(
+                                    '$e${e == active ? "  [${context.l10n.systemActive}]" : ""}'),
                           ))
                       .toList(),
                 ),

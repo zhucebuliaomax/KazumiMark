@@ -6,6 +6,7 @@ import 'package:kazumi/services/network/proxy_utils.dart';
 import 'package:kazumi/services/network/proxy_manager.dart';
 import 'package:kazumi/request/core/dio_factory.dart';
 import 'package:kazumi/request/core/network_config.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 class ProxyEditorPage extends StatefulWidget {
   const ProxyEditorPage({super.key});
@@ -34,13 +35,14 @@ class _ProxyEditorPageState extends State<ProxyEditorPage> {
   }
 
   Future<void> saveAndTest() async {
+    final l10n = context.l10n;
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
     final url = urlController.text.trim();
     if (url.isEmpty) {
-      KazumiDialog.showToast(message: '请输入代理地址');
+      KazumiDialog.showToast(message: l10n.enterProxyAddress);
       return;
     }
 
@@ -79,18 +81,18 @@ class _ProxyEditorPageState extends State<ProxyEditorPage> {
           )
           .timeout(const Duration(seconds: 15));
       await GStorage.putSetting(SettingsKeys.proxyConfigured, true);
-      KazumiDialog.showToast(message: '测试成功');
+      KazumiDialog.showToast(message: l10n.testSucceeded);
     } catch (e) {
       await GStorage.putSetting(SettingsKeys.proxyEnable, false);
       ProxyManager.clearProxy();
-      KazumiDialog.showToast(message: '代理连接失败');
+      KazumiDialog.showToast(message: l10n.proxyConnectionFailed);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const SysAppBar(title: Text('代理配置')),
+      appBar: SysAppBar(title: Text(context.l10n.proxyConfiguration)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -102,17 +104,17 @@ class _ProxyEditorPageState extends State<ProxyEditorPage> {
                 children: [
                   TextFormField(
                     controller: urlController,
-                    decoration: const InputDecoration(
-                      labelText: '代理地址',
+                    decoration: InputDecoration(
+                      labelText: context.l10n.proxyAddress,
                       hintText: 'http://127.0.0.1:7890',
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return '请输入代理地址';
+                        return context.l10n.enterProxyAddress;
                       }
                       if (!ProxyUtils.isValidProxyUrl(value)) {
-                        return '格式错误，请使用 http://host:port 格式';
+                        return context.l10n.invalidProxyFormat;
                       }
                       return null;
                     },
@@ -120,8 +122,8 @@ class _ProxyEditorPageState extends State<ProxyEditorPage> {
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: testUrlController,
-                    decoration: const InputDecoration(
-                      labelText: '测试地址',
+                    decoration: InputDecoration(
+                      labelText: context.l10n.testAddress,
                       hintText: 'https://www.google.com',
                       border: OutlineInputBorder(),
                     ),
@@ -135,7 +137,7 @@ class _ProxyEditorPageState extends State<ProxyEditorPage> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: saveAndTest,
         icon: const Icon(Icons.save),
-        label: const Text('保存并测试'),
+        label: Text(context.l10n.saveAndTest),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:kazumi/bean/settings/settings_detail_scaffold.dart';
 import 'package:kazumi/services/storage/storage.dart';
 import 'package:kazumi/services/network/proxy_manager.dart';
 import 'package:kazumi/bean/settings/settings_list.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 class ProxySettingsPage extends StatefulWidget {
   const ProxySettingsPage({super.key});
@@ -33,7 +34,7 @@ class _ProxySettingsPageState extends State<ProxySettingsPage> {
     if (value) {
       final proxyConfigured = GStorage.getSetting(SettingsKeys.proxyConfigured);
       if (!proxyConfigured) {
-        KazumiDialog.showToast(message: '请先在代理配置中完成测试');
+        KazumiDialog.showToast(message: context.l10n.completeProxyTestFirst);
         return;
       }
       await GStorage.putSetting(SettingsKeys.proxyEnable, true);
@@ -55,19 +56,19 @@ class _ProxySettingsPageState extends State<ProxySettingsPage> {
         onBackPressed(context);
       },
       child: SettingsDetailScaffold(
-        title: const Text('代理设置'),
+        title: Text(context.l10n.proxySettings),
         body: SettingsList(
           sections: [
             SettingsSection(
-              title: Text('代理'),
+              title: Text(context.l10n.proxy),
               tiles: [
                 SettingsTile.switchTile(
                   leading: Icons.vpn_key_rounded,
                   onToggle: (value) async {
                     await updateProxyEnable(value ?? !proxyEnable);
                   },
-                  title: Text('启用代理'),
-                  description: Text('启用后网络请求将通过代理服务器'),
+                  title: Text(context.l10n.enableProxy),
+                  description: Text(context.l10n.enableProxyDescription),
                   initialValue: proxyEnable,
                 ),
                 SettingsTile(
@@ -79,8 +80,8 @@ class _ProxySettingsPageState extends State<ProxySettingsPage> {
                           GStorage.getSetting(SettingsKeys.proxyEnable);
                     });
                   },
-                  title: Text('代理配置'),
-                  description: Text('配置代理服务器地址和认证信息'),
+                  title: Text(context.l10n.proxyConfiguration),
+                  description: Text(context.l10n.proxyConfigurationDescription),
                 ),
               ],
             ),

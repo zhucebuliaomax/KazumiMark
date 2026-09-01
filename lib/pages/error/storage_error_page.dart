@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:kazumi/bean/widget/error_widget.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 class StorageErrorPage extends StatelessWidget {
   const StorageErrorPage({super.key});
@@ -10,7 +11,7 @@ class StorageErrorPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('内部错误'),
+        title: Text(context.l10n.internalError),
       ),
       body: Center(
         child: FutureBuilder<Directory>(
@@ -18,15 +19,16 @@ class StorageErrorPage extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               final supportDir = snapshot.data;
-              final path = supportDir != null ? '$supportDir' : '未知路径';
+              final path =
+                  supportDir != null ? '$supportDir' : context.l10n.unknownPath;
               return GeneralErrorWidget(
-                errMsg: '存储初始化错误 \n 当前储存位置 $path \n 尝试删除该目录以重置本地存储',
+                errMsg: context.l10n.storageInitializationError(path),
                 actions: [
                   GeneralErrorButton(
                     onPressed: () {
                       exit(0);
                     },
-                    text: '退出程序',
+                    text: context.l10n.exitProgram,
                   ),
                 ],
               );

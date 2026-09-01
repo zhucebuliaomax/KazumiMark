@@ -5,6 +5,7 @@ import 'package:kazumi/bean/dialog/dialog_helper.dart';
 import 'package:kazumi/bean/settings/settings_detail_scaffold.dart';
 import 'package:kazumi/bean/settings/settings_list.dart';
 import 'package:kazumi/utils/device.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 class DanmakuSettingsPage extends StatefulWidget {
   const DanmakuSettingsPage({super.key});
@@ -74,18 +75,19 @@ class _DanmakuSettingsPageState extends State<DanmakuSettingsPage> {
   }
 
   Future<void> resetDanmakuSettings() async {
+    final l10n = context.l10n;
     final bool shouldReset = await KazumiDialog.show<bool>(
           builder: (context) => AlertDialog(
-            title: const Text('恢复默认弹幕设置'),
-            content: const Text('弹幕来源、显示和样式设置将恢复为默认值，关键词屏蔽列表不会被清空。'),
+            title: Text(l10n.restoreDefaultDanmakuSettings),
+            content: Text(l10n.restoreDefaultDanmakuSettingsConfirmation),
             actions: [
               TextButton(
                 onPressed: () => KazumiDialog.dismiss(popWith: false),
-                child: Text('取消'),
+                child: Text(l10n.cancel),
               ),
               TextButton(
                 onPressed: () => KazumiDialog.dismiss(popWith: true),
-                child: Text('恢复默认'),
+                child: Text(l10n.restoreDefault),
               ),
             ],
           ),
@@ -96,7 +98,7 @@ class _DanmakuSettingsPageState extends State<DanmakuSettingsPage> {
     await GStorage.resetDanmakuSettings();
     if (!mounted) return;
     setState(_loadSettingsFromStorage);
-    KazumiDialog.showToast(message: '已恢复默认弹幕设置');
+    KazumiDialog.showToast(message: l10n.defaultDanmakuSettingsRestored);
   }
 
   void onBackPressed(BuildContext context) {
@@ -163,11 +165,11 @@ class _DanmakuSettingsPageState extends State<DanmakuSettingsPage> {
         onBackPressed(context);
       },
       child: SettingsDetailScaffold(
-        title: const Text('弹幕设置'),
+        title: Text(context.l10n.danmakuSettings),
         body: SettingsList(
           sections: [
             SettingsSection(
-              title: Text('弹幕来源'),
+              title: Text(context.l10n.danmakuSource),
               tiles: [
                 SettingsTile.switchTile(
                   leading: Icons.live_tv_rounded,
@@ -200,29 +202,29 @@ class _DanmakuSettingsPageState extends State<DanmakuSettingsPage> {
                         SettingsKeys.danmakuDanDanSource, danmakuDanDanSource);
                     setState(() {});
                   },
-                  title: Text('弹弹play'),
+                  title: Text(context.l10n.danDanPlay),
                   initialValue: danmakuDanDanSource,
                 ),
               ],
             ),
             SettingsSection(
-              title: Text('弹幕屏蔽'),
+              title: Text(context.l10n.danmakuBlocking),
               tiles: [
                 SettingsTile(
                   leading: Icons.block_rounded,
                   onPressed: (_) {
                     context.pushNamed('/settings/danmaku/shield');
                   },
-                  title: Text('关键词屏蔽'),
+                  title: Text(context.l10n.keywordBlocking),
                 ),
               ],
             ),
             SettingsSection(
-              title: Text('弹幕显示'),
+              title: Text(context.l10n.danmakuDisplay),
               tiles: [
                 SettingsSliderTile(
                   leading: Icons.crop_free_rounded,
-                  title: Text('弹幕区域'),
+                  title: Text(context.l10n.danmakuArea),
                   value: defaultDanmakuArea,
                   min: 0,
                   max: 1,
@@ -232,18 +234,19 @@ class _DanmakuSettingsPageState extends State<DanmakuSettingsPage> {
                 ),
                 SettingsSliderTile(
                   leading: Icons.timer_rounded,
-                  title: Text('弹幕持续时间'),
+                  title: Text(context.l10n.danmakuDuration),
                   value: defaultDanmakuDuration,
                   min: 2,
                   max: 16,
                   divisions: 14,
-                  valueLabel: '${defaultDanmakuDuration.round()} 秒',
+                  valueLabel:
+                      context.l10n.seconds(defaultDanmakuDuration.round()),
                   onChanged: (value) =>
                       updateDanmakuDuration(value.roundToDouble()),
                 ),
                 SettingsSliderTile(
                   leading: Icons.format_line_spacing_rounded,
-                  title: Text('弹幕行高'),
+                  title: Text(context.l10n.danmakuLineHeight),
                   value: defaultDanmakuLineHeight,
                   min: 0,
                   max: 3,
@@ -260,8 +263,8 @@ class _DanmakuSettingsPageState extends State<DanmakuSettingsPage> {
                         SettingsKeys.danmakuFollowSpeed, danmakuFollowSpeed);
                     setState(() {});
                   },
-                  title: Text('弹幕跟随视频倍速'),
-                  description: Text('开启后弹幕速度会随视频倍速而改变'),
+                  title: Text(context.l10n.danmakuFollowSpeed),
+                  description: Text(context.l10n.danmakuFollowSpeedDescription),
                   initialValue: danmakuFollowSpeed,
                 ),
                 SettingsTile.switchTile(
@@ -272,7 +275,7 @@ class _DanmakuSettingsPageState extends State<DanmakuSettingsPage> {
                         SettingsKeys.danmakuTop, danmakuTop);
                     setState(() {});
                   },
-                  title: Text('顶部弹幕'),
+                  title: Text(context.l10n.topDanmaku),
                   initialValue: danmakuTop,
                 ),
                 SettingsTile.switchTile(
@@ -283,7 +286,7 @@ class _DanmakuSettingsPageState extends State<DanmakuSettingsPage> {
                         SettingsKeys.danmakuBottom, danmakuBottom);
                     setState(() {});
                   },
-                  title: Text('底部弹幕'),
+                  title: Text(context.l10n.bottomDanmaku),
                   initialValue: danmakuBottom,
                 ),
                 SettingsTile.switchTile(
@@ -294,7 +297,7 @@ class _DanmakuSettingsPageState extends State<DanmakuSettingsPage> {
                         SettingsKeys.danmakuScroll, danmakuScroll);
                     setState(() {});
                   },
-                  title: Text('滚动弹幕'),
+                  title: Text(context.l10n.scrollingDanmaku),
                   initialValue: danmakuScroll,
                 ),
                 SettingsTile.switchTile(
@@ -305,8 +308,8 @@ class _DanmakuSettingsPageState extends State<DanmakuSettingsPage> {
                         SettingsKeys.danmakuMassive, danmakuMassive);
                     setState(() {});
                   },
-                  title: Text('海量弹幕'),
-                  description: Text('弹幕过多时进行叠加绘制'),
+                  title: Text(context.l10n.massiveDanmaku),
+                  description: Text(context.l10n.massiveDanmakuDescription),
                   initialValue: danmakuMassive,
                 ),
                 SettingsTile.switchTile(
@@ -318,14 +321,15 @@ class _DanmakuSettingsPageState extends State<DanmakuSettingsPage> {
                         danmakuDeduplication);
                     setState(() {});
                   },
-                  title: Text('弹幕去重'),
-                  description: Text('相同内容弹幕过多时合并为一条弹幕'),
+                  title: Text(context.l10n.danmakuDeduplication),
+                  description:
+                      Text(context.l10n.danmakuDeduplicationDescription),
                   initialValue: danmakuDeduplication,
                 ),
               ],
             ),
             SettingsSection(
-              title: Text('弹幕样式'),
+              title: Text(context.l10n.danmakuStyle),
               tiles: [
                 SettingsTile.switchTile(
                   leading: Icons.border_color_rounded,
@@ -335,12 +339,12 @@ class _DanmakuSettingsPageState extends State<DanmakuSettingsPage> {
                         SettingsKeys.danmakuBorder, danmakuBorder);
                     setState(() {});
                   },
-                  title: Text('弹幕描边'),
+                  title: Text(context.l10n.danmakuBorder),
                   initialValue: danmakuBorder,
                 ),
                 SettingsSliderTile(
                   leading: Icons.line_weight_rounded,
-                  title: Text('弹幕描边粗细'),
+                  title: Text(context.l10n.danmakuBorderWidth),
                   value: defaultdanmakuBorderSize,
                   min: 0.1,
                   max: 3,
@@ -357,12 +361,12 @@ class _DanmakuSettingsPageState extends State<DanmakuSettingsPage> {
                         SettingsKeys.danmakuColor, danmakuColor);
                     setState(() {});
                   },
-                  title: Text('弹幕颜色'),
+                  title: Text(context.l10n.danmakuColor),
                   initialValue: danmakuColor,
                 ),
                 SettingsSliderTile(
                   leading: Icons.format_size_rounded,
-                  title: Text('字体大小'),
+                  title: Text(context.l10n.fontSize),
                   value: defaultDanmakuFontSize,
                   min: 10,
                   max: isCompact() ? 32 : 48,
@@ -372,7 +376,7 @@ class _DanmakuSettingsPageState extends State<DanmakuSettingsPage> {
                 ),
                 SettingsSliderTile(
                   leading: Icons.format_bold_rounded,
-                  title: Text('字体字重'),
+                  title: Text(context.l10n.fontWeight),
                   value: defaultDanmakuFontWeight.toDouble(),
                   min: 1,
                   max: 9,
@@ -382,7 +386,7 @@ class _DanmakuSettingsPageState extends State<DanmakuSettingsPage> {
                 ),
                 SettingsSliderTile(
                   leading: Icons.opacity_rounded,
-                  title: Text('弹幕不透明度'),
+                  title: Text(context.l10n.danmakuOpacity),
                   value: defaultDanmakuOpacity,
                   min: 0.1,
                   max: 1,
@@ -397,8 +401,9 @@ class _DanmakuSettingsPageState extends State<DanmakuSettingsPage> {
                 SettingsTile(
                   leading: Icons.settings_backup_restore_rounded,
                   onPressed: (_) => resetDanmakuSettings(),
-                  title: Text('恢复默认设置'),
-                  description: Text('将弹幕相关设置恢复为默认值'),
+                  title: Text(context.l10n.restoreDefaultSettings),
+                  description:
+                      Text(context.l10n.restoreDanmakuSettingsDescription),
                 ),
               ],
             ),
