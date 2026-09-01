@@ -10,7 +10,7 @@ import 'package:window_manager/window_manager.dart';
 class DisplayModeService {
   DisplayModeService._();
 
-  static const _intentChannel = MethodChannel('com.predidit.kazumi/intent');
+  static const _intentChannel = MethodChannel('app.kazumimax/intent');
 
   static Future<void> enterFullScreen({bool lockOrientation = true}) async {
     if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {

@@ -284,7 +284,7 @@
 
               cat>DEBIAN/control<<EOF
               Maintainer: madoka773 <valigarmanda55@gmail.com>
-              Package: Kazumi
+              Package: kazumimax
               Version: ${{ env.tag }}
               Section: x11
               Priority: optional
@@ -298,8 +298,8 @@
                        libwebkit2gtk-4.1-0
               EOF
 
-              cp ../assets/linux/io.github.Predidit.Kazumi.desktop usr/share/applications
-              cp ../assets/images/logo/logo_linux.png usr/share/icons/hicolor/512x512/apps/io.github.Predidit.Kazumi.png
+              cp ../assets/linux/app.kazumimax.desktop usr/share/applications
+              cp ../assets/images/logo/logo_linux.png usr/share/icons/hicolor/512x512/apps/app.kazumimax.png
 
               cd ..
               dpkg-deb --build --root-owner-group Kazumi_linux_${{ env.tag }}_amd64
@@ -367,7 +367,7 @@
 
               cat>DEBIAN/control<<EOF
               Maintainer: madoka773 <valigarmanda55@gmail.com>
-              Package: Kazumi
+              Package: kazumimax
               Version: ${{ env.tag }}
               Section: x11
               Priority: optional
@@ -381,8 +381,8 @@
                        libwebkit2gtk-4.1-0
               EOF
 
-              cp ../assets/linux/io.github.Predidit.Kazumi.desktop usr/share/applications
-              cp ../assets/images/logo/logo_linux.png usr/share/icons/hicolor/512x512/apps/io.github.Predidit.Kazumi.png
+              cp ../assets/linux/app.kazumimax.desktop usr/share/applications
+              cp ../assets/images/logo/logo_linux.png usr/share/icons/hicolor/512x512/apps/app.kazumimax.png
 
               cd ..
               dpkg-deb --build --root-owner-group Kazumi_linux_${{ env.tag }}_arm64

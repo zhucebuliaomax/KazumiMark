@@ -1,4 +1,4 @@
-package com.example.kazumi
+package app.kazumimax
 
 import android.app.PendingIntent
 import android.content.Intent
@@ -31,9 +31,9 @@ import com.ryanheise.audioservice.AudioService
 import com.ryanheise.audioservice.AudioServiceActivity
 
 class MainActivity: AudioServiceActivity() {
-    private val CHANNEL = "com.predidit.kazumi/intent"
-    private val STORAGE_CHANNEL = "com.predidit.kazumi/storage"
-    private val PIP_CHANNEL = "com.predidit.kazumi/pip"
+    private val CHANNEL = "app.kazumimax/intent"
+    private val STORAGE_CHANNEL = "app.kazumimax/storage"
+    private val PIP_CHANNEL = "app.kazumimax/pip"
     private var intentChannel: MethodChannel? = null
     private var pipChannel: MethodChannel? = null
 
@@ -50,9 +50,9 @@ class MainActivity: AudioServiceActivity() {
     private var originalWindowBackground: Drawable? = null
     private var windowBackgroundOverridden = false
 
-    private val actionPipPlayPause = "com.predidit.kazumi.pip.PLAY_PAUSE"
-    private val actionPipForward = "com.predidit.kazumi.pip.FORWARD"
-    private val actionPipToggleDanmaku = "com.predidit.kazumi.pip.TOGGLE_DANMAKU"
+    private val actionPipPlayPause = "app.kazumimax.pip.PLAY_PAUSE"
+    private val actionPipForward = "app.kazumimax.pip.FORWARD"
+    private val actionPipToggleDanmaku = "app.kazumimax.pip.TOGGLE_DANMAKU"
 
     // Ratios outside [1:2.39, 2.39:1] make enterPictureInPictureMode throw.
     private val maxPipAspectRatio = 2.39f

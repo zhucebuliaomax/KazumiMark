@@ -6,7 +6,7 @@ import 'package:kazumi/services/logging/logger.dart';
 class PlatformEnvironmentService {
   PlatformEnvironmentService._();
 
-  static const _intentChannel = MethodChannel('com.predidit.kazumi/intent');
+  static const _intentChannel = MethodChannel('app.kazumimax/intent');
 
   static Future<bool> isInMultiWindowMode() async {
     if (!Platform.isAndroid) {
