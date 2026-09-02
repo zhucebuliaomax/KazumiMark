@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/onboarding/onboarding_step_layout.dart';
 
 class UpdateSourceStep extends StatelessWidget {
@@ -16,8 +17,8 @@ class UpdateSourceStep extends StatelessWidget {
   Widget build(BuildContext context) {
     return OnboardingStepLayout(
       leading: const OnboardingStepIcon(icon: Icons.system_update_rounded),
-      title: '更新来源',
-      subtitle: '选择获取应用更新的方式',
+      title: context.l10n.updateSource,
+      subtitle: context.l10n.updateSourceDescription,
       child: Align(
         alignment: Alignment.topCenter,
         child: Column(
@@ -26,14 +27,14 @@ class UpdateSourceStep extends StatelessWidget {
             _OptionCard(
               icon: Icons.rocket_launch_rounded,
               title: 'Github',
-              description: '应用内检查更新，适合大多数用户',
+              description: context.l10n.githubUpdateDescription,
               selected: useGithubUpdate,
               onTap: () => onChanged(true),
             ),
             _OptionCard(
               icon: Icons.storefront_rounded,
               title: 'F-Droid',
-              description: '由 F-Droid 商店管理更新',
+              description: context.l10n.fdroidUpdateDescription,
               selected: !useGithubUpdate,
               onTap: () => onChanged(false),
             ),
@@ -100,9 +101,7 @@ class _OptionCard extends StatelessWidget {
               ),
               const SizedBox(width: 16),
               Icon(
-                selected
-                    ? Icons.check_circle_rounded
-                    : Icons.circle_outlined,
+                selected ? Icons.check_circle_rounded : Icons.circle_outlined,
                 color: selected ? colorScheme.primary : colorScheme.outline,
               ),
             ],

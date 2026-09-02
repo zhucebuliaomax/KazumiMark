@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/services.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
 import 'package:kazumi/bean/widget/embedded_native_control_area.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/navigation.dart';
 import 'package:kazumi/pages/menu/route_visibility.dart';
 import 'package:kazumi/pages/router.dart';
@@ -78,7 +79,10 @@ class _ScaffoldMenu extends State<ScaffoldMenu> with RouteAware {
     if (lastPromptAt == null ||
         now.difference(lastPromptAt) > const Duration(seconds: 2)) {
       _lastExitPromptAt = now;
-      KazumiDialog.showToast(message: '再按一次退出应用', context: context);
+      KazumiDialog.showToast(
+        message: context.l10n.pressBackAgainToExit,
+        context: context,
+      );
       return;
     }
 
@@ -131,26 +135,26 @@ class _ScaffoldMenu extends State<ScaffoldMenu> with RouteAware {
     return Scaffold(
       body: _outlet(context),
       bottomNavigationBar: NavigationBar(
-        destinations: const <Widget>[
+        destinations: <Widget>[
           NavigationDestination(
             selectedIcon: Icon(Icons.home),
             icon: Icon(Icons.home_outlined),
-            label: '推荐',
+            label: context.l10n.pagePopular,
           ),
           NavigationDestination(
             selectedIcon: Icon(Icons.timeline),
             icon: Icon(Icons.timeline_outlined),
-            label: '时间表',
+            label: context.l10n.pageTimeline,
           ),
           NavigationDestination(
             selectedIcon: Icon(Icons.favorite),
             icon: Icon(Icons.favorite_outlined),
-            label: '追番',
+            label: context.l10n.pageCollection,
           ),
           NavigationDestination(
             selectedIcon: Icon(Icons.settings),
             icon: Icon(Icons.settings),
-            label: '我的',
+            label: context.l10n.pageMy,
           ),
         ],
         selectedIndex: selectedIndex,
@@ -179,26 +183,26 @@ class _ScaffoldMenu extends State<ScaffoldMenu> with RouteAware {
                 child: const Icon(Icons.search),
               ),
               labelType: NavigationRailLabelType.selected,
-              destinations: const <NavigationRailDestination>[
+              destinations: <NavigationRailDestination>[
                 NavigationRailDestination(
                   selectedIcon: Icon(Icons.home),
                   icon: Icon(Icons.home_outlined),
-                  label: Text('推荐'),
+                  label: Text(context.l10n.pagePopular),
                 ),
                 NavigationRailDestination(
                   selectedIcon: Icon(Icons.timeline),
                   icon: Icon(Icons.timeline_outlined),
-                  label: Text('时间表'),
+                  label: Text(context.l10n.pageTimeline),
                 ),
                 NavigationRailDestination(
                   selectedIcon: Icon(Icons.favorite),
                   icon: Icon(Icons.favorite_border),
-                  label: Text('追番'),
+                  label: Text(context.l10n.pageCollection),
                 ),
                 NavigationRailDestination(
                   selectedIcon: Icon(Icons.settings),
                   icon: Icon(Icons.settings_outlined),
-                  label: Text('我的'),
+                  label: Text(context.l10n.pageMy),
                 ),
               ],
               selectedIndex: selectedIndex,

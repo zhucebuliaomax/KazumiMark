@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:kazumi/utils/device.dart';
@@ -277,7 +278,7 @@ class _ImageViewerState extends State<ImageViewer> {
           ),
           const SizedBox(height: 8),
           Text(
-            '图片加载失败',
+            context.l10n.imageLoadFailed,
             style: TextStyle(
               color: Theme.of(context).colorScheme.onErrorContainer,
             ),

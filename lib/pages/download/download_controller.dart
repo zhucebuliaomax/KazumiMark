@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/modules/download/download_module.dart';
 import 'package:kazumi/modules/danmaku/danmaku_module.dart';
 import 'package:kazumi/plugins/plugins.dart';
@@ -555,7 +556,7 @@ abstract class _DownloadController with Store {
       final plugin = _findPlugin(request.pluginName);
       if (plugin == null) {
         _failEpisode(request.recordKey, request.episodeNumber,
-            '找不到插件 ${request.pluginName}');
+            currentL10n.pluginNotFound(request.pluginName));
         return;
       }
 
@@ -606,7 +607,8 @@ abstract class _DownloadController with Store {
       }
 
       if (m3u8Url == null || m3u8Url.isEmpty) {
-        _failEpisode(request.recordKey, request.episodeNumber, '解析视频源超时');
+        _failEpisode(request.recordKey, request.episodeNumber,
+            currentL10n.parseVideoSourceTimedOut);
         return;
       }
 
@@ -827,7 +829,8 @@ abstract class _DownloadController with Store {
 
     final plugin = _findPlugin(pluginName);
     if (plugin == null) {
-      _failEpisode(recordKey, episodeNumber, '找不到插件 $pluginName');
+      _failEpisode(
+          recordKey, episodeNumber, currentL10n.pluginNotFound(pluginName));
       return;
     }
 
@@ -945,7 +948,8 @@ abstract class _DownloadController with Store {
 
     final plugin = _findPlugin(pluginName);
     if (plugin == null) {
-      _failEpisode(recordKey, episodeNumber, '找不到插件 $pluginName');
+      _failEpisode(
+          recordKey, episodeNumber, currentL10n.pluginNotFound(pluginName));
       return;
     }
 

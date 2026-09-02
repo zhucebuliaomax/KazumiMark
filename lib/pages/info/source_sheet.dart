@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart' show reaction, ReactionDisposer;
@@ -93,14 +94,14 @@ class _SourceSheetState extends State<SourceSheet> {
 
   void _showVerifiedResult(Plugin plugin, String pageHtml) {
     if (_searchService.applyHarvestedSearchResult(plugin.name, pageHtml)) {
-      KazumiDialog.showToast(message: '验证成功');
+      KazumiDialog.showToast(message: currentL10n.verificationSucceeded);
       return;
     }
     // Counting down before re-querying keeps the retry from tripping the rate
     // limit the verification just cleared.
     KazumiDialog.showTimedSuccessDialog(
-      title: '验证成功',
-      message: '即将重新检索',
+      title: currentL10n.verificationSucceeded,
+      message: currentL10n.searchWillRestart,
       onComplete: () => _querySource(_keyword, plugin.name),
     );
   }
@@ -144,7 +145,7 @@ class _SourceSheetState extends State<SourceSheet> {
   Future<void> _openSearchItem(Plugin plugin, SearchItem searchItem) async {
     final cancelToken = RuleCancelToken();
     KazumiDialog.showLoading(
-      msg: '获取中',
+      msg: currentL10n.fetching,
       barrierDismissible: isDesktop(),
       onDismiss: cancelToken.cancel,
     );
@@ -185,7 +186,7 @@ class _SourceSheetState extends State<SourceSheet> {
 
   void _showAliasPicker(String pluginName) {
     if (widget.infoController.bangumiItem.alias.isEmpty) {
-      KazumiDialog.showToast(message: '无可用别名，试试手动检索');
+      KazumiDialog.showToast(message: currentL10n.noAliasesTryManualSearch);
       return;
     }
     showAliasPickerDialog(
@@ -264,13 +265,21 @@ class _SourceSheetState extends State<SourceSheet> {
   /// siblings lack one end up with misaligned names.
   ({String text, Color? color}) _sourceSummary(
       Plugin plugin, List<SearchItem> results, bool searching) {
-    if (searching) return (text: '检索中', color: null);
-    if (results.isNotEmpty) return (text: '${results.length} 条', color: null);
+    if (searching) return (text: context.l10n.searching, color: null);
+    if (results.isNotEmpty) {
+      return (text: context.l10n.resultCount(results.length), color: null);
+    }
     final error = Theme.of(context).colorScheme.error;
     return switch (widget.infoController.pluginSearchStatus[plugin.name]) {
-      PluginSearchStatus.error => (text: '检索失败', color: error),
-      PluginSearchStatus.captcha => (text: '需要验证', color: error),
-      _ => (text: '无结果', color: null),
+      PluginSearchStatus.error => (
+          text: context.l10n.searchFailed,
+          color: error
+        ),
+      PluginSearchStatus.captcha => (
+          text: context.l10n.verificationRequired,
+          color: error
+        ),
+      _ => (text: context.l10n.noResults, color: null),
     };
   }
 
@@ -312,21 +321,21 @@ class _SourceSheetState extends State<SourceSheet> {
           ] else ...[
             if (hasMenu)
               PopupMenuButton<VoidCallback>(
-                tooltip: '${plugin.name} 的更多操作',
+                tooltip: context.l10n.moreActionsFor(plugin.name),
                 icon: Icon(Icons.more_vert_rounded, size: 20, color: onColor),
                 onSelected: (action) => action(),
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     value: () => _showAliasPicker(plugin.name),
-                    child: const Text('别名检索'),
+                    child: Text(context.l10n.aliasSearch),
                   ),
                   PopupMenuItem(
                     value: () => _showCustomKeyword(plugin.name),
-                    child: const Text('手动检索'),
+                    child: Text(context.l10n.manualSearch),
                   ),
                   PopupMenuItem(
                     value: () => _openInBrowser(plugin),
-                    child: const Text('在浏览器中打开'),
+                    child: Text(context.l10n.openInBrowser),
                   ),
                 ],
               )
@@ -374,20 +383,22 @@ class _SourceSheetState extends State<SourceSheet> {
     final String hint;
     switch (widget.infoController.pluginSearchStatus[plugin.name]) {
       case PluginSearchStatus.captcha:
-        hint = '这个源要求先完成验证';
-        actions.add(
-            _primaryAction('进行验证', () => _captchaFlow.start(plugin, _keyword)));
-        actions.add(_action('重试', () => _retry(plugin)));
+        hint = context.l10n.sourceRequiresVerification;
+        actions.add(_primaryAction(
+            context.l10n.verify, () => _captchaFlow.start(plugin, _keyword)));
+        actions.add(_action(context.l10n.retry, () => _retry(plugin)));
       case PluginSearchStatus.error:
-        hint = '这个源没能返回结果';
-        actions.add(_primaryAction('重试', () => _retry(plugin)));
+        hint = context.l10n.sourceReturnedNoResults;
+        actions.add(_primaryAction(context.l10n.retry, () => _retry(plugin)));
       default:
-        hint = '换个关键词再试试';
-        actions
-            .add(_primaryAction('别名检索', () => _showAliasPicker(plugin.name)));
-        actions.add(_action('手动检索', () => _showCustomKeyword(plugin.name)));
+        hint = context.l10n.tryAnotherKeyword;
+        actions.add(_primaryAction(
+            context.l10n.aliasSearch, () => _showAliasPicker(plugin.name)));
+        actions.add(_action(
+            context.l10n.manualSearch, () => _showCustomKeyword(plugin.name)));
     }
-    actions.add(_action('浏览器打开', () => _openInBrowser(plugin)));
+    actions
+        .add(_action(context.l10n.openInBrowser, () => _openInBrowser(plugin)));
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
@@ -444,9 +455,10 @@ class _SourceSheetState extends State<SourceSheet> {
     final found = plugins.fold<int>(
         0, (sum, plugin) => sum + _resultsFor(plugin.name).length);
     if (done < plugins.length) {
-      return '「$_keyword」· 检索中 $done/${plugins.length}';
+      return context.l10n
+          .searchingKeywordProgress(_keyword, done, plugins.length);
     }
-    return '「$_keyword」· $found 条结果';
+    return context.l10n.keywordResultCount(_keyword, found);
   }
 
   @override
@@ -461,7 +473,7 @@ class _SourceSheetState extends State<SourceSheet> {
           return Column(
             children: [
               MaterialBottomSheetHeader(
-                title: '选择播放源',
+                title: context.l10n.selectPlaybackSource,
                 description: _progressDescription(),
                 onClose: () => Navigator.of(context).pop(),
               ),

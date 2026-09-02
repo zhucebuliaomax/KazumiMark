@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
 import 'package:kazumi/bean/card/user_comments_card.dart';
 import 'package:kazumi/bean/widget/error_widget.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/modules/bangumi/episode_item.dart';
 import 'package:kazumi/pages/video/video_controller.dart';
 import 'package:kazumi/request/apis/bangumi_api.dart';
@@ -113,22 +114,22 @@ class _EpisodeCommentsSheetState extends State<EpisodeCommentsSheet> {
             if (commentsQueryTimeout) {
               return SliverFillRemaining(
                 child: GeneralErrorWidget(
-                  errMsg: '评论获取失败',
+                  errMsg: context.l10n.loadCommentsFailed,
                   actions: [
                     GeneralErrorButton(
                       onPressed: () {
                         _refreshIndicatorKey.currentState?.show();
                       },
-                      text: '重试',
+                      text: context.l10n.retry,
                     ),
                   ],
                 ),
               );
             }
             if (commentsIsEmpty) {
-              return const SliverFillRemaining(
+              return SliverFillRemaining(
                 child: Center(
-                  child: Text('什么都没有找到 (´;ω;`)'),
+                  child: Text(context.l10n.nothingFound),
                 ),
               );
             }
@@ -165,7 +166,7 @@ class _EpisodeCommentsSheetState extends State<EpisodeCommentsSheet> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(' 本集标题  '),
+          Text(' ${context.l10n.episodeTitle}  '),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,8 +199,8 @@ class _EpisodeCommentsSheetState extends State<EpisodeCommentsSheet> {
               onPressed: () {
                 showEpisodeSelection();
               },
-              child: const Text(
-                '手动切换',
+              child: Text(
+                context.l10n.switchManually,
                 style: TextStyle(fontSize: 13),
               ),
             ),
@@ -214,7 +215,9 @@ class _EpisodeCommentsSheetState extends State<EpisodeCommentsSheet> {
               onPressed: toggleSortOrder,
               child: Observer(builder: (context) {
                 return Text(
-                  videoPageController.isCommentsAscending ? '倒序' : '正序',
+                  videoPageController.isCommentsAscending
+                      ? context.l10n.descending
+                      : context.l10n.ascending,
                   style: const TextStyle(fontSize: 13),
                 );
               }),
@@ -227,7 +230,7 @@ class _EpisodeCommentsSheetState extends State<EpisodeCommentsSheet> {
 
   void showEpisodeSelection() async {
     final int selectedEpisode = ep == 0 ? widget.episode : ep;
-    KazumiDialog.showLoading(msg: '分集列表加载中');
+    KazumiDialog.showLoading(msg: currentL10n.loadingEpisodeList);
     final List<EpisodeInfo> episodeList =
         await BangumiApi.getBangumiEpisodesByID(
             videoPageController.bangumiItem.id);
@@ -236,7 +239,7 @@ class _EpisodeCommentsSheetState extends State<EpisodeCommentsSheet> {
       return;
     }
     if (episodeList.isEmpty) {
-      KazumiDialog.showToast(message: '未找到分集列表');
+      KazumiDialog.showToast(message: currentL10n.episodeListNotFound);
       return;
     }
     KazumiDialog.show(
@@ -248,9 +251,10 @@ class _EpisodeCommentsSheetState extends State<EpisodeCommentsSheet> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(24, 20, 24, 8),
-                  child: Text('分集列表', style: TextStyle(fontSize: 20)),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 20, 24, 8),
+                  child: Text(context.l10n.episodeList,
+                      style: const TextStyle(fontSize: 20)),
                 ),
                 Flexible(
                   child: ListView.builder(
@@ -288,7 +292,7 @@ class _EpisodeCommentsSheetState extends State<EpisodeCommentsSheet> {
                     child: TextButton(
                       onPressed: () => KazumiDialog.dismiss(),
                       child: Text(
-                        '取消',
+                        context.l10n.cancel,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.outline),
                       ),

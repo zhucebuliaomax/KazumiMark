@@ -14,6 +14,7 @@ import 'package:kazumi/utils/device.dart';
 import 'package:kazumi/utils/date_time.dart';
 import 'package:kazumi/utils/crypto.dart';
 import 'package:kazumi/utils/version.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 /// 安装类型枚举
 enum InstallationType {
@@ -159,7 +160,7 @@ class AutoUpdater {
       final data = await _latestRelease();
 
       if (!data.containsKey('tag_name')) {
-        throw Exception('无效的响应数据');
+        throw Exception('Invalid response data');
       }
 
       final remoteVersion = data['tag_name'] as String;
@@ -170,7 +171,7 @@ class AutoUpdater {
 
         return UpdateInfo(
           version: remoteVersion,
-          description: data['body'] ?? '发现新版本',
+          description: data['body'] ?? currentL10n.newVersionAvailable,
           downloadUrl: '',
           // 将在用户选择安装类型后填充
           releaseNotes: data['html_url'] ?? '',
@@ -221,10 +222,10 @@ class AutoUpdater {
       if (updateInfo != null) {
         _showUpdateDialog(updateInfo, isAutoCheck: false);
       } else {
-        KazumiDialog.showToast(message: '当前已经是最新版本！');
+        KazumiDialog.showToast(message: currentL10n.alreadyLatestVersion);
       }
     } catch (e) {
-      KazumiDialog.showToast(message: '检查更新失败');
+      KazumiDialog.showToast(message: currentL10n.checkUpdatesFailed);
     }
   }
 
@@ -233,7 +234,7 @@ class AutoUpdater {
     KazumiDialog.show(
       builder: (context) {
         return AlertDialog(
-          title: Text('发现新版本 ${updateInfo.version}'),
+          title: Text(currentL10n.newVersion(updateInfo.version)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -243,7 +244,7 @@ class AutoUpdater {
                 if (updateInfo.publishedAt.isNotEmpty) ...[
                   const SizedBox(height: 8),
                   Text(
-                    '发布时间: ${formatDate(updateInfo.publishedAt)}',
+                    currentL10n.releaseDate(formatDate(updateInfo.publishedAt)),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
@@ -260,7 +261,7 @@ class AutoUpdater {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '选择安装类型:',
+                          currentL10n.selectInstallationType,
                           style: Theme.of(context).textTheme.labelSmall,
                         ),
                         const SizedBox(height: 8),
@@ -332,10 +333,11 @@ class AutoUpdater {
                 onPressed: () {
                   GStorage.putSetting(SettingsKeys.autoUpdate, false);
                   KazumiDialog.dismiss();
-                  KazumiDialog.showToast(message: '已关闭自动更新');
+                  KazumiDialog.showToast(
+                      message: currentL10n.autoUpdateDisabled);
                 },
                 child: Text(
-                  '关闭自动更新',
+                  currentL10n.disableAutoUpdate,
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.outline),
                 ),
@@ -343,7 +345,7 @@ class AutoUpdater {
             TextButton(
               onPressed: () => KazumiDialog.dismiss(),
               child: Text(
-                '稍后提醒',
+                currentL10n.remindMeLater,
                 style: TextStyle(color: Theme.of(context).colorScheme.outline),
               ),
             ),
@@ -353,7 +355,7 @@ class AutoUpdater {
                   launchUrl(Uri.parse(updateInfo.releaseNotes),
                       mode: LaunchMode.externalApplication);
                 },
-                child: const Text('查看详情'),
+                child: Text(currentL10n.viewDetails),
               ),
             TextButton(
               onPressed: () {
@@ -364,7 +366,7 @@ class AutoUpdater {
                       updateInfo, updateInfo.availableInstallationTypes.first);
                 }
               },
-              child: const Text('立即更新'),
+              child: Text(currentL10n.updateNow),
             ),
           ],
         );
@@ -376,21 +378,21 @@ class AutoUpdater {
   String _getInstallationTypeDescription(InstallationType type) {
     switch (type) {
       case InstallationType.windowsMsix:
-        return 'Windows MSIX 包';
+        return currentL10n.windowsMsixPackage;
       case InstallationType.windowsPortable:
-        return 'Windows 便携版 (ZIP)';
+        return currentL10n.windowsPortableZip;
       case InstallationType.linuxDeb:
-        return 'Linux DEB 包';
+        return currentL10n.linuxDebPackage;
       case InstallationType.linuxTar:
-        return 'Linux TAR 包';
+        return currentL10n.linuxTarPackage;
       case InstallationType.macosDmg:
-        return 'macOS DMG 镜像';
+        return currentL10n.macosDmgImage;
       case InstallationType.androidApk:
         return 'Android APK';
       case InstallationType.ios:
         return 'iOS ipa';
       case InstallationType.unknown:
-        return '未知安装类型';
+        return currentL10n.unknownInstallationType;
     }
   }
 
@@ -414,8 +416,10 @@ class AutoUpdater {
       final downloadUrl = getUpdateDownloadUrlFromAsset(asset);
       if (asset == null || downloadUrl.isEmpty) {
         KazumiDialog.showToast(
-            message:
-                '没有找到 ${_getInstallationTypeDescription(selectedType)} 的下载链接');
+          message: currentL10n.noDownloadLinkForType(
+            _getInstallationTypeDescription(selectedType),
+          ),
+        );
         return;
       }
 
@@ -435,7 +439,8 @@ class AutoUpdater {
 
       _downloadUpdate(downloadInfo, expectedHash);
     } catch (e) {
-      KazumiDialog.showToast(message: '下载失败: ${e.toString()}');
+      KazumiDialog.showToast(
+          message: currentL10n.downloadFailedWithError(e.toString()));
       KazumiLogger().e('Update: download update failed', error: e);
     }
   }
@@ -444,7 +449,7 @@ class AutoUpdater {
   Future<void> _downloadUpdate(
       UpdateInfo updateInfo, String expectedHash) async {
     if (updateInfo.downloadUrl.isEmpty) {
-      KazumiDialog.showToast(message: '没有找到合适的下载链接');
+      KazumiDialog.showToast(message: currentL10n.noSuitableDownloadLink);
       return;
     }
 
@@ -453,7 +458,7 @@ class AutoUpdater {
       clickMaskDismiss: false,
       builder: (context) {
         return AlertDialog(
-          title: const Text('正在下载更新'),
+          title: Text(currentL10n.downloadingUpdate),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -477,7 +482,7 @@ class AutoUpdater {
                 _cancelDownload();
                 KazumiDialog.dismiss();
               },
-              child: const Text('取消'),
+              child: Text(currentL10n.cancel),
             ),
           ],
         );
@@ -494,22 +499,22 @@ class AutoUpdater {
       KazumiDialog.dismiss();
 
       // 显示详细的错误信息
-      String errorMessage = '下载失败';
+      String errorMessage = currentL10n.downloadFailed;
       if (e.toString().contains('Permission denied') ||
           e.toString().contains('Operation not permitted')) {
-        errorMessage = '权限不足，文件已保存到应用临时目录';
+        errorMessage = currentL10n.insufficientPermissionTemporaryDirectory;
       } else if (e.toString().contains('No space left')) {
-        errorMessage = '磁盘空间不足';
+        errorMessage = currentL10n.insufficientDiskSpace;
       } else if (e.toString().contains('Network')) {
-        errorMessage = '网络连接错误';
-      } else if (e.toString().contains('文件完整性验证失败')) {
-        errorMessage = '文件完整性验证失败，可能是网络传输错误';
+        errorMessage = currentL10n.networkConnectionError;
+      } else if (e.toString().contains('File integrity verification failed')) {
+        errorMessage = currentL10n.fileIntegrityVerificationFailed;
       }
 
       KazumiDialog.show(
         builder: (context) {
           return AlertDialog(
-            title: const Text('下载失败'),
+            title: Text(currentL10n.downloadFailed),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -517,7 +522,7 @@ class AutoUpdater {
                 Text(errorMessage),
                 const SizedBox(height: 8),
                 Text(
-                  '错误详情: ${e.toString()}',
+                  currentL10n.errorDetails(e.toString()),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
@@ -525,7 +530,7 @@ class AutoUpdater {
             actions: [
               TextButton(
                 onPressed: () => KazumiDialog.dismiss(),
-                child: const Text('确定'),
+                child: Text(currentL10n.confirm),
               ),
               TextButton(
                 onPressed: () {
@@ -533,7 +538,7 @@ class AutoUpdater {
                   // 重新尝试下载
                   _downloadUpdate(updateInfo, expectedHash);
                 },
-                child: const Text('重试'),
+                child: Text(currentL10n.retry),
               ),
             ],
           );
@@ -559,7 +564,7 @@ class AutoUpdater {
     KazumiDialog.show(
       builder: (context) {
         return AlertDialog(
-          title: const Text('下载完成'),
+          title: Text(currentL10n.downloadComplete),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -573,13 +578,14 @@ class AutoUpdater {
                   ),
                   const SizedBox(width: 8),
                   Expanded(
-                    child: Text('新版本 ${updateInfo.version} 已下载完成'),
+                    child: Text(
+                        currentL10n.newVersionDownloaded(updateInfo.version)),
                   ),
                 ],
               ),
               const SizedBox(height: 12),
               Text(
-                '安装过程中应用将会退出',
+                currentL10n.appWillExitDuringInstallation,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.error,
                   fontSize: 12,
@@ -596,7 +602,7 @@ class AutoUpdater {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '文件位置:',
+                      currentL10n.fileLocation,
                       style: Theme.of(context).textTheme.labelSmall,
                     ),
                     const SizedBox(height: 4),
@@ -615,7 +621,7 @@ class AutoUpdater {
             TextButton(
               onPressed: () => KazumiDialog.dismiss(),
               child: Text(
-                '稍后安装',
+                currentL10n.installLater,
                 style: TextStyle(color: Theme.of(context).colorScheme.outline),
               ),
             ),
@@ -625,7 +631,7 @@ class AutoUpdater {
                   // 在文件管理器中显示文件
                   _revealInFileManager(filePath);
                 },
-                child: const Text('打开文件夹'),
+                child: Text(currentL10n.openFolder),
               ),
             TextButton(
               onPressed: () {
@@ -633,7 +639,7 @@ class AutoUpdater {
                 _installUpdate(
                     filePath, updateInfo.recommendedInstallationType);
               },
-              child: const Text('立即安装'),
+              child: Text(currentL10n.installNow),
             ),
           ],
         );
@@ -697,7 +703,9 @@ class AutoUpdater {
     if (downloadedHash != expectedHash) {
       // 哈希不匹配，删除文件并抛出异常
       await file.delete();
-      throw Exception('文件完整性验证失败: 期望 $expectedHash，实际 $downloadedHash');
+      throw Exception(
+        'File integrity verification failed: expected $expectedHash, actual $downloadedHash',
+      );
     }
     KazumiLogger().i('Update: file downloaded and hash verified: $filePath');
 
@@ -709,7 +717,7 @@ class AutoUpdater {
       String filePath, InstallationType installationType) async {
     try {
       // 显示准备退出的提示
-      KazumiDialog.showToast(message: '准备安装更新，应用即将退出...');
+      KazumiDialog.showToast(message: currentL10n.preparingInstallAppWillExit);
 
       await Future.delayed(const Duration(seconds: 2));
 
@@ -734,12 +742,16 @@ class AutoUpdater {
       } else if (Platform.isAndroid) {
         final result = await OpenFilex.open(filePath);
         if (result.type != ResultType.done) {
-          KazumiDialog.showToast(message: '无法打开安装文件: ${result.message}');
+          KazumiDialog.showToast(
+            message: currentL10n.cannotOpenInstaller(result.message),
+          );
           return;
         }
       }
     } catch (e) {
-      KazumiDialog.showToast(message: '启动安装程序失败: ${e.toString()}');
+      KazumiDialog.showToast(
+        message: currentL10n.launchInstallerFailed(e.toString()),
+      );
       KazumiLogger().e('Update: launch installer failed', error: e);
     }
   }
@@ -753,7 +765,7 @@ class AutoUpdater {
       // 如果传入的本来就是目录则打开这个目录
       // 如果是文件则打开包含它的目录
       if (type == FileSystemEntityType.notFound) {
-        KazumiDialog.showToast(message: '文件或目录不存在');
+        KazumiDialog.showToast(message: currentL10n.fileOrDirectoryNotFound);
         return;
       } else if (type == FileSystemEntityType.directory) {
         targetDirOrFile = filePath;
@@ -780,10 +792,11 @@ class AutoUpdater {
         // 尝试打开包含文件的文件夹
         await Process.start('xdg-open', [targetDirOrFile]);
       } else {
-        KazumiDialog.showToast(message: '此平台不支持通过此方法打开文件管理器');
+        KazumiDialog.showToast(
+            message: currentL10n.fileManagerMethodUnsupported);
       }
     } catch (e) {
-      KazumiDialog.showToast(message: '无法打开文件管理器');
+      KazumiDialog.showToast(message: currentL10n.cannotOpenFileManager);
       KazumiLogger().w('Update: reveal in file manager failed', error: e);
     } finally {
       try {

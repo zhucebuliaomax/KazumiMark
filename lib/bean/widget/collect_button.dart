@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/modules/bangumi/bangumi_item.dart';
 import 'package:kazumi/pages/collect/collect_controller.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -51,17 +52,17 @@ class _CollectButtonState extends State<CollectButton> {
   String getTypeStringByInt(int collectType) {
     switch (collectType) {
       case 1:
-        return "在看";
+        return context.l10n.watching;
       case 2:
-        return "想看";
+        return context.l10n.planToWatch;
       case 3:
-        return "搁置";
+        return context.l10n.onHold;
       case 4:
-        return "看过";
+        return context.l10n.watched;
       case 5:
-        return "抛弃";
+        return context.l10n.abandoned;
       default:
-        return "未追";
+        return context.l10n.notFollowing;
     }
   }
 

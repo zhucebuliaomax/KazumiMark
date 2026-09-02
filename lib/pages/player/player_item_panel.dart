@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kazumi/bean/widget/play_pause_icon.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/player/player_adjustment_hud.dart';
 import 'package:kazumi/pages/player/controller/player_aspect_ratio.dart';
 import 'package:kazumi/pages/player/controller/player_super_resolution.dart';
@@ -159,8 +160,9 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
             filled: true,
             fillColor: Colors.white38,
             floatingLabelBehavior: FloatingLabelBehavior.never,
-            hintText:
-                playerController.danmaku.danmakuOn ? '发个友善的弹幕见证当下' : '已关闭弹幕',
+            hintText: playerController.danmaku.danmakuOn
+                ? context.l10n.danmakuInputHint
+                : context.l10n.danmakuDisabled,
             hintStyle: TextStyle(
                 fontSize: isDesktop() ? 15 : 13, color: Colors.white60),
             alignLabelWithHint: true,
@@ -190,7 +192,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                       borderRadius: BorderRadius.circular(isDesktop() ? 8 : 20),
                     ),
                   ),
-                  child: const Text('发送'),
+                  child: Text(context.l10n.send),
                 ),
               ],
             ),
@@ -216,7 +218,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
     final double currentSpeed = playerController.playback.playerSpeed;
     KazumiDialog.show(builder: (context) {
       return AlertDialog(
-        title: const Text('播放速度'),
+        title: Text(context.l10n.playbackSpeed),
         content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
           return Wrap(
@@ -248,7 +250,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
           TextButton(
             onPressed: () => KazumiDialog.dismiss(),
             child: Text(
-              '取消',
+              context.l10n.cancel,
               style: TextStyle(color: Theme.of(context).colorScheme.outline),
             ),
           ),
@@ -257,7 +259,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
               await widget.setPlaybackSpeed(1.0);
               KazumiDialog.dismiss();
             },
-            child: const Text('默认速度'),
+            child: Text(context.l10n.defaultSpeed),
           ),
         ],
       );
@@ -268,7 +270,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
     KazumiDialog.show(builder: (context) {
       String input = "";
       return AlertDialog(
-        title: const Text('跳过秒数'),
+        title: Text(context.l10n.skipSeconds),
         content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
           return TextField(
@@ -288,7 +290,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
           TextButton(
             onPressed: () => KazumiDialog.dismiss(),
             child: Text(
-              '取消',
+              context.l10n.cancel,
               style: TextStyle(color: Theme.of(context).colorScheme.outline),
             ),
           ),
@@ -301,7 +303,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                 KazumiDialog.dismiss();
               }
             },
-            child: const Text('确定'),
+            child: Text(context.l10n.confirm),
           ),
         ],
       );
@@ -394,14 +396,19 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
             : () {
                 widget.handleDanmaku();
               },
-        tooltip: danmakuLoading ? '弹幕加载中...' : (danmakuOn ? '关闭弹幕' : '打开弹幕'),
+        tooltip: danmakuLoading
+            ? context.l10n.danmakuLoading
+            : (danmakuOn
+                ? context.l10n.closeDanmaku
+                : context.l10n.openDanmaku),
       );
     });
   }
 
   Widget forwardIcon() {
     return Tooltip(
-      message: '快进${playerController.playback.buttonSkipTime}秒，长按修改时间',
+      message:
+          context.l10n.skipButtonHint(playerController.playback.buttonSkipTime),
       child: GestureDetector(
         onLongPress: () => showForwardChange(),
         child: IconButton(
@@ -682,7 +689,9 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
               child: Row(
                 children: [
                   IconButton(
-                    tooltip: playerController.playback.playing ? '暂停' : '播放',
+                    tooltip: playerController.playback.playing
+                        ? context.l10n.pause
+                        : context.l10n.play,
                     onPressed: () => playerController.playOrPause(),
                     icon: PlayPauseIcon(
                       iconColor: Colors.white,
@@ -695,7 +704,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                     IconButton(
                       color: Colors.white,
                       icon: const Icon(Icons.skip_next_rounded),
-                      tooltip: '下一集',
+                      tooltip: context.l10n.nextEpisode,
                       onPressed: () => widget.handlePreNextEpisode('next'),
                     ),
                   if (isDesktop())
@@ -739,7 +748,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                                   },
                                   color: Colors.white,
                                   icon: cachedDanmakuSettingIcon!,
-                                  tooltip: '弹幕设置',
+                                  tooltip: context.l10n.danmakuSettings,
                                 ),
                                 if (isSpaceEnough) danmakuTextField,
                               ],
@@ -757,8 +766,9 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                       onPressed: () {
                         widget.handleDanmaku();
                       },
-                      tooltip:
-                          playerController.danmaku.danmakuOn ? '关闭弹幕' : '打开弹幕',
+                      tooltip: playerController.danmaku.danmakuOn
+                          ? context.l10n.closeDanmaku
+                          : context.l10n.openDanmaku,
                     ),
                     if (playerController.danmaku.danmakuOn) ...[
                       IconButton(
@@ -775,7 +785,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                         },
                         color: Colors.white,
                         icon: cachedDanmakuSettingIcon!,
-                        tooltip: '弹幕设置',
+                        tooltip: context.l10n.danmakuSettings,
                       ),
                       Expanded(child: danmakuTextField),
                     ],
@@ -795,8 +805,8 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                             controller.open();
                           }
                         },
-                        child: const Text(
-                          '超分辨率',
+                        child: Text(
+                          context.l10n.superResolution,
                           style: TextStyle(color: Colors.white),
                         ),
                       );
@@ -842,7 +852,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                         },
                         child: Text(
                           playerController.playback.playerSpeed == 1.0
-                              ? '倍速'
+                              ? context.l10n.playbackSpeedShort
                               : '${playerController.playback.playerSpeed}x',
                           style: const TextStyle(color: Colors.white),
                         ),
@@ -893,7 +903,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                           Icons.aspect_ratio_rounded,
                           color: Colors.white,
                         ),
-                        tooltip: '视频比例',
+                        tooltip: context.l10n.videoAspectRatio,
                       );
                     },
                     menuChildren: [
@@ -927,7 +937,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                       : IconButton(
                           color: Colors.white,
                           icon: const Icon(Icons.menu_open_rounded),
-                          tooltip: '选集面板',
+                          tooltip: context.l10n.episodePanel,
                           onPressed: () {
                             widget.toggleMenu();
                           },
@@ -942,8 +952,9 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                           icon: Icon(videoPageController.isFullscreen
                               ? Icons.fullscreen_exit_rounded
                               : Icons.fullscreen_rounded),
-                          tooltip:
-                              videoPageController.isFullscreen ? '退出全屏' : '全屏',
+                          tooltip: videoPageController.isFullscreen
+                              ? context.l10n.shortcutExitFullscreen
+                              : context.l10n.shortcutFullscreen,
                           onPressed: () {
                             widget.handleFullscreen();
                           },
@@ -977,7 +988,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
               IconButton(
                 color: Colors.white,
                 icon: const Icon(Icons.arrow_back_rounded),
-                tooltip: '返回',
+                tooltip: context.l10n.back,
                 onPressed: () {
                   widget.onBackPressed(context);
                 },
@@ -1014,7 +1025,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                     }
                     await widget.enterAndroidPictureInPicture();
                   },
-                  tooltip: '画中画',
+                  tooltip: context.l10n.pictureInPicture,
                   icon: const Icon(
                     Icons.picture_in_picture,
                     color: Colors.white,
@@ -1038,7 +1049,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                         controller.open();
                       }
                     },
-                    tooltip: '更多选项',
+                    tooltip: context.l10n.moreOptions,
                     icon: const Icon(
                       Icons.more_vert,
                       color: Colors.white,
@@ -1055,7 +1066,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                       constraints: BoxConstraints(minWidth: 112),
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("弹幕切换"),
+                        child: Text(context.l10n.switchDanmaku),
                       ),
                     ),
                   ),
@@ -1068,7 +1079,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                       constraints: BoxConstraints(minWidth: 112),
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("视频详情"),
+                        child: Text(context.l10n.videoDetails),
                       ),
                     ),
                   ),
@@ -1090,7 +1101,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                       constraints: BoxConstraints(minWidth: 112),
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("远程投屏"),
+                        child: Text(context.l10n.remoteCasting),
                       ),
                     ),
                   ),
@@ -1103,7 +1114,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                       constraints: BoxConstraints(minWidth: 112),
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("外部播放"),
+                        child: Text(context.l10n.externalPlayback),
                       ),
                     ),
                   ),
@@ -1119,7 +1130,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              "不开启",
+                              context.l10n.doNotEnable,
                               style: TextStyle(
                                 color: !TimedShutdownService().isActive
                                     ? Theme.of(context).colorScheme.primary
@@ -1135,8 +1146,9 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                             TimedShutdownService().start(minutes,
                                 onExpired: widget.pauseForTimedShutdown);
                             KazumiDialog.showToast(
-                                message:
-                                    '已设置 ${TimedShutdownService().formatMinutesToDisplay(minutes)} 后定时关闭');
+                                message: context.l10n.timedShutdownSet(
+                                    TimedShutdownService()
+                                        .formatMinutesToDisplay(minutes)));
                           },
                           child: Container(
                             height: 48,
@@ -1144,7 +1156,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                "$minutes 分钟",
+                                context.l10n.minutesCount(minutes),
                                 style: TextStyle(
                                   color: TimedShutdownService().setMinutes ==
                                           minutes
@@ -1166,7 +1178,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                           constraints: BoxConstraints(minWidth: 112),
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: Text("自定义"),
+                            child: Text(context.l10n.custom),
                           ),
                         ),
                       ),
@@ -1182,8 +1194,10 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                           builder: (context, remainingSeconds, child) {
                             return Text(
                               remainingSeconds > 0
-                                  ? "定时关闭 (${TimedShutdownService().formatRemainingTime()})"
-                                  : "定时关闭",
+                                  ? context.l10n.timedShutdownRemaining(
+                                      TimedShutdownService()
+                                          .formatRemainingTime())
+                                  : context.l10n.timedShutdown,
                             );
                           },
                         ),
@@ -1199,7 +1213,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                       constraints: BoxConstraints(minWidth: 112),
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("一起看"),
+                        child: Text(context.l10n.watchTogether),
                       ),
                     ),
                   ),
@@ -1228,7 +1242,7 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                     Icons.photo_camera_outlined,
                     color: Colors.white,
                   ),
-                  tooltip: '截图',
+                  tooltip: context.l10n.shortcutScreenshot,
                   onPressed: () {
                     widget.handleScreenShot();
                   },
@@ -1240,7 +1254,9 @@ class _PlayerItemPanelState extends State<PlayerItemPanel> {
                   : Icons.lock_open,
               color: Colors.white,
             ),
-            tooltip: playerController.panel.lockPanel ? '解锁面板' : '锁定面板',
+            tooltip: playerController.panel.lockPanel
+                ? context.l10n.unlockPanel
+                : context.l10n.lockPanel,
             onPressed: () {
               playerController.panel.lockPanel =
                   !playerController.panel.lockPanel;

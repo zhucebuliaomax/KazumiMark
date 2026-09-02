@@ -636,7 +636,7 @@ class _SearchWorkbenchSheetState extends State<_SearchWorkbenchSheet> {
                         children: [
                           for (final tag in defaultAnimeTags)
                             FilterChip(
-                              label: Text(tag),
+                              label: Text(localizedAnimeTag(tag)),
                               selected: draft.tags.contains(tag),
                               showCheckmark: false,
                               onSelected: (selected) {

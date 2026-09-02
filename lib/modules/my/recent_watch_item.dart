@@ -1,4 +1,5 @@
 import 'package:kazumi/modules/history/history_module.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 /// Display snapshot for a continue-watching card.
 ///
@@ -36,9 +37,9 @@ class RecentWatchItem {
       title: bangumiItem.nameCn.isEmpty ? bangumiItem.name : bangumiItem.nameCn,
       coverUrl: bangumiItem.images['large'] ?? '',
       episodeLabel: history.lastWatchEpisodeName.isEmpty
-          ? '第${history.lastWatchEpisode}话'
+          ? currentL10n.episodeNumber(history.lastWatchEpisode)
           : history.lastWatchEpisodeName,
-      sourceLabel: isOffline ? '缓存' : '在线',
+      sourceLabel: isOffline ? currentL10n.cached : currentL10n.online,
       adapterName: history.adapterName,
       lastWatchTime: history.lastWatchTime,
       history: history,

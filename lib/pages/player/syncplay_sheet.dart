@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:kazumi/bean/dialog/adaptive_bottom_sheet.dart';
 import 'package:kazumi/bean/dialog/material_bottom_sheet.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/player/player_controller.dart';
 import 'package:kazumi/services/player/syncplay_endpoint.dart';
 import 'package:kazumi/services/storage/storage.dart';
@@ -156,7 +157,7 @@ class _SyncPlaySheetScaffold extends StatelessWidget {
                 const SizedBox(width: 12),
                 IconButton.filledTonal(
                   onPressed: () => Navigator.of(context).pop(),
-                  tooltip: '关闭',
+                  tooltip: context.l10n.close,
                   icon: const Icon(Icons.close_rounded),
                 ),
               ],
@@ -178,7 +179,7 @@ class _SyncPlaySheetScaffold extends StatelessWidget {
                   if (showCancel)
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      child: const Text('取消'),
+                      child: Text(context.l10n.cancel),
                     ),
                   const Spacer(),
                   if (primaryAction != null) primaryAction!,
@@ -215,8 +216,8 @@ class _SyncPlayHomeSheet extends StatelessWidget {
       final bool connecting = hasSession && !connected;
 
       return _SyncPlaySheetScaffold(
-        title: '一起看',
-        description: '与好友同步播放、暂停与选集',
+        title: context.l10n.watchTogether,
+        description: context.l10n.watchTogetherDescription,
         primaryAction: hasSession
             ? FilledButton.tonalIcon(
                 onPressed: () async {
@@ -227,7 +228,9 @@ class _SyncPlayHomeSheet extends StatelessWidget {
                   foregroundColor: colorScheme.onErrorContainer,
                 ),
                 icon: const Icon(Icons.logout_rounded),
-                label: Text(connecting ? '取消连接' : '断开连接'),
+                label: Text(connecting
+                    ? context.l10n.cancelConnection
+                    : context.l10n.disconnect),
               )
             : null,
         bodyBuilder: (context, compact) {
@@ -266,7 +269,7 @@ class _SyncPlayHomeSheet extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    '正在连接',
+                    context.l10n.connecting,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: colorScheme.onSurface,
                       fontWeight: FontWeight.w600,
@@ -295,15 +298,15 @@ class _SyncPlayHomeSheet extends StatelessWidget {
 
     final Widget create = _ChoiceCard(
       icon: Icons.add_home_outlined,
-      title: '创建房间',
-      description: '生成房间号并邀请好友',
+      title: context.l10n.createRoom,
+      description: context.l10n.createRoomDescription,
       emphasized: true,
       onTap: () => Navigator.of(context).pop(_SyncPlayDestination.create),
     );
     final Widget join = _ChoiceCard(
       icon: Icons.login_rounded,
-      title: '加入房间',
-      description: '已有好友的房间号',
+      title: context.l10n.joinRoom,
+      description: context.l10n.joinRoomDescription,
       emphasized: false,
       onTap: () => Navigator.of(context).pop(_SyncPlayDestination.join),
     );
@@ -338,7 +341,7 @@ class _SyncPlayHomeSheet extends StatelessWidget {
             leading:
                 Icon(Icons.dns_outlined, color: colorScheme.onSurfaceVariant),
             title: Text(
-              '同步服务器',
+              context.l10n.syncServer,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: colorScheme.onSurfaceVariant,
               ),
@@ -372,7 +375,7 @@ class _SyncPlayHomeSheet extends StatelessWidget {
       children: [
         _RoomNumberCard(
           room: room,
-          label: '当前房间',
+          label: context.l10n.currentRoom,
           trailing: [_CopyButton(value: room)],
         ),
         const SizedBox(height: 12),
@@ -385,14 +388,14 @@ class _SyncPlayHomeSheet extends StatelessWidget {
               _buildInfoRow(
                 context,
                 icon: Icons.network_ping_rounded,
-                label: '网络延迟',
+                label: context.l10n.networkLatency,
                 value: '$rtt ms',
               ),
               Divider(height: 1, indent: 56, color: colorScheme.outlineVariant),
               _buildInfoRow(
                 context,
                 icon: Icons.dns_outlined,
-                label: '同步服务器',
+                label: context.l10n.syncServer,
                 value: _readEndPoint(),
               ),
             ],
@@ -400,7 +403,7 @@ class _SyncPlayHomeSheet extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         Text(
-          '分享房间号，好友即可加入',
+          context.l10n.shareRoomHint,
           style: theme.textTheme.bodySmall?.copyWith(
             color: colorScheme.onSurfaceVariant,
           ),
@@ -602,25 +605,28 @@ class _SyncPlayRoomSheetState extends State<_SyncPlayRoomSheet> {
     final bool isCreate = widget.isCreate;
 
     return _SyncPlaySheetScaffold(
-      title: isCreate ? '创建房间' : '加入房间',
-      description: isCreate ? '将房间号分享给好友' : '输入好友的房间号',
+      title: isCreate ? context.l10n.createRoom : context.l10n.joinRoom,
+      description: isCreate
+          ? context.l10n.shareRoomNumberWithFriends
+          : context.l10n.enterFriendsRoomNumber,
       showCancel: true,
       primaryAction: FilledButton.icon(
         onPressed: _submit,
         icon: Icon(
             isCreate ? Icons.play_circle_outline_rounded : Icons.login_rounded),
-        label: Text(isCreate ? '创建并加入' : '加入房间'),
+        label:
+            Text(isCreate ? context.l10n.createAndJoin : context.l10n.joinRoom),
       ),
       bodyBuilder: (context, compact) {
         final Widget lead = isCreate
             ? _RoomNumberCard(
                 room: _createdRoom,
-                label: '房间号',
+                label: context.l10n.roomNumber,
                 trailing: [
                   IconButton(
                     onPressed: () =>
                         setState(() => _createdRoom = _generateRoomNumber()),
-                    tooltip: '重新生成',
+                    tooltip: context.l10n.regenerate,
                     color: Theme.of(context).colorScheme.onPrimaryContainer,
                     icon: const Icon(Icons.refresh_rounded),
                   ),
@@ -662,17 +668,17 @@ class _SyncPlayRoomSheetState extends State<_SyncPlayRoomSheet> {
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: _sheetInputDecoration(
-        labelText: '房间号',
-        hintText: '6-10 位数字',
+        labelText: context.l10n.roomNumber,
+        hintText: context.l10n.roomNumberHint,
         icon: Icons.meeting_room_outlined,
       ),
       validator: (value) {
         final String text = (value ?? '').trim();
         if (text.isEmpty) {
-          return '请输入房间号';
+          return context.l10n.enterRoomNumber;
         }
         if (!RegExp(r'^[0-9]{6,10}$').hasMatch(text)) {
-          return '房间号为 6-10 位数字';
+          return context.l10n.invalidRoomNumber;
         }
         return null;
       },
@@ -685,17 +691,17 @@ class _SyncPlayRoomSheetState extends State<_SyncPlayRoomSheet> {
       textInputAction: TextInputAction.done,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: _sheetInputDecoration(
-        labelText: '昵称',
+        labelText: context.l10n.nickname,
         icon: Icons.person_outline_rounded,
-        helperText: compact ? null : '4-12 位英文字母，房间内可见',
+        helperText: compact ? null : context.l10n.nicknameHint,
       ),
       validator: (value) {
         final String text = (value ?? '').trim();
         if (text.isEmpty) {
-          return '请输入昵称';
+          return context.l10n.enterNickname;
         }
         if (!RegExp(r'^[a-zA-Z]{4,12}$').hasMatch(text)) {
-          return '昵称为 4-12 位英文字母';
+          return context.l10n.invalidNickname;
         }
         return null;
       },
@@ -713,7 +719,7 @@ class _SyncPlayServerSheet extends StatefulWidget {
 
 class _SyncPlayServerSheetState extends State<_SyncPlayServerSheet> {
   /// Stands in for a user supplied address in the otherwise fixed list.
-  static const String _customOption = '自定义服务器';
+  static String get _customOption => currentL10n.customServer;
 
   final TextEditingController _customEndPointController =
       TextEditingController();
@@ -748,7 +754,8 @@ class _SyncPlayServerSheetState extends State<_SyncPlayServerSheet> {
     if (endPoint == _customOption) {
       endPoint = _customEndPointController.text.trim();
       if (parseSyncPlayEndPoint(endPoint) == null) {
-        setState(() => _customEndPointError = '地址格式为 host:port');
+        setState(
+            () => _customEndPointError = currentL10n.serverAddressFormatHint);
         return;
       }
     }
@@ -759,12 +766,12 @@ class _SyncPlayServerSheetState extends State<_SyncPlayServerSheet> {
   @override
   Widget build(BuildContext context) {
     return _SyncPlaySheetScaffold(
-      title: '同步服务器',
-      description: '房间成员需使用同一服务器',
+      title: context.l10n.syncServer,
+      description: context.l10n.sameServerRequired,
       showCancel: true,
       primaryAction: FilledButton(
         onPressed: _save,
-        child: const Text('保存'),
+        child: Text(context.l10n.save),
       ),
       bodyBuilder: (context, compact) {
         final ColorScheme colorScheme = Theme.of(context).colorScheme;
@@ -802,7 +809,7 @@ class _SyncPlayServerSheetState extends State<_SyncPlayServerSheet> {
                 keyboardType: TextInputType.url,
                 autocorrect: false,
                 decoration: _sheetInputDecoration(
-                  labelText: '服务器地址',
+                  labelText: context.l10n.serverAddress,
                   hintText: 'example.com:8996',
                   errorText: _customEndPointError,
                   icon: Icons.link_rounded,
@@ -949,7 +956,7 @@ class _CopyButtonState extends State<_CopyButton> {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: _copy,
-      tooltip: _copied ? '已复制' : '复制',
+      tooltip: _copied ? context.l10n.copied : context.l10n.copy,
       color: Theme.of(context).colorScheme.onPrimaryContainer,
       icon: Icon(_copied ? Icons.check_rounded : Icons.copy_rounded),
     );

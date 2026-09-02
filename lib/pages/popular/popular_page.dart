@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:kazumi/bean/widget/bangumi_mirror_error_widget.dart';
 import 'package:kazumi/bean/widget/custom_dropdown_menu.dart';
 import 'package:kazumi/modules/bangumi/bangumi_item.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/popular/popular_controller.dart';
 import 'package:kazumi/bean/card/bangumi_card.dart';
 import 'package:kazumi/utils/constants.dart';
@@ -206,7 +207,9 @@ class _PopularPageState extends State<PopularPage> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                isTrend ? '热门番组' : popularController.currentTag,
+                                isTrend
+                                    ? context.l10n.popularAnime
+                                    : popularController.currentTag,
                                 style: theme.textTheme.headlineMedium!.copyWith(
                                   fontWeight: fontWeight,
                                   fontSize: fontSize,
@@ -234,14 +237,14 @@ class _PopularPageState extends State<PopularPage> {
     final actions = <Widget>[
       if (MediaQuery.of(context).orientation == Orientation.portrait)
         IconButton(
-          tooltip: '搜索',
+          tooltip: context.l10n.search,
           onPressed: () => context.pushNamed('/search/'),
           icon: const Icon(Icons.search),
         ),
     ];
     actions.add(
       IconButton(
-        tooltip: '历史记录',
+        tooltip: context.l10n.history,
         onPressed: () => context.pushNamed('/settings/history/'),
         icon: const Icon(Icons.history),
       ),
@@ -250,7 +253,7 @@ class _PopularPageState extends State<PopularPage> {
       if (!showWindowButton()) {
         actions.add(
           IconButton(
-            tooltip: '退出',
+            tooltip: context.l10n.exit,
             onPressed: () => windowManager.close(),
             icon: const Icon(Icons.close),
           ),
@@ -285,7 +288,9 @@ class _PopularPageState extends State<PopularPage> {
               '',
               ...defaultAnimeTags,
             ],
-            itemBuilder: (item) => item.isEmpty ? '热门番组' : item,
+            itemBuilder: (item) => item.isEmpty
+                ? context.l10n.popularAnime
+                : localizedAnimeTag(item),
           );
         },
         transitionDuration: const Duration(milliseconds: 200),

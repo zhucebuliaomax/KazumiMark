@@ -5,6 +5,7 @@ import 'package:kazumi/repositories/collect_repository.dart';
 import 'package:kazumi/modules/collect/collect_type.dart';
 import 'package:kazumi/services/storage/storage.dart';
 import 'package:mobx/mobx.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 part 'timeline_controller.g.dart';
 
@@ -119,7 +120,7 @@ abstract class _TimelineController with Store {
 
   void tryEnterSeason(DateTime date) {
     _selectedDate = date;
-    seasonString = "加载中 ٩(◦`꒳´◦)۶";
+    seasonString = currentL10n.loadingPlayful;
   }
 
   /// Sort type: 1 = default (id), 2 = score, 3 = heat (votes).

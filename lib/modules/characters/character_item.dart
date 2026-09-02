@@ -1,4 +1,5 @@
 import 'package:kazumi/modules/characters/actor_item.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 class CharacterAvator {
   final String small;
@@ -74,7 +75,7 @@ class CharacterItem {
         id: json['id'] ?? 0,
         type: json['type'] ?? 0,
         name: json['name'] ?? '',
-        relation: json['relation'] ?? '未知',
+        relation: json['relation'] ?? currentL10n.unknown,
         avator:
             CharacterAvator.fromJson(json['images'] as Map<String, dynamic>),
         actorList: resActorList,

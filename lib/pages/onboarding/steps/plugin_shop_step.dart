@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/onboarding/onboarding_step_layout.dart';
 import 'package:kazumi/pages/plugin_editor/plugin_catalog_view.dart';
 import 'package:kazumi/plugins/plugins_controller.dart';
@@ -15,8 +16,8 @@ class PluginShopStep extends StatelessWidget {
   Widget build(BuildContext context) {
     return OnboardingStepLayout(
       leading: const OnboardingStepIcon(icon: Icons.travel_explore_rounded),
-      title: '添加规则',
-      subtitle: '规则提供番剧搜索源，可稍后在 设置 → 规则管理 中调整',
+      title: context.l10n.addRules,
+      subtitle: context.l10n.addRulesDescription,
       child: PluginCatalogView(
         controller: controller,
         listPadding: EdgeInsets.zero,

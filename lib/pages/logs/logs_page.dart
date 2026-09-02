@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:kazumi/bean/appbar/sys_app_bar.dart';
 import 'package:kazumi/bean/widget/empty_state_widget.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 class LogsPage extends StatefulWidget {
   const LogsPage({super.key});
@@ -138,7 +139,7 @@ class _LogsPageState extends State<LogsPage> {
       });
     } catch (e) {
       if (!mounted) return;
-      KazumiDialog.showToast(message: '清空失败: $e');
+      KazumiDialog.showToast(message: context.l10n.clearLogsFailed('$e'));
     }
   }
 
@@ -146,18 +147,18 @@ class _LogsPageState extends State<LogsPage> {
     try {
       await Clipboard.setData(ClipboardData(text: _fullContent));
       if (!mounted) return;
-      KazumiDialog.showToast(message: '已复制到剪贴板');
+      KazumiDialog.showToast(message: context.l10n.copiedToClipboard);
     } catch (e) {
       if (!mounted) return;
-      KazumiDialog.showToast(message: '复制失败: $e');
+      KazumiDialog.showToast(message: context.l10n.copyFailed('$e'));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const SysAppBar(
-        title: Text('日志'),
+      appBar: SysAppBar(
+        title: Text(context.l10n.logs),
       ),
       body: buildBody,
       floatingActionButton: buildFloatingButtons,
@@ -172,16 +173,16 @@ class _LogsPageState extends State<LogsPage> {
     }
 
     if (_hasError) {
-      return const Center(
-        child: Text('加载日志失败'),
+      return Center(
+        child: Text(context.l10n.loadLogsFailed),
       );
     }
 
     if (_logLines.isEmpty) {
-      return const Center(
+      return Center(
         child: GeneralEmptyState(
           icon: Icons.receipt_long_rounded,
-          title: '暂无日志',
+          title: context.l10n.noLogs,
         ),
       );
     }
@@ -223,14 +224,14 @@ class _LogsPageState extends State<LogsPage> {
         FloatingActionButton(
           heroTag: null,
           onPressed: _clearLogs,
-          tooltip: '清空日志',
+          tooltip: context.l10n.clearLogs,
           child: const Icon(Icons.clear_all),
         ),
         const SizedBox(width: 15),
         FloatingActionButton(
           heroTag: null,
           onPressed: _copyLogs,
-          tooltip: '复制日志',
+          tooltip: context.l10n.copyLogs,
           child: const Icon(Icons.copy),
         ),
       ],

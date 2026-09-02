@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:kazumi/modules/bangumi/bangumi_item.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/timeline/timeline_controller.dart';
 import 'package:kazumi/bean/dialog/adaptive_bottom_sheet.dart';
 import 'package:kazumi/bean/dialog/material_bottom_sheet.dart';
@@ -37,7 +38,7 @@ class _TimelinePageState extends State<TimelinePage>
     super.initState();
     int weekday = DateTime.now().weekday - 1;
     tabController =
-        TabController(vsync: this, length: tabs.length, initialIndex: weekday);
+        TabController(vsync: this, length: 7, initialIndex: weekday);
     showRating = GStorage.getSetting(SettingsKeys.showRating);
     if (timelineController.bangumiCalendar.isEmpty) {
       timelineController.init();
@@ -65,15 +66,15 @@ class _TimelinePageState extends State<TimelinePage>
     }
   }
 
-  final List<Tab> tabs = const <Tab>[
-    Tab(text: '一'),
-    Tab(text: '二'),
-    Tab(text: '三'),
-    Tab(text: '四'),
-    Tab(text: '五'),
-    Tab(text: '六'),
-    Tab(text: '日'),
-  ];
+  List<Tab> get tabs => <Tab>[
+        Tab(text: context.l10n.mondayShort),
+        Tab(text: context.l10n.tuesdayShort),
+        Tab(text: context.l10n.wednesdayShort),
+        Tab(text: context.l10n.thursdayShort),
+        Tab(text: context.l10n.fridayShort),
+        Tab(text: context.l10n.saturdayShort),
+        Tab(text: context.l10n.sundayShort),
+      ];
 
   final seasons = ['秋', '夏', '春', '冬'];
 
@@ -202,8 +203,8 @@ class _TimelinePageState extends State<TimelinePage>
     final textTheme = Theme.of(context).textTheme;
 
     return MaterialBottomSheetHeader(
-      title: '时间机器',
-      description: '按季度回到任意放送季，时间线会立即切换。',
+      title: context.l10n.timeMachine,
+      description: context.l10n.timeMachineDescription,
       onClose: KazumiDialog.dismiss,
       footer: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -212,7 +213,8 @@ class _TimelinePageState extends State<TimelinePage>
           borderRadius: BorderRadius.circular(16),
         ),
         child: Text(
-          '当前查看 ${getStringByDateTime(timelineController.selectedDate)}',
+          context.l10n.currentlyViewingSeason(
+              getStringByDateTime(timelineController.selectedDate)),
           style: textTheme.labelLarge?.copyWith(
             color: colorScheme.onSecondaryContainer,
             fontWeight: FontWeight.w600,
@@ -255,7 +257,7 @@ class _TimelinePageState extends State<TimelinePage>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '$year年',
+            context.l10n.yearLabel(year),
             style: textTheme.titleMedium?.copyWith(
               color: colorScheme.onSurface,
               fontWeight: FontWeight.w700,
@@ -264,7 +266,7 @@ class _TimelinePageState extends State<TimelinePage>
           if (!hasSelectedSeason) ...[
             const SizedBox(height: 4),
             Text(
-              '共 ${availableSeasons.length} 个季度可选',
+              context.l10n.availableSeasonCount(availableSeasons.length),
               style: textTheme.bodySmall?.copyWith(
                 color: colorScheme.onSurfaceVariant,
               ),
@@ -343,13 +345,13 @@ class _TimelinePageState extends State<TimelinePage>
   String getSortTypeLabel(int sortType) {
     switch (sortType) {
       case 1:
-        return '时间优先';
+        return context.l10n.timePriority;
       case 2:
-        return '评分优先';
+        return context.l10n.ratingPriority;
       case 3:
-        return '热度优先';
+        return context.l10n.popularityPriority;
       default:
-        return '热度优先';
+        return context.l10n.popularityPriority;
     }
   }
 
@@ -419,8 +421,8 @@ class _TimelinePageState extends State<TimelinePage>
 
   Widget buildTimelineOptionsSheetHeader(BuildContext context) {
     return MaterialBottomSheetHeader(
-      title: '时间线选项',
-      description: '调整排序和过滤条件，结果会立即应用到当前时间线。',
+      title: context.l10n.timelineOptions,
+      description: context.l10n.timelineOptionsDescription,
       onClose: KazumiDialog.dismiss,
       footer: Observer(
         builder: (context) {
@@ -431,14 +433,15 @@ class _TimelinePageState extends State<TimelinePage>
             children: [
               buildTimelineOptionSummaryChip(
                 context,
-                label: '当前排序 ${getSortTypeLabel(timelineController.sortType)}',
+                label: context.l10n
+                    .currentSort(getSortTypeLabel(timelineController.sortType)),
                 highlighted: true,
               ),
               buildTimelineOptionSummaryChip(
                 context,
                 label: enabledFilterCount == 0
-                    ? '未启用过滤条件'
-                    : '已启用 $enabledFilterCount 个过滤条件',
+                    ? context.l10n.noFiltersEnabled
+                    : context.l10n.enabledFilterCount(enabledFilterCount),
                 onTap: scrollToFilterSection,
               ),
             ],
@@ -576,15 +579,15 @@ class _TimelinePageState extends State<TimelinePage>
   Widget showFilterSwitcher() {
     return MaterialBottomSheetSection(
       key: filterSectionKey,
-      title: '过滤器',
-      description: '按收藏状态收起不需要显示的条目，支持连续调整。',
+      title: context.l10n.filters,
+      description: context.l10n.timelineFiltersDescription,
       child: Column(
         children: [
           Observer(
             builder: (context) => buildFilterOptionTile(
               context,
-              title: '不显示已抛弃的番剧',
-              description: '隐藏已经标记为抛弃的条目。',
+              title: context.l10n.hideAbandonedAnime,
+              description: context.l10n.hideAbandonedAnimeDescription,
               value: timelineController.notShowAbandonedBangumis,
               onChanged: (value) {
                 timelineController.setNotShowAbandonedBangumis(value);
@@ -596,8 +599,8 @@ class _TimelinePageState extends State<TimelinePage>
           Observer(
             builder: (context) => buildFilterOptionTile(
               context,
-              title: '不显示已看过的番剧',
-              description: '把已经看完的条目从时间线中移除。',
+              title: context.l10n.hideWatchedAnime,
+              description: context.l10n.hideWatchedAnimeTimelineDescription,
               value: timelineController.notShowWatchedBangumis,
               onChanged: (value) {
                 timelineController.setNotShowWatchedBangumis(value);
@@ -609,8 +612,8 @@ class _TimelinePageState extends State<TimelinePage>
           Observer(
             builder: (context) => buildFilterOptionTile(
               context,
-              title: '只显示在看的番剧',
-              description: '聚焦当前正在追更的条目。',
+              title: context.l10n.onlyShowWatchingAnime,
+              description: context.l10n.onlyShowWatchingAnimeDescription,
               value: timelineController.onlyShowWatchingBangumis,
               onChanged: (value) {
                 timelineController.setOnlyShowWatchingBangumis(value);
@@ -625,31 +628,31 @@ class _TimelinePageState extends State<TimelinePage>
 
   Widget showSortSwitcher() {
     return MaterialBottomSheetSection(
-      title: '排序方式',
-      description: '选择每一天内番剧卡片的排列方式。',
+      title: context.l10n.sortOrder,
+      description: context.l10n.timelineSortDescription,
       child: Column(
         children: [
           buildSortOptionTile(
             context,
             sortType: 3,
-            title: '按热度排序',
-            description: '优先展示讨论度和关注度更高的条目。',
+            title: context.l10n.sortByPopularity,
+            description: context.l10n.sortByPopularityDescription,
             icon: Icons.local_fire_department_rounded,
           ),
           const SizedBox(height: 12),
           buildSortOptionTile(
             context,
             sortType: 2,
-            title: '按评分排序',
-            description: '优先展示评分更高的条目。',
+            title: context.l10n.sortByRating,
+            description: context.l10n.sortByRatingDescription,
             icon: Icons.star_rounded,
           ),
           const SizedBox(height: 12),
           buildSortOptionTile(
             context,
             sortType: 1,
-            title: '按时间排序',
-            description: '恢复默认时间顺序，方便按播出节奏查看。',
+            title: context.l10n.sortByTime,
+            description: context.l10n.sortByTimeDescription,
             icon: Icons.schedule_rounded,
           ),
         ],

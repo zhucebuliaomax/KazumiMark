@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:kazumi/bean/settings/settings_list.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:kazumi/bean/settings/settings_detail_scaffold.dart';
@@ -26,7 +27,11 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
-  final exitBehaviorTitles = <String>['退出 Kazumi', '最小化至托盘', '每次都询问'];
+  List<String> get exitBehaviorTitles => <String>[
+        context.l10n.exitKazumi,
+        context.l10n.minimizeToTray,
+        context.l10n.askEveryTime,
+      ];
   late dynamic defaultDanmakuArea;
   late dynamic defaultThemeMode;
   late dynamic defaultThemeColor;
@@ -106,15 +111,15 @@ class _AboutPageState extends State<AboutPage> {
     KazumiDialog.show(
       builder: (context) {
         return AlertDialog(
-          title: const Text('缓存管理'),
-          content: const Text('缓存为番剧封面, 清除后加载时需要重新下载,确认要清除缓存吗?'),
+          title: Text(context.l10n.cacheManagement),
+          content: Text(context.l10n.clearCoverCacheConfirmation),
           actions: [
             TextButton(
               onPressed: () {
                 KazumiDialog.dismiss();
               },
               child: Text(
-                '取消',
+                context.l10n.cancel,
                 style: TextStyle(color: Theme.of(context).colorScheme.outline),
               ),
             ),
@@ -125,7 +130,7 @@ class _AboutPageState extends State<AboutPage> {
                 } catch (_) {}
                 KazumiDialog.dismiss();
               },
-              child: const Text('确认'),
+              child: Text(context.l10n.confirm),
             ),
           ],
         );
@@ -141,24 +146,24 @@ class _AboutPageState extends State<AboutPage> {
         onBackPressed(context);
       },
       child: SettingsDetailScaffold(
-        title: const Text('关于'),
+        title: Text(context.l10n.about),
         body: SettingsList(
           sections: [
             SettingsSection(
-              title: Text('开源'),
+              title: Text(context.l10n.openSource),
               tiles: [
                 SettingsTile(
                   leading: Icons.gavel_rounded,
                   onPressed: (_) {
                     context.pushNamed('/settings/about/license');
                   },
-                  title: Text('开源许可证'),
-                  description: Text('查看所有开源许可证'),
+                  title: Text(context.l10n.openSourceLicenses),
+                  description: Text(context.l10n.viewOpenSourceLicenses),
                 ),
               ],
             ),
             SettingsSection(
-              title: Text('外部链接'),
+              title: Text(context.l10n.externalLinks),
               tiles: [
                 SettingsTile(
                   leading: Icons.home_rounded,
@@ -166,7 +171,7 @@ class _AboutPageState extends State<AboutPage> {
                     launchUrl(Uri.parse(ApiEndpoints.projectUrl),
                         mode: LaunchMode.externalApplication);
                   },
-                  title: Text('项目主页'),
+                  title: Text(context.l10n.projectHomepage),
                 ),
                 SettingsTile(
                   leading: Icons.code_rounded,
@@ -174,7 +179,7 @@ class _AboutPageState extends State<AboutPage> {
                     launchUrl(Uri.parse(ApiEndpoints.sourceUrl),
                         mode: LaunchMode.externalApplication);
                   },
-                  title: Text('代码仓库'),
+                  title: Text(context.l10n.sourceRepository),
                   value: Text('Github'),
                 ),
                 SettingsTile(
@@ -183,7 +188,7 @@ class _AboutPageState extends State<AboutPage> {
                     launchUrl(Uri.parse(ApiEndpoints.iconUrl),
                         mode: LaunchMode.externalApplication);
                   },
-                  title: Text('图标创作'),
+                  title: Text(context.l10n.iconDesign),
                   value: Text('Pixiv'),
                 ),
                 SettingsTile(
@@ -192,7 +197,7 @@ class _AboutPageState extends State<AboutPage> {
                     launchUrl(Uri.parse(ApiEndpoints.bangumiIndex),
                         mode: LaunchMode.externalApplication);
                   },
-                  title: Text('番剧索引'),
+                  title: Text(context.l10n.animeIndex),
                   value: Text('Bangumi'),
                 ),
                 SettingsTile(
@@ -201,7 +206,7 @@ class _AboutPageState extends State<AboutPage> {
                     launchUrl(Uri.parse('https://trace.moe'),
                         mode: LaunchMode.externalApplication);
                   },
-                  title: Text('以图搜番'),
+                  title: Text(context.l10n.animeImageSearch),
                   value: Text('trace.moe'),
                 ),
                 SettingsTile(
@@ -210,14 +215,14 @@ class _AboutPageState extends State<AboutPage> {
                     launchUrl(Uri.parse(ApiEndpoints.dandanIndex),
                         mode: LaunchMode.externalApplication);
                   },
-                  title: Text('弹幕来源'),
+                  title: Text(context.l10n.danmakuSource),
                   description: Text('ID: ${dandanCredentials['id']}'),
-                  value: Text('弹弹play开放平台'),
+                  value: Text(context.l10n.danDanPlayOpenPlatform),
                 ),
               ],
             ),
             SettingsSection(
-              title: Text('社区'),
+              title: Text(context.l10n.community),
               tiles: [
                 SettingsTile(
                   leading: Icons.send_rounded,
@@ -226,13 +231,13 @@ class _AboutPageState extends State<AboutPage> {
                         mode: LaunchMode.externalApplication);
                   },
                   title: Text('Telegram'),
-                  value: Text('点击加入'),
+                  value: Text(context.l10n.tapToJoin),
                 ),
               ],
             ),
             if (isDesktop()) // 之后如果有非桌面平台的新选项可以移除
               SettingsSection(
-                title: Text('默认行为'),
+                title: Text(context.l10n.defaultBehavior),
                 tiles: [
                   SettingsTile(
                     leading: Icons.exit_to_app_rounded,
@@ -243,7 +248,7 @@ class _AboutPageState extends State<AboutPage> {
                         menuController.open();
                       }
                     },
-                    title: Text('关闭时'),
+                    title: Text(context.l10n.whenClosing),
                     value: MenuAnchor(
                       consumeOutsideTap: true,
                       controller: menuController,
@@ -281,29 +286,29 @@ class _AboutPageState extends State<AboutPage> {
                 ],
               ),
             SettingsSection(
-              title: Text('存储与日志'),
+              title: Text(context.l10n.storageAndLogs),
               tiles: [
                 SettingsTile(
                   leading: Icons.receipt_long_rounded,
                   onPressed: (_) {
                     context.pushNamed('/settings/about/logs');
                   },
-                  title: Text('错误日志'),
+                  title: Text(context.l10n.errorLogs),
                 ),
                 SettingsTile(
                   leading: Icons.cleaning_services_rounded,
                   onPressed: (_) {
                     _showCacheDialog();
                   },
-                  title: Text('清除缓存'),
+                  title: Text(context.l10n.clearCache),
                   value: _cacheSizeMB == -1
-                      ? Text('统计中...')
+                      ? Text(context.l10n.calculating)
                       : Text('${_cacheSizeMB.toStringAsFixed(2)}MB'),
                 ),
               ],
             ),
             SettingsSection(
-              title: Text('应用更新'),
+              title: Text(context.l10n.appUpdates),
               tiles: [
                 SettingsTile.switchTile(
                   leading: Icons.update_rounded,
@@ -313,7 +318,7 @@ class _AboutPageState extends State<AboutPage> {
                         SettingsKeys.autoUpdate, autoUpdate);
                     setState(() {});
                   },
-                  title: Text('启动时检查应用更新'),
+                  title: Text(context.l10n.checkAppUpdatesOnStartup),
                   initialValue: autoUpdate,
                 ),
                 SettingsTile(
@@ -321,13 +326,14 @@ class _AboutPageState extends State<AboutPage> {
                   onPressed: (_) {
                     myController.checkUpdate();
                   },
-                  title: Text('检查应用更新'),
-                  value: Text('当前版本 ${ApiEndpoints.version}'),
+                  title: Text(context.l10n.checkAppUpdates),
+                  value:
+                      Text(context.l10n.currentVersion(ApiEndpoints.version)),
                 ),
               ],
             ),
             SettingsSection(
-              title: Text('规则更新'),
+              title: Text(context.l10n.ruleUpdates),
               tiles: [
                 SettingsTile.switchTile(
                   leading: Icons.extension_rounded,
@@ -340,7 +346,7 @@ class _AboutPageState extends State<AboutPage> {
                     );
                     setState(() {});
                   },
-                  title: Text('启动时检查规则更新'),
+                  title: Text(context.l10n.checkRuleUpdatesOnStartup),
                   initialValue: checkPluginUpdateOnStartup,
                 ),
               ],

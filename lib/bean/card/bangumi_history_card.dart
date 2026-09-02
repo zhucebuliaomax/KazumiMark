@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:kazumi/bean/card/network_img_layer.dart';
@@ -14,8 +15,8 @@ import 'package:kazumi/utils/date_time.dart';
 
 String _historySourceText(String entryKind) {
   return HistoryEntryKind.normalize(entryKind) == HistoryEntryKind.offline
-      ? '缓存'
-      : '在线';
+      ? currentL10n.cached
+      : currentL10n.online;
 }
 
 class BangumiHistoryCardV extends StatefulWidget {
@@ -49,14 +50,14 @@ class _BangumiHistoryCardVState extends State<BangumiHistoryCardV> {
 
   Future<void> _onTap() async {
     if (widget.showDelete) {
-      KazumiDialog.showToast(message: '编辑模式');
+      KazumiDialog.showToast(message: currentL10n.editMode);
       return;
     }
     _queryRoadsCancelToken?.cancel();
     final cancelToken = RuleCancelToken();
     _queryRoadsCancelToken = cancelToken;
     KazumiDialog.showLoading(
-      msg: '获取中',
+      msg: currentL10n.fetching,
       barrierDismissible: isDesktop(),
       onDismiss: cancelToken.cancel,
     );
@@ -84,7 +85,7 @@ class _BangumiHistoryCardVState extends State<BangumiHistoryCardV> {
         ? widget.historyItem.bangumiItem.name
         : widget.historyItem.bangumiItem.nameCn;
     final String episodeText = widget.historyItem.lastWatchEpisodeName.isEmpty
-        ? '第${widget.historyItem.lastWatchEpisode}话'
+        ? context.l10n.episodeNumber(widget.historyItem.lastWatchEpisode)
         : widget.historyItem.lastWatchEpisodeName;
     final String sourceText = _historySourceText(widget.historyItem.entryKind);
 
@@ -233,7 +234,7 @@ class _BangumiHistoryCardVState extends State<BangumiHistoryCardV> {
                           size: 20,
                           color: colorScheme.onSurfaceVariant,
                         ),
-                        tooltip: '番剧详情',
+                        tooltip: context.l10n.animeDetails,
                         onPressed: () {
                           context.pushNamed(
                             '/info/',
@@ -248,7 +249,7 @@ class _BangumiHistoryCardVState extends State<BangumiHistoryCardV> {
                           Icons.delete_outline,
                           color: colorScheme.error,
                         ),
-                        tooltip: '删除记录',
+                        tooltip: context.l10n.deleteRecord,
                         onPressed: () {
                           widget.onDeleted?.call();
                         },

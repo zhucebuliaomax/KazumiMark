@@ -8,6 +8,7 @@ import 'package:kazumi/modules/plugin/plugin_http_module.dart';
 import 'package:kazumi/pages/plugin_editor/plugin_update_actions.dart';
 import 'package:kazumi/plugins/plugins_controller.dart';
 import 'package:kazumi/services/storage/storage.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 enum PluginCatalogSort { lastUpdate, name }
 
@@ -19,7 +20,7 @@ class PluginCatalogView extends StatefulWidget {
     this.listPadding = const EdgeInsets.symmetric(horizontal: 8),
     this.showRefreshButton = false,
     this.compactLastUpdate = false,
-    this.errorMessage = '无法访问规则仓库',
+    this.errorMessage,
   });
 
   final PluginsController controller;
@@ -27,7 +28,7 @@ class PluginCatalogView extends StatefulWidget {
   final EdgeInsetsGeometry listPadding;
   final bool showRefreshButton;
   final bool compactLastUpdate;
-  final String errorMessage;
+  final String? errorMessage;
 
   @override
   State<PluginCatalogView> createState() => PluginCatalogViewState();
@@ -129,9 +130,9 @@ class PluginCatalogViewState extends State<PluginCatalogView> {
                 item.lastUpdate > 0 ? _formatLastUpdate(item.lastUpdate) : null,
             trailing: RuleCardActionButton(
               label: switch (status) {
-                PluginCatalogItemStatus.install => '安装',
-                PluginCatalogItemStatus.installed => '已安装',
-                PluginCatalogItemStatus.update => '更新',
+                PluginCatalogItemStatus.install => context.l10n.install,
+                PluginCatalogItemStatus.installed => context.l10n.installed,
+                PluginCatalogItemStatus.update => context.l10n.update,
               },
               onPressed: status == PluginCatalogItemStatus.installed
                   ? null
@@ -158,7 +159,7 @@ class PluginCatalogViewState extends State<PluginCatalogView> {
     if (widget.compactLastUpdate) {
       return value.split(' ')[0];
     }
-    return '更新时间: ${value.split('.')[0]}';
+    return context.l10n.lastUpdated(value.split('.')[0]);
   }
 
   Widget _buildLoadError() {
@@ -166,13 +167,16 @@ class PluginCatalogViewState extends State<PluginCatalogView> {
     return Center(
       child: GeneralErrorWidget(
         errMsg:
-            '${widget.errorMessage}\n${enableGitProxy ? '规则仓库镜像已启用' : '规则仓库镜像已禁用'}',
+            '${widget.errorMessage ?? context.l10n.ruleRepositoryAccessFailed}\n'
+            '${enableGitProxy ? context.l10n.ruleRepositoryMirrorEnabled : context.l10n.ruleRepositoryMirrorDisabled}',
         actions: [
           GeneralErrorButton(
             onPressed: () => unawaited(_toggleGitProxyAndRefresh()),
-            text: enableGitProxy ? '禁用规则镜像' : '启用规则镜像',
+            text: enableGitProxy
+                ? context.l10n.disableRuleRepositoryMirror
+                : context.l10n.enableRuleRepositoryMirror,
           ),
-          GeneralErrorButton(onPressed: refresh, text: '刷新'),
+          GeneralErrorButton(onPressed: refresh, text: context.l10n.refresh),
         ],
       ),
     );
@@ -186,7 +190,7 @@ class PluginCatalogViewState extends State<PluginCatalogView> {
       return _buildLoadError();
     }
     if (_controller.pluginHTTPList.isEmpty) {
-      return const Center(child: Text('规则仓库中暂无规则'));
+      return Center(child: Text(context.l10n.ruleRepositoryEmpty));
     }
     return _buildPluginList();
   }
@@ -203,7 +207,7 @@ class PluginCatalogViewState extends State<PluginCatalogView> {
           children: [
             IconButton(
               onPressed: refresh,
-              tooltip: '刷新规则列表',
+              tooltip: context.l10n.refreshRuleList,
               icon: const Icon(Icons.refresh_rounded),
             ),
           ],

@@ -15,6 +15,7 @@ import 'package:kazumi/modules/collect/collect_type_mapper.dart';
 import 'package:kazumi/modules/bangumi/bangumi_collection_type.dart';
 import 'package:kazumi/modules/comments/comment_item.dart';
 import 'package:kazumi/utils/search_parser.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 class BangumiSearchPage {
   const BangumiSearchPage({
@@ -539,7 +540,7 @@ class BangumiApi {
     } on NetworkException catch (e) {
       if (e.statusCode == 401) {
         KazumiLogger().e('Bangumi token unauthorized, please check your token');
-        throw StateError('Bangumi token 未授权，请检查您的 token');
+        throw StateError(currentL10n.bangumiTokenUnauthorized);
       }
       rethrow;
     } catch (e) {
@@ -616,7 +617,7 @@ class BangumiApi {
                 bangumiCollection.add(BangumiCollection.fromJson(jsonItem));
                 progressCurrent++;
                 onProgress?.call(
-                  '正在拉取${collectionType.label}收藏',
+                  currentL10n.fetchingCollection(collectionType.label),
                   progressCurrent,
                   progressTotal,
                 );
@@ -667,13 +668,13 @@ class BangumiApi {
       String str;
       switch (e.statusCode) {
         case 400:
-          str = 'Validation Error 验证错误';
+          str = 'Validation Error';
           break;
         case 401:
-          str = 'Unauthorized 未经授权';
+          str = 'Unauthorized';
           break;
         case 404:
-          str = 'User not found 用户不存在';
+          str = 'User not found';
           break;
         default:
           str = 'Error $e';

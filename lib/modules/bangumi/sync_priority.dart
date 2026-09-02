@@ -1,11 +1,16 @@
-enum BangumiSyncPriority {
-  localFirst(0, '本地优先'),
-  bangumiFirst(1, 'Bangumi优先');
+import 'package:kazumi/l10n/l10n.dart';
 
-  const BangumiSyncPriority(this.value, this.label);
+enum BangumiSyncPriority {
+  localFirst(0),
+  bangumiFirst(1);
+
+  const BangumiSyncPriority(this.value);
 
   final int value;
-  final String label;
+  String get label => switch (this) {
+        localFirst => currentL10n.localFirst,
+        bangumiFirst => currentL10n.bangumiFirst,
+      };
 
   static BangumiSyncPriority fromValue(int value) {
     return BangumiSyncPriority.values.firstWhere(

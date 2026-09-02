@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
 import 'package:kazumi/plugins/anti_crawler_config.dart';
 import 'package:kazumi/plugins/plugins.dart';
@@ -28,8 +29,8 @@ class SourceCaptchaFlow {
         _startAutomated(
           plugin,
           searchUrl,
-          statusText: '${plugin.name} 正在执行验证脚本，请稍候',
-          detailText: '已加载验证页面并执行自定义脚本，等待验证通过…',
+          statusText: currentL10n.executingVerificationScript(plugin.name),
+          detailText: currentL10n.verificationScriptRunningDescription,
           startVerification: (service, url, onVerified) =>
               service.loadForCustomScript(
             url: url,
@@ -42,8 +43,8 @@ class SourceCaptchaFlow {
         _startAutomated(
           plugin,
           searchUrl,
-          statusText: '${plugin.name} 正在自动完成验证，请稍候',
-          detailText: '已检测到验证按钮并模拟点击，等待验证通过…',
+          statusText: currentL10n.automaticVerificationInProgress(plugin.name),
+          detailText: currentL10n.automaticVerificationDescription,
           startVerification: (service, url, onVerified) =>
               service.loadForButtonClick(
             url: url,
@@ -259,7 +260,7 @@ class _CaptchaDialogState extends State<_CaptchaDialog> {
     if (_submittingNotifier.value) return;
     final captchaCode = _captchaCode.trim();
     if (captchaCode.isEmpty) {
-      KazumiDialog.showToast(message: '请输入验证码');
+      KazumiDialog.showToast(message: currentL10n.enterCaptcha);
       return;
     }
     _submittingNotifier.value = true;
@@ -269,19 +270,19 @@ class _CaptchaDialogState extends State<_CaptchaDialog> {
   @override
   Widget build(BuildContext context) {
     return _VerifyDialogFrame(
-      title: '验证码验证',
-      statusText: '${widget.pluginName} 需要验证码验证',
+      title: context.l10n.captchaVerification,
+      statusText: context.l10n.pluginRequiresCaptcha(widget.pluginName),
       children: [
         const SizedBox(height: 20),
         ValueListenableBuilder<String?>(
           valueListenable: _captchaImageNotifier,
           builder: (context, imageUrl, _) {
             if (imageUrl == null) {
-              return const Column(
+              return Column(
                 children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 12),
-                  Text('正在加载验证码图片...'),
+                  const CircularProgressIndicator(),
+                  const SizedBox(height: 12),
+                  Text(context.l10n.loadingCaptchaImage),
                 ],
               );
             }
@@ -297,7 +298,7 @@ class _CaptchaDialogState extends State<_CaptchaDialog> {
                         height: 80,
                         fit: BoxFit.contain,
                         errorBuilder: (context, error, _) =>
-                            const Text('图片解码失败'),
+                            Text(context.l10n.imageDecodeFailed),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -305,9 +306,9 @@ class _CaptchaDialogState extends State<_CaptchaDialog> {
                       autofocus: true,
                       enabled: !isSubmitting,
                       onChanged: (value) => _captchaCode = value,
-                      decoration: const InputDecoration(
-                        labelText: '请输入验证码',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: context.l10n.enterCaptcha,
+                        border: const OutlineInputBorder(),
                       ),
                       onSubmitted: isSubmitting ? null : (_) => _submit(),
                     ),
@@ -333,7 +334,7 @@ class _CaptchaDialogState extends State<_CaptchaDialog> {
                 TextButton(
                   onPressed: () => KazumiDialog.dismiss(),
                   child: Text(
-                    '取消',
+                    context.l10n.cancel,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.outline,
                     ),
@@ -347,7 +348,7 @@ class _CaptchaDialogState extends State<_CaptchaDialog> {
                           dimension: 18,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : const Text('提交'),
+                      : Text(context.l10n.submit),
                 ),
               ],
             );
@@ -370,7 +371,7 @@ class _AutomatedVerifyDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _VerifyDialogFrame(
-      title: '自动验证中',
+      title: context.l10n.automaticVerification,
       statusText: statusText,
       children: [
         const SizedBox(height: 24),
@@ -387,7 +388,7 @@ class _AutomatedVerifyDialog extends StatelessWidget {
           child: TextButton(
             onPressed: () => KazumiDialog.dismiss(),
             child: Text(
-              '取消',
+              context.l10n.cancel,
               style: TextStyle(color: Theme.of(context).colorScheme.outline),
             ),
           ),

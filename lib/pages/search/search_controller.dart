@@ -10,6 +10,7 @@ import 'package:kazumi/repositories/search_history_repository.dart';
 import 'package:kazumi/request/apis/bangumi_api.dart';
 import 'package:kazumi/request/apis/trace_api.dart';
 import 'package:kazumi/utils/search_parser.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 part 'search_controller.g.dart';
 
@@ -168,10 +169,10 @@ abstract class _SearchPageController with Store {
       if (result.error != null && result.error!.isNotEmpty) {
         imageSearchError = result.error!;
       } else if (imageSearchResults.isEmpty) {
-        imageSearchError = '未找到匹配结果';
+        imageSearchError = currentL10n.noMatchingResults;
       }
     } catch (e) {
-      imageSearchError = '图片搜索失败，请稍后重试';
+      imageSearchError = currentL10n.imageSearchFailedRetry;
     } finally {
       isImageSearching = false;
     }
@@ -188,10 +189,10 @@ abstract class _SearchPageController with Store {
       if (result.error != null && result.error!.isNotEmpty) {
         imageSearchError = result.error!;
       } else if (imageSearchResults.isEmpty) {
-        imageSearchError = '未找到匹配结果';
+        imageSearchError = currentL10n.noMatchingResults;
       }
     } catch (e) {
-      imageSearchError = '图片搜索失败，请检查图片地址或稍后重试';
+      imageSearchError = currentL10n.imageSearchUrlFailedRetry;
     } finally {
       isImageSearching = false;
     }

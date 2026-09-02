@@ -10,43 +10,54 @@ import 'package:kazumi/bean/appbar/sys_app_bar.dart';
 import 'package:kazumi/pages/plugin_editor/editor_form_widgets.dart';
 import 'package:kazumi/request/config/api_endpoints.dart';
 import 'package:kazumi/services/plugin/api_rule_engine.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 abstract final class _RuleEditorText {
-  static const pageTitle = '规则编辑器';
-  static const testRule = '测试规则';
-  static const save = '保存';
+  static String get pageTitle => currentL10n.ruleEditorPageTitle;
+  static String get testRule => currentL10n.ruleEditorTestRule;
+  static String get save => currentL10n.save;
 
   static const modeXPath = 'XPath';
   static const modeApi = 'API';
   static const methodGet = 'GET';
   static const methodPost = 'POST';
-  static const bodyTypeNone = '无';
+  static String get bodyTypeNone => currentL10n.none;
   static const bodyTypeJson = 'JSON';
-  static const bodyTypeForm = '表单';
-  static const formatNested = '嵌套 JSON';
-  static const formatDelimited = '分隔字符串';
+  static String get bodyTypeForm => currentL10n.ruleEditorForm;
+  static String get formatNested => currentL10n.ruleEditorNestedJson;
+  static String get formatDelimited => currentL10n.ruleEditorDelimitedString;
 
-  static const legacyParser = '简易解析';
-  static const legacyParserDesc = '使用简易解析器而不是现代解析器';
-  static const adBlocker = '广告过滤';
-  static const adBlockerDesc = '启用 HLS 广告过滤';
+  static String get legacyParser => currentL10n.ruleEditorLegacyParser;
+  static String get legacyParserDesc => currentL10n.ruleEditorLegacyParserDesc;
+  static String get adBlocker => currentL10n.ruleEditorAdBlocker;
+  static String get adBlockerDesc => currentL10n.ruleEditorAdBlockerDesc;
 
-  static const antiCrawlerEnable = '启用反反爬虫';
-  static const antiCrawlerEnableDesc = '检索失败时显示验证码验证按钮而非重试';
-  static const captchaTypeLabel = '验证类型';
-  static const captchaTypeImage = '图片验证码';
-  static const captchaTypeAutoClick = '自动点击';
-  static const captchaTypeScript = '自定义脚本';
-  static const captchaTypeImageDesc = '展示验证码图片，由用户手动输入';
-  static const captchaTypeAutoClickDesc = '检测到验证按钮后自动模拟点击';
-  static const captchaTypeScriptDesc = '加载页面后执行规则内的验证脚本';
-  static const captchaTypeUnknownDesc = '未知验证类型';
-  static const captchaDetectTypeLabel = '验证页检测方式';
-  static const captchaDetectTypeDesc = '优先使用该标记判断搜索响应是否为验证页';
-  static const captchaDetectText = '文本';
-  static const captchaDetectRegex = '正则';
-  static const captchaDetectValueHintText = '身份验证';
-  static const captchaDetectValueHintRegex = '身份验证|smart_verify';
+  static String get antiCrawlerEnable =>
+      currentL10n.ruleEditorAntiCrawlerEnable;
+  static String get antiCrawlerEnableDesc =>
+      currentL10n.ruleEditorAntiCrawlerEnableDesc;
+  static String get captchaTypeLabel => currentL10n.ruleEditorCaptchaType;
+  static String get captchaTypeImage => currentL10n.ruleEditorImageCaptcha;
+  static String get captchaTypeAutoClick => currentL10n.ruleEditorAutoClick;
+  static String get captchaTypeScript => currentL10n.ruleEditorCustomScript;
+  static String get captchaTypeImageDesc =>
+      currentL10n.ruleEditorImageCaptchaDesc;
+  static String get captchaTypeAutoClickDesc =>
+      currentL10n.ruleEditorAutoClickDesc;
+  static String get captchaTypeScriptDesc =>
+      currentL10n.ruleEditorCustomScriptDesc;
+  static String get captchaTypeUnknownDesc =>
+      currentL10n.ruleEditorUnknownCaptchaType;
+  static String get captchaDetectTypeLabel =>
+      currentL10n.ruleEditorCaptchaDetectionMethod;
+  static String get captchaDetectTypeDesc =>
+      currentL10n.ruleEditorCaptchaDetectionMethodDesc;
+  static String get captchaDetectText => currentL10n.text;
+  static String get captchaDetectRegex => currentL10n.ruleEditorRegex;
+  static String get captchaDetectValueHintText =>
+      currentL10n.ruleEditorCaptchaDetectionTextHint;
+  static String get captchaDetectValueHintRegex =>
+      currentL10n.ruleEditorCaptchaDetectionRegexHint;
   static const captchaDetectValueHintXPath = '//button[@id="verify"]';
   static const captchaImageHint = '//img[@class="captcha"]';
   static const captchaInputHint = '//input[@name="captcha"]';
@@ -54,85 +65,100 @@ abstract final class _RuleEditorText {
   static const captchaScriptHint =
       'KazumiCaptcha.log("ready"); KazumiCaptcha.done();';
 
-  static const sectionBasic = '基本信息';
-  static const sectionBasicDesc = '规则的名称、版本与站点地址';
-  static const sectionSearch = '搜索规则';
-  static const sectionSearchDesc = '定义如何在站点内检索条目';
-  static const sectionChapter = '选集规则';
-  static const sectionChapterDesc = '定义如何获取播放线路与剧集列表';
-  static const advancedOptions = '高级选项';
-  static const advancedOptionsDesc = '行为、网络与反反爬虫配置';
-  static const groupBehavior = '行为设置';
-  static const groupNetwork = '网络设置';
-  static const groupAntiCrawler = '反反爬虫';
+  static String get sectionBasic => currentL10n.ruleEditorBasicInfo;
+  static String get sectionBasicDesc => currentL10n.ruleEditorBasicInfoDesc;
+  static String get sectionSearch => currentL10n.ruleEditorSearchRules;
+  static String get sectionSearchDesc => currentL10n.ruleEditorSearchRulesDesc;
+  static String get sectionChapter => currentL10n.ruleEditorEpisodeRules;
+  static String get sectionChapterDesc =>
+      currentL10n.ruleEditorEpisodeRulesDesc;
+  static String get advancedOptions => currentL10n.advancedOptions;
+  static String get advancedOptionsDesc =>
+      currentL10n.ruleEditorAdvancedOptionsDesc;
+  static String get groupBehavior => currentL10n.ruleEditorBehaviorSettings;
+  static String get groupNetwork => currentL10n.ruleEditorNetworkSettings;
+  static String get groupAntiCrawler => currentL10n.ruleEditorAntiCrawler;
 
-  static const ruleName = '规则名称';
-  static const ruleVersion = '规则版本';
-  static const baseUrl = '基础地址（URL）';
-  static const searchRuleType = '搜索规则类型';
-  static const chapterRuleType = '选集规则类型';
+  static String get ruleName => currentL10n.ruleEditorRuleName;
+  static String get ruleVersion => currentL10n.ruleEditorRuleVersion;
+  static String get baseUrl => currentL10n.ruleEditorBaseUrl;
+  static String get searchRuleType => currentL10n.ruleEditorSearchRuleType;
+  static String get chapterRuleType => currentL10n.ruleEditorEpisodeRuleType;
 
-  static const searchUrl = '搜索地址（URL）';
-  static const searchListXPath = '搜索结果列表（XPath）';
-  static const itemNameXPath = '条目名称（XPath）';
-  static const itemLinkXPath = '条目链接（XPath）';
-  static const roadListXPath = '播放线路列表（XPath）';
-  static const episodeListXPath = '剧集列表（XPath）';
+  static String get searchUrl => currentL10n.ruleEditorSearchUrl;
+  static String get searchListXPath => currentL10n.ruleEditorSearchListXPath;
+  static String get itemNameXPath => currentL10n.ruleEditorItemNameXPath;
+  static String get itemLinkXPath => currentL10n.ruleEditorItemLinkXPath;
+  static String get roadListXPath => currentL10n.ruleEditorRoadListXPath;
+  static String get episodeListXPath => currentL10n.ruleEditorEpisodeListXPath;
 
-  static const searchMethod = '搜索请求方法';
-  static const searchRequestUrl = '搜索请求地址（URL）';
-  static const searchHeaders = '搜索请求头（JSON）';
-  static const searchQuery = '搜索查询参数（JSON）';
-  static const searchBodyType = '搜索请求体类型';
-  static const searchBody = '搜索请求体（JSON）';
-  static const searchListPath = '搜索结果列表路径（JSONPath）';
-  static const itemNamePath = '条目名称路径（JSONPath，相对条目）';
-  static const itemSourcePath = '条目来源路径（JSONPath，相对条目）';
+  static String get searchMethod => currentL10n.ruleEditorSearchMethod;
+  static String get searchRequestUrl => currentL10n.ruleEditorSearchRequestUrl;
+  static String get searchHeaders => currentL10n.ruleEditorSearchHeaders;
+  static String get searchQuery => currentL10n.ruleEditorSearchQuery;
+  static String get searchBodyType => currentL10n.ruleEditorSearchBodyType;
+  static String get searchBody => currentL10n.ruleEditorSearchBody;
+  static String get searchListPath => currentL10n.ruleEditorSearchListPath;
+  static String get itemNamePath => currentL10n.ruleEditorItemNamePath;
+  static String get itemSourcePath => currentL10n.ruleEditorItemSourcePath;
 
-  static const chapterMethod = '选集请求方法';
-  static const chapterRequestUrl = '选集请求地址（URL）';
-  static const chapterHeaders = '选集请求头（JSON）';
-  static const chapterQuery = '选集查询参数（JSON）';
-  static const chapterBodyType = '选集请求体类型';
-  static const chapterBody = '选集请求体（JSON）';
-  static const chapterResponseFormat = '选集响应格式';
-  static const roadListPath = '播放线路列表路径（JSONPath，留空表示单线路）';
-  static const roadNamePath = '线路名称路径（JSONPath，相对线路）';
-  static const episodeListPath = '剧集列表路径（JSONPath，相对线路）';
-  static const episodeNamePath = '剧集名称路径（JSONPath，相对剧集）';
-  static const playbackEntryPath = '播放入口地址路径（JSONPath，使用播放页地址模板时可留空）';
-  static const playbackEntryPathHelper = '从剧集对象读取交给 WebView 的地址，可以是播放页面或媒体直链。';
-  static const roadNamesPath = '线路名称串路径（JSONPath）';
-  static const roadEpisodesPath = '线路剧集串路径（JSONPath）';
-  static const roadSeparator = '线路分隔符';
-  static const episodeSeparator = '剧集分隔符';
-  static const fieldSeparator = '名称与地址分隔符';
-  static const responseVariables = '响应变量（JSON：变量名 → JSONPath）';
-  static const playPageUrl = '播放页地址模板（URL，可选）';
-  static const playPageUrlHelper = '可用变量：@source、@episodeUrl、'
-      '@roadIndex/@episodeIndex（从 0 起）、@roadNumber/@episodeNumber（从 1 起）'
-      '及响应变量。';
-  static const playPageQuery = '播放页查询参数（JSON）';
-  static const playPageQueryHelper = '与地址模板可用变量相同，合并进最终 URL 的查询参数。';
+  static String get chapterMethod => currentL10n.ruleEditorEpisodeMethod;
+  static String get chapterRequestUrl =>
+      currentL10n.ruleEditorEpisodeRequestUrl;
+  static String get chapterHeaders => currentL10n.ruleEditorEpisodeHeaders;
+  static String get chapterQuery => currentL10n.ruleEditorEpisodeQuery;
+  static String get chapterBodyType => currentL10n.ruleEditorEpisodeBodyType;
+  static String get chapterBody => currentL10n.ruleEditorEpisodeBody;
+  static String get chapterResponseFormat =>
+      currentL10n.ruleEditorEpisodeResponseFormat;
+  static String get roadListPath => currentL10n.ruleEditorRoadListPath;
+  static String get roadNamePath => currentL10n.ruleEditorRoadNamePath;
+  static String get episodeListPath => currentL10n.ruleEditorEpisodeListPath;
+  static String get episodeNamePath => currentL10n.ruleEditorEpisodeNamePath;
+  static String get playbackEntryPath =>
+      currentL10n.ruleEditorPlaybackEntryPath;
+  static String get playbackEntryPathHelper =>
+      currentL10n.ruleEditorPlaybackEntryPathHelper;
+  static String get roadNamesPath => currentL10n.ruleEditorRoadNamesPath;
+  static String get roadEpisodesPath => currentL10n.ruleEditorRoadEpisodesPath;
+  static String get roadSeparator => currentL10n.ruleEditorRoadSeparator;
+  static String get episodeSeparator => currentL10n.ruleEditorEpisodeSeparator;
+  static String get fieldSeparator => currentL10n.ruleEditorFieldSeparator;
+  static String get responseVariables =>
+      currentL10n.ruleEditorResponseVariables;
+  static String get playPageUrl => currentL10n.ruleEditorPlayPageUrl;
+  static String get playPageUrlHelper =>
+      currentL10n.ruleEditorPlayPageUrlHelper;
+  static String get playPageQuery => currentL10n.ruleEditorPlayPageQuery;
+  static String get playPageQueryHelper =>
+      currentL10n.ruleEditorPlayPageQueryHelper;
 
-  static const userAgent = '用户代理（User-Agent）';
-  static const userAgentHelper = '仅用于播放器和下载器。';
-  static const referer = '播放请求来源（Referer）';
-  static const refererHelper = '仅用于播放器和下载器。';
+  static String get userAgent => currentL10n.ruleEditorUserAgent;
+  static String get userAgentHelper =>
+      currentL10n.ruleEditorPlayerDownloaderOnly;
+  static String get referer => currentL10n.ruleEditorReferer;
+  static String get refererHelper => currentL10n.ruleEditorPlayerDownloaderOnly;
 
-  static const captchaDetectValue = '验证页检测值';
-  static const captchaDetectValueHelper = '留空时使用验证码图片或验证按钮的 XPath 进行检测。';
-  static const captchaImage = '验证码图片（XPath）';
-  static const captchaImageHelper = '填写验证码图片元素的 XPath。';
-  static const captchaInput = '验证码输入框（XPath）';
-  static const captchaInputHelper = '填写验证码输入框元素的 XPath。';
-  static const captchaSubmitButton = '验证提交按钮（XPath）';
-  static const captchaSubmitButtonHelper = '填写提交验证码按钮元素的 XPath。';
-  static const verifyButton = '验证按钮（XPath）';
-  static const verifyButtonHelper = '填写验证按钮元素的 XPath，检测到后将自动点击。';
-  static const captchaScript = '验证脚本（JavaScript）';
-  static const captchaScriptHelper =
-      '可调用 KazumiCaptcha.log、clicked、done 和 fail。';
+  static String get captchaDetectValue =>
+      currentL10n.ruleEditorCaptchaDetectionValue;
+  static String get captchaDetectValueHelper =>
+      currentL10n.ruleEditorCaptchaDetectionValueHelper;
+  static String get captchaImage => currentL10n.ruleEditorCaptchaImageXPath;
+  static String get captchaImageHelper =>
+      currentL10n.ruleEditorCaptchaImageXPathHelper;
+  static String get captchaInput => currentL10n.ruleEditorCaptchaInputXPath;
+  static String get captchaInputHelper =>
+      currentL10n.ruleEditorCaptchaInputXPathHelper;
+  static String get captchaSubmitButton =>
+      currentL10n.ruleEditorCaptchaSubmitXPath;
+  static String get captchaSubmitButtonHelper =>
+      currentL10n.ruleEditorCaptchaSubmitXPathHelper;
+  static String get verifyButton => currentL10n.ruleEditorVerifyButtonXPath;
+  static String get verifyButtonHelper =>
+      currentL10n.ruleEditorVerifyButtonXPathHelper;
+  static String get captchaScript => currentL10n.ruleEditorCaptchaScript;
+  static String get captchaScriptHelper =>
+      currentL10n.ruleEditorCaptchaScriptHelper;
 }
 
 class PluginEditorPage extends StatefulWidget {
@@ -248,20 +274,20 @@ class _PluginEditorPageState extends State<PluginEditorPage> {
     ButtonSegment(value: 'POST', label: Text(_RuleEditorText.methodPost)),
   ];
 
-  static const List<ButtonSegment<String>> _bodyTypeSegments = [
-    ButtonSegment(
-      value: ApiBodyType.none,
-      label: Text(_RuleEditorText.bodyTypeNone),
-    ),
-    ButtonSegment(
-      value: ApiBodyType.json,
-      label: Text(_RuleEditorText.bodyTypeJson),
-    ),
-    ButtonSegment(
-      value: ApiBodyType.form,
-      label: Text(_RuleEditorText.bodyTypeForm),
-    ),
-  ];
+  static List<ButtonSegment<String>> get _bodyTypeSegments => [
+        ButtonSegment(
+          value: ApiBodyType.none,
+          label: Text(_RuleEditorText.bodyTypeNone),
+        ),
+        ButtonSegment(
+          value: ApiBodyType.json,
+          label: Text(_RuleEditorText.bodyTypeJson),
+        ),
+        ButtonSegment(
+          value: ApiBodyType.form,
+          label: Text(_RuleEditorText.bodyTypeForm),
+        ),
+      ];
 
   @override
   void initState() {
@@ -401,7 +427,7 @@ class _PluginEditorPageState extends State<PluginEditorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: SysAppBar(
-        title: const Text(_RuleEditorText.pageTitle),
+        title: Text(_RuleEditorText.pageTitle),
         actions: [
           IconButton(
             tooltip: _RuleEditorText.testRule,
@@ -500,7 +526,7 @@ class _PluginEditorPageState extends State<PluginEditorPage> {
       floatingActionButton: FloatingActionButton.extended(
         heroTag: null,
         icon: const Icon(Icons.save_rounded),
-        label: const Text(_RuleEditorText.save),
+        label: Text(_RuleEditorText.save),
         onPressed: () async {
           final editedPlugin = _tryBuildEditedPlugin();
           if (editedPlugin == null) return;
@@ -523,22 +549,22 @@ class _PluginEditorPageState extends State<PluginEditorPage> {
       title: _RuleEditorText.advancedOptions,
       description: _RuleEditorText.advancedOptionsDesc,
       children: [
-        const EditorSubheader(label: _RuleEditorText.groupBehavior),
+        EditorSubheader(label: _RuleEditorText.groupBehavior),
         SwitchListTile(
           contentPadding: EdgeInsets.zero,
-          title: const Text(_RuleEditorText.legacyParser),
-          subtitle: const Text(_RuleEditorText.legacyParserDesc),
+          title: Text(_RuleEditorText.legacyParser),
+          subtitle: Text(_RuleEditorText.legacyParserDesc),
           value: useLegacyParser,
           onChanged: (value) => setState(() => useLegacyParser = value),
         ),
         SwitchListTile(
           contentPadding: EdgeInsets.zero,
-          title: const Text(_RuleEditorText.adBlocker),
-          subtitle: const Text(_RuleEditorText.adBlockerDesc),
+          title: Text(_RuleEditorText.adBlocker),
+          subtitle: Text(_RuleEditorText.adBlockerDesc),
           value: adBlocker,
           onChanged: (value) => setState(() => adBlocker = value),
         ),
-        const EditorSubheader(label: _RuleEditorText.groupNetwork),
+        EditorSubheader(label: _RuleEditorText.groupNetwork),
         EditorTextField(
           controller: userAgentController,
           label: _RuleEditorText.userAgent,
@@ -551,11 +577,11 @@ class _PluginEditorPageState extends State<PluginEditorPage> {
           helper: _RuleEditorText.refererHelper,
         ),
         if (searchMode == RuleMode.xpath) ...[
-          const EditorSubheader(label: _RuleEditorText.groupAntiCrawler),
+          EditorSubheader(label: _RuleEditorText.groupAntiCrawler),
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
-            title: const Text(_RuleEditorText.antiCrawlerEnable),
-            subtitle: const Text(_RuleEditorText.antiCrawlerEnableDesc),
+            title: Text(_RuleEditorText.antiCrawlerEnable),
+            subtitle: Text(_RuleEditorText.antiCrawlerEnableDesc),
             value: antiCrawlerEnabled,
             onChanged: (value) => setState(() => antiCrawlerEnabled = value),
           ),
@@ -581,7 +607,7 @@ class _PluginEditorPageState extends State<PluginEditorPage> {
         EditorSegmentedField<int>(
           label: _RuleEditorText.captchaTypeLabel,
           value: captchaType,
-          segments: const [
+          segments: [
             ButtonSegment(
               value: CaptchaType.imageCaptcha,
               label: Text(_RuleEditorText.captchaTypeImage),
@@ -608,7 +634,7 @@ class _PluginEditorPageState extends State<PluginEditorPage> {
         EditorSegmentedField<int>(
           label: _RuleEditorText.captchaDetectTypeLabel,
           value: captchaDetectType,
-          segments: const [
+          segments: [
             ButtonSegment(
               value: CaptchaDetectType.xpath,
               label: Text(_RuleEditorText.modeXPath),
@@ -798,7 +824,7 @@ class _PluginEditorPageState extends State<PluginEditorPage> {
         EditorSegmentedField<String>(
           label: _RuleEditorText.chapterResponseFormat,
           value: chapterApiFormat,
-          segments: const [
+          segments: [
             ButtonSegment(
               value: ApiChapterFormat.nested,
               label: Text(_RuleEditorText.formatNested),
@@ -942,13 +968,19 @@ class _PluginEditorPageState extends State<PluginEditorPage> {
       request: ApiRequestConfig(
         method: searchApiMethod,
         url: valueOf(searchApiURLController),
-        headers: _parseJsonMap(searchApiHeadersController, '搜索请求头'),
-        query: _parseJsonMap(searchApiQueryController, '搜索查询参数'),
+        headers: _parseJsonMap(
+          searchApiHeadersController,
+          _RuleEditorText.searchHeaders,
+        ),
+        query: _parseJsonMap(
+          searchApiQueryController,
+          _RuleEditorText.searchQuery,
+        ),
         bodyType: searchApiBodyType,
         body: _parseBody(
           searchApiBodyController,
           searchApiBodyType,
-          '搜索请求体',
+          _RuleEditorText.searchBody,
         ),
       ),
       listPath: valueOf(searchApiListPathController),
@@ -957,7 +989,7 @@ class _PluginEditorPageState extends State<PluginEditorPage> {
     );
     if (!shouldValidate) return config;
     if (config.request.url.isEmpty) {
-      throw const FormatException('搜索请求地址不能为空');
+      throw FormatException(currentL10n.ruleEditorSearchUrlRequired);
     }
     const ApiRuleStrategy()
       ..prepareRequest(config.request, const {'keyword': 'test'})
@@ -969,19 +1001,25 @@ class _PluginEditorPageState extends State<PluginEditorPage> {
     final pageUrl = chapterApiPageURLController.text.trim();
     final variablesRaw = _parseJsonMap(
       chapterApiVariablesController,
-      '选集响应变量',
+      _RuleEditorText.responseVariables,
     );
     final config = ApiChapterConfig(
       request: ApiRequestConfig(
         method: chapterApiMethod,
         url: chapterApiURLController.text.trim(),
-        headers: _parseJsonMap(chapterApiHeadersController, '选集请求头'),
-        query: _parseJsonMap(chapterApiQueryController, '选集查询参数'),
+        headers: _parseJsonMap(
+          chapterApiHeadersController,
+          _RuleEditorText.chapterHeaders,
+        ),
+        query: _parseJsonMap(
+          chapterApiQueryController,
+          _RuleEditorText.chapterQuery,
+        ),
         bodyType: chapterApiBodyType,
         body: _parseBody(
           chapterApiBodyController,
           chapterApiBodyType,
-          '选集请求体',
+          _RuleEditorText.chapterBody,
         ),
       ),
       format: chapterApiFormat,
@@ -1004,13 +1042,13 @@ class _PluginEditorPageState extends State<PluginEditorPage> {
               url: pageUrl,
               query: _parseJsonMap(
                 chapterApiPageQueryController,
-                '播放页查询参数',
+                _RuleEditorText.playPageQuery,
               ),
             ),
     );
     if (chapterMode != RuleMode.api) return config;
     if (config.request.url.isEmpty) {
-      throw const FormatException('选集请求地址不能为空');
+      throw FormatException(currentL10n.ruleEditorEpisodeUrlRequired);
     }
     const ApiRuleStrategy()
       ..prepareRequest(config.request, const {'source': 'test'})
@@ -1025,7 +1063,9 @@ class _PluginEditorPageState extends State<PluginEditorPage> {
     final text = controller.text.trim();
     if (text.isEmpty) return <String, dynamic>{};
     final value = jsonDecode(text);
-    if (value is! Map) throw FormatException('$label 必须是 JSON 对象');
+    if (value is! Map) {
+      throw FormatException(currentL10n.mustBeJsonObject(label));
+    }
     return value.map((key, value) => MapEntry(key.toString(), value));
   }
 
@@ -1041,10 +1081,12 @@ class _PluginEditorPageState extends State<PluginEditorPage> {
     try {
       value = jsonDecode(text);
     } on FormatException catch (error) {
-      throw FormatException('$label 不是有效 JSON：${error.message}');
+      throw FormatException(
+        currentL10n.invalidJsonWithError(label, error.message),
+      );
     }
     if (bodyType == ApiBodyType.form && value is! Map) {
-      throw FormatException('$label 在表单模式下必须是 JSON 对象');
+      throw FormatException(currentL10n.formBodyMustBeJsonObject(label));
     }
     return value;
   }

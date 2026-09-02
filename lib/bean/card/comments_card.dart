@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/bean/widget/bangumi_avatar.dart';
 import 'package:kazumi/modules/comments/comment_item.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -93,7 +94,7 @@ class CommentsCard extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
-                                '我的吐槽',
+                                context.l10n.myComment,
                                 style: TextStyle(
                                     fontSize: 12,
                                     color: Theme.of(context)

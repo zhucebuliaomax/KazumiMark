@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 Future<String?> showMobileDanmakuInputSheet(BuildContext context) {
   return showModalBottomSheet<String>(
@@ -44,10 +45,10 @@ class _MobileDanmakuInputSheetState extends State<_MobileDanmakuInputSheet> {
                 textAlignVertical: TextAlignVertical.center,
                 onChanged: (value) => _danmakuText = value,
                 onSubmitted: _submit,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   filled: true,
                   floatingLabelBehavior: FloatingLabelBehavior.never,
-                  hintText: '发个友善的弹幕见证当下',
+                  hintText: context.l10n.danmakuInputHint,
                   hintStyle: TextStyle(fontSize: 14),
                   alignLabelWithHint: true,
                   contentPadding:
@@ -61,7 +62,7 @@ class _MobileDanmakuInputSheetState extends State<_MobileDanmakuInputSheet> {
             ),
           ),
           IconButton(
-            tooltip: '发送',
+            tooltip: context.l10n.send,
             onPressed: _submit,
             icon: Icon(
               Icons.send_rounded,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/services/sync/bangumi_sync_service.dart';
 import 'package:kazumi/services/logging/logger.dart';
 import 'package:kazumi/services/storage/storage.dart';
@@ -45,7 +46,7 @@ class _PlayerSettingsPageState extends State<WebDavSettingsPage> {
     var webDavEnable = GStorage.getSetting(SettingsKeys.webDavEnable);
     if (webDavEnable) {
       KazumiLogger().i('WebDav: manual history sync started');
-      KazumiDialog.showToast(message: '正在同步观看记录');
+      KazumiDialog.showToast(message: currentL10n.syncingWatchHistory);
       var webDav = WebDav();
       try {
         if (!webDav.isHistorySyncing) {
@@ -54,17 +55,20 @@ class _PlayerSettingsPageState extends State<WebDavSettingsPage> {
         try {
           await webDav.syncHistory();
           KazumiLogger().i('WebDav: manual history sync completed');
-          KazumiDialog.showToast(message: '观看记录同步完成');
+          KazumiDialog.showToast(
+              message: currentL10n.watchHistorySyncCompleted);
         } catch (e) {
           KazumiLogger().w('WebDav: manual history sync failed', error: e);
-          KazumiDialog.showToast(message: '观看记录同步失败 ${e.toString()}');
+          KazumiDialog.showToast(
+              message: currentL10n.watchHistorySyncFailed(e.toString()));
         }
       } catch (e) {
         KazumiLogger().w('WebDav: manual history sync ping failed', error: e);
-        KazumiDialog.showToast(message: 'WebDav连接失败');
+        KazumiDialog.showToast(
+            message: currentL10n.webDavConnectionFailed(e.toString()));
       }
     } else {
-      KazumiDialog.showToast(message: '未开启WebDav同步或配置无效');
+      KazumiDialog.showToast(message: currentL10n.webDavDisabledOrInvalid);
     }
   }
 
@@ -76,11 +80,11 @@ class _PlayerSettingsPageState extends State<WebDavSettingsPage> {
         onBackPressed(context);
       },
       child: SettingsDetailScaffold(
-        title: const Text('同步设置'),
+        title: Text(context.l10n.syncSettings),
         body: SettingsList(
           sections: [
             SettingsSection(
-              title: Text('规则仓库'),
+              title: Text(context.l10n.ruleRepository),
               tiles: [
                 SettingsTile.switchTile(
                   leading: Icons.hub_rounded,
@@ -90,8 +94,9 @@ class _PlayerSettingsPageState extends State<WebDavSettingsPage> {
                         SettingsKeys.enableGitProxy, enableGitProxy);
                     setState(() {});
                   },
-                  title: Text('规则仓库镜像'),
-                  description: Text('使用镜像访问规则更新和管理仓库'),
+                  title: Text(context.l10n.ruleRepositoryMirror),
+                  description:
+                      Text(context.l10n.ruleRepositoryMirrorSettingDescription),
                   initialValue: enableGitProxy,
                 ),
               ],
@@ -109,8 +114,9 @@ class _PlayerSettingsPageState extends State<WebDavSettingsPage> {
                       setState(() {});
                     }
                   },
-                  title: Text('Bangumi 镜像'),
-                  description: Text('使用缓存后端加载榜单'),
+                  title: Text(context.l10n.bangumiMirror),
+                  description:
+                      Text(context.l10n.bangumiMirrorSettingDescription),
                   initialValue: enableBangumiProxy,
                 ),
                 SettingsTile.switchTile(
@@ -124,7 +130,7 @@ class _PlayerSettingsPageState extends State<WebDavSettingsPage> {
                               .trim();
                       if (token.isEmpty) {
                         KazumiDialog.showToast(
-                            message: '请先配置 Bangumi 的 Access Token');
+                            message: currentL10n.configureBangumiTokenFirst);
                         return;
                       } else {
                         if (!bangumi.initialized) {
@@ -132,7 +138,8 @@ class _PlayerSettingsPageState extends State<WebDavSettingsPage> {
                             await bangumi.init();
                           } catch (e) {
                             KazumiDialog.showToast(
-                                message: "Bangumi 初始化失败，请稍后再试");
+                                message: currentL10n
+                                    .bangumiInitializationRetryLater);
                             return;
                           }
                         }
@@ -146,8 +153,8 @@ class _PlayerSettingsPageState extends State<WebDavSettingsPage> {
                     }
                     setState(() {});
                   },
-                  title: Text('Bangumi 同步'),
-                  description: Text('与Bangumi自动同步追番状态'),
+                  title: Text(context.l10n.bangumiSync),
+                  description: Text(context.l10n.bangumiSyncDescription),
                   initialValue: bangumiSyncEnable,
                 ),
                 SettingsTile(
@@ -158,7 +165,7 @@ class _PlayerSettingsPageState extends State<WebDavSettingsPage> {
                         GStorage.getSetting(SettingsKeys.bangumiSyncEnable);
                     setState(() {});
                   },
-                  title: Text('Bangumi 配置'),
+                  title: Text(context.l10n.bangumiConfiguration),
                 ),
               ],
             ),
@@ -174,7 +181,9 @@ class _PlayerSettingsPageState extends State<WebDavSettingsPage> {
                         await WebDav().init();
                       } catch (e) {
                         webDavEnable = false;
-                        KazumiDialog.showToast(message: 'WEBDAV初始化失败 $e');
+                        KazumiDialog.showToast(
+                            message:
+                                currentL10n.webDavInitializationFailed('$e'));
                       }
                     }
                     if (!webDavEnable) {
@@ -191,14 +200,15 @@ class _PlayerSettingsPageState extends State<WebDavSettingsPage> {
                       setState(() {});
                     }
                   },
-                  title: Text('WEBDAV同步'),
+                  title: Text(context.l10n.webDavSync),
                   initialValue: webDavEnable,
                 ),
                 SettingsTile.switchTile(
                   leading: Icons.history_rounded,
                   onToggle: (value) async {
                     if (!webDavEnable) {
-                      KazumiDialog.showToast(message: '请先开启WEBDAV同步');
+                      KazumiDialog.showToast(
+                          message: currentL10n.enableWebDavSyncFirst);
                       return;
                     }
                     webDavEnableHistory = value ?? !webDavEnableHistory;
@@ -206,15 +216,16 @@ class _PlayerSettingsPageState extends State<WebDavSettingsPage> {
                         SettingsKeys.webDavEnableHistory, webDavEnableHistory);
                     setState(() {});
                   },
-                  title: Text('观看记录同步'),
-                  description: Text('允许自动同步观看记录'),
+                  title: Text(context.l10n.watchHistorySync),
+                  description: Text(context.l10n.watchHistorySyncDescription),
                   initialValue: webDavEnableHistory,
                 ),
                 SettingsTile.switchTile(
                   leading: Icons.favorite_rounded,
                   onToggle: (value) async {
                     if (!webDavEnable) {
-                      KazumiDialog.showToast(message: '请先开启WEBDAV同步');
+                      KazumiDialog.showToast(
+                          message: currentL10n.enableWebDavSyncFirst);
                       return;
                     }
                     webDavEnableCollect = value ?? !webDavEnableCollect;
@@ -222,8 +233,8 @@ class _PlayerSettingsPageState extends State<WebDavSettingsPage> {
                         SettingsKeys.webDavEnableCollect, webDavEnableCollect);
                     setState(() {});
                   },
-                  title: Text('收藏同步'),
-                  description: Text('允许 WebDAV 参与追番状态同步'),
+                  title: Text(context.l10n.collectionSync),
+                  description: Text(context.l10n.collectionSyncDescription),
                   initialValue: webDavEnableCollect,
                 ),
                 SettingsTile(
@@ -231,7 +242,7 @@ class _PlayerSettingsPageState extends State<WebDavSettingsPage> {
                   onPressed: (_) async {
                     context.pushNamed('/settings/webdav/editor');
                   },
-                  title: Text('WEBDAV配置'),
+                  title: Text(context.l10n.webDavConfiguration),
                 ),
                 SettingsTile(
                   leading: Icons.cloud_upload_rounded,
@@ -239,8 +250,8 @@ class _PlayerSettingsPageState extends State<WebDavSettingsPage> {
                   onPressed: (_) {
                     syncHistoryWithWebDav();
                   },
-                  title: Text('立即同步观看记录'),
-                  description: Text('与WEBDAV双向合并观看记录'),
+                  title: Text(context.l10n.syncWatchHistoryNow),
+                  description: Text(context.l10n.mergeWatchHistoryWithWebDav),
                 ),
               ],
             ),

@@ -4,6 +4,7 @@ import 'package:kazumi/bean/appbar/sys_app_bar.dart';
 import 'package:kazumi/bean/card/bangumi_history_card.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
 import 'package:kazumi/bean/widget/empty_state_widget.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/history/history_controller.dart';
 import 'package:kazumi/utils/constants.dart';
 
@@ -41,15 +42,15 @@ class _HistoryPageState extends State<HistoryPage> {
     KazumiDialog.show(
       builder: (context) {
         return AlertDialog(
-          title: const Text('记录管理'),
-          content: const Text('确认要清除所有历史记录吗?'),
+          title: Text(context.l10n.historyManagement),
+          content: Text(context.l10n.clearAllHistoryConfirmation),
           actions: [
             TextButton(
               onPressed: () {
                 KazumiDialog.dismiss();
               },
               child: Text(
-                '取消',
+                context.l10n.cancel,
                 style: TextStyle(color: Theme.of(context).colorScheme.outline),
               ),
             ),
@@ -60,7 +61,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   historyController.clearAll();
                 } catch (_) {}
               },
-              child: const Text('确认'),
+              child: Text(context.l10n.confirm),
             ),
           ],
         );
@@ -78,7 +79,7 @@ class _HistoryPageState extends State<HistoryPage> {
         },
         child: Scaffold(
           appBar: SysAppBar(
-            title: const Text('历史记录'),
+            title: Text(context.l10n.history),
             actions: [
               if (historyController.histories.isNotEmpty) ...[
                 IconButton(
@@ -90,14 +91,16 @@ class _HistoryPageState extends State<HistoryPage> {
                   icon: showDelete
                       ? const Icon(Icons.edit_off_outlined)
                       : const Icon(Icons.edit_outlined),
-                  tooltip: showDelete ? '退出编辑' : '编辑',
+                  tooltip: showDelete
+                      ? context.l10n.exitEditMode
+                      : context.l10n.edit,
                 ),
                 IconButton(
                   onPressed: () {
                     showHistoryClearDialog();
                   },
                   icon: const Icon(Icons.delete_sweep_outlined),
-                  tooltip: '清除全部',
+                  tooltip: context.l10n.clearAll,
                 ),
               ],
             ],
@@ -112,10 +115,10 @@ class _HistoryPageState extends State<HistoryPage> {
     if (historyController.histories.isNotEmpty) {
       return contentGrid;
     } else {
-      return const Center(
+      return Center(
         child: GeneralEmptyState(
           icon: Icons.history_rounded,
-          title: '暂无历史记录',
+          title: context.l10n.noHistory,
         ),
       );
     }

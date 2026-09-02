@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:kazumi/plugins/plugins.dart';
 import 'package:kazumi/utils/encoding.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 class PluginImportParseResult {
   const PluginImportParseResult({
@@ -28,9 +29,9 @@ class PluginImportParser {
   static PluginImportParseResult parse(String input) {
     final value = input.trim();
     if (value.isEmpty) {
-      return const PluginImportParseResult(
+      return PluginImportParseResult(
         plugins: [],
-        failures: ['导入内容为空'],
+        failures: [currentL10n.importContentEmpty],
         duplicateCount: 0,
       );
     }
@@ -57,7 +58,7 @@ class PluginImportParser {
     } else {
       final segments = findKazumiRuleLinkSegments(value).toList();
       if (segments.isEmpty) {
-        failures.add('未找到有效的 JSON 或 kazumi:// 规则链接');
+        failures.add(currentL10n.noValidRuleImportContent);
       } else {
         for (var index = 0; index < segments.length; index++) {
           final segment = segments[index];
@@ -100,7 +101,7 @@ class PluginImportParser {
       final entry = _decodeRuleEntry(scheme, rawPayload);
       _parseEntry(entry, index, plugins, failures);
     } catch (error) {
-      failures.add('第 $index 条：$error');
+      failures.add(currentL10n.importEntryError(index, error.toString()));
     }
   }
 
@@ -132,8 +133,7 @@ class PluginImportParser {
         if (decoded is Map) {
           return Map<String, dynamic>.from(decoded);
         }
-        firstError ??=
-            const FormatException('规则链接内容必须是 JSON object');
+        firstError ??= FormatException(currentL10n.ruleLinkMustBeJsonObject);
       } on FormatException catch (error) {
         firstError ??= error;
         // Try a shorter prefix in case prose follows the rule link.
@@ -155,22 +155,22 @@ class PluginImportParser {
       } else if (entry is String) {
         final decoded = json.decode(kazumiBase64ToJson(entry));
         if (decoded is! Map) {
-          throw const FormatException('规则链接内容必须是 JSON object');
+          throw FormatException(currentL10n.ruleLinkMustBeJsonObject);
         }
         plugin = Plugin.fromJson(Map<String, dynamic>.from(decoded));
       } else {
-        throw const FormatException('规则必须是 JSON object 或 kazumi:// 链接');
+        throw FormatException(currentL10n.ruleMustBeJsonOrLink);
       }
 
       if (plugin.name.trim().isEmpty) {
-        throw const FormatException('规则名称不能为空');
+        throw FormatException(currentL10n.ruleNameRequired);
       }
       if (plugin.requiresNewerClient) {
-        throw const FormatException('规则需要更高版本客户端');
+        throw FormatException(currentL10n.ruleRequiresNewerClient);
       }
       plugins.add(plugin);
     } catch (error) {
-      failures.add('第 $index 条：$error');
+      failures.add(currentL10n.importEntryError(index, error.toString()));
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/modules/character/character_full_item.dart';
 import 'package:kazumi/modules/comments/comment_item.dart';
 import 'package:kazumi/request/apis/bangumi_api.dart';
@@ -141,8 +142,8 @@ class _CharacterPageState extends State<CharacterPage> {
               description: _headerDescription,
               onClose: () => Navigator.of(context).pop(),
             ),
-            const MaterialBottomSheetSegmentedTabs(
-              labels: ['资料', '吐槽'],
+            MaterialBottomSheetSegmentedTabs(
+              labels: [context.l10n.profile, context.l10n.comments],
             ),
             Expanded(
               child: TabBarView(
@@ -157,12 +158,16 @@ class _CharacterPageState extends State<CharacterPage> {
 
   String get _headerTitle {
     final name = widget.characterName.trim();
-    return name.isEmpty ? '人物' : name;
+    return name.isEmpty ? context.l10n.character : name;
   }
 
   String? get _headerDescription {
     final relation = widget.characterRelation.trim();
-    if (relation.isEmpty || relation == '未知') return null;
+    if (relation.isEmpty ||
+        relation == currentL10n.unknown ||
+        relation == '未知') {
+      return null;
+    }
     return relation;
   }
 
@@ -170,11 +175,11 @@ class _CharacterPageState extends State<CharacterPage> {
     final character = characterFullItem;
     if (character != null && character.id == 0) {
       return GeneralErrorWidget(
-        errMsg: '什么都没有找到 (´;ω;`)',
+        errMsg: context.l10n.nothingFound,
         actions: [
           GeneralErrorButton(
             onPressed: loadCharacter,
-            text: '点击重试',
+            text: context.l10n.tapToRetry,
           ),
         ],
       );
@@ -249,9 +254,9 @@ class _CharacterPageState extends State<CharacterPage> {
 
     return Semantics(
       button: true,
-      label: '查看人物图片',
+      label: context.l10n.viewCharacterImages,
       child: Tooltip(
-        message: '查看原图',
+        message: context.l10n.viewOriginalImage,
         child: Material(
           color: Theme.of(context).colorScheme.surfaceContainerHigh,
           borderRadius: const BorderRadius.all(StyleString.imgRadius),
@@ -291,14 +296,17 @@ class _CharacterPageState extends State<CharacterPage> {
     }
     if (character.summary.trim().isNotEmpty) {
       blocks.add(
-        CharacterInfoField(key: '简介', value: character.summary.trim()),
+        CharacterInfoField(
+          key: context.l10n.introduction,
+          value: character.summary.trim(),
+        ),
       );
     }
 
     if (pills.isEmpty && blocks.isEmpty) {
       final theme = Theme.of(context);
       return Text(
-        '暂无人物资料',
+        context.l10n.noCharacterProfile,
         style: theme.textTheme.bodyMedium?.copyWith(
           color: theme.colorScheme.onSurfaceVariant,
         ),
@@ -415,22 +423,22 @@ class _CharacterPageState extends State<CharacterPage> {
             if (commentsError) {
               return SliverFillRemaining(
                 child: GeneralErrorWidget(
-                  errMsg: '什么都没有找到 (´;ω;`)',
+                  errMsg: context.l10n.nothingFound,
                   actions: [
                     GeneralErrorButton(
                       onPressed: () {
                         loadComments();
                       },
-                      text: '点击重试',
+                      text: context.l10n.tapToRetry,
                     ),
                   ],
                 ),
               );
             }
             if (commentsList.isEmpty) {
-              return const SliverFillRemaining(
+              return SliverFillRemaining(
                 child: Center(
-                  child: Text('什么都没有找到 (´;ω;`)'),
+                  child: Text(context.l10n.nothingFound),
                 ),
               );
             }

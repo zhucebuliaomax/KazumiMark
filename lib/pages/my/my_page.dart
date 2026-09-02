@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:kazumi/bean/appbar/sys_app_bar.dart';
 import 'package:kazumi/bean/settings/settings_list.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/modules/collect/collect_type.dart';
 import 'package:kazumi/modules/my/watch_stats.dart';
 import 'package:kazumi/pages/menu/route_visibility.dart';
@@ -71,7 +72,7 @@ class _MyPageState extends State<MyPage> {
     final bool wide =
         MediaQuery.sizeOf(context).width > LayoutBreakpoint.compact['width']!;
     return Scaffold(
-      appBar: const SysAppBar(title: Text('我的'), needTopOffset: false),
+      appBar: SysAppBar(title: Text(context.l10n.pageMy), needTopOffset: false),
       body: SafeArea(
         top: false,
         bottom: false,
@@ -141,7 +142,7 @@ class _MyPageState extends State<MyPage> {
     }
     return [
       const SizedBox(height: 24),
-      _sectionLabel('继续观看'),
+      _sectionLabel(context.l10n.continueWatching),
       const SizedBox(height: 12),
       GridView.builder(
         shrinkWrap: true,
@@ -179,18 +180,18 @@ class _MyPageState extends State<MyPage> {
     final tiles = <Widget>[
       _StatTile(
         value: '${stats.watchedBangumiCount}',
-        unit: '部',
-        label: '看过番剧',
+        unit: context.l10n.animeUnit,
+        label: context.l10n.watchedAnime,
       ),
       _StatTile(
         value: '${stats.watchedEpisodeCount}',
-        unit: '集',
-        label: '观看集数',
+        unit: context.l10n.episodeUnit,
+        label: context.l10n.watchedEpisodes,
       ),
       _StatTile(
         value: '${stats.downloadTaskCount}',
-        unit: '集',
-        label: '离线缓存',
+        unit: context.l10n.episodeUnit,
+        label: context.l10n.offlineCache,
       ),
     ];
     // Tiles hold different amounts of text; stretch keeps them level.
@@ -215,22 +216,22 @@ class _MyPageState extends State<MyPage> {
       children: [
         SettingsCategoryTile(
           icon: Icons.history_rounded,
-          title: '历史记录',
+          title: context.l10n.history,
           description: stats.lastWatchName != null
-              ? '最近看到 ${stats.lastWatchName}'
-              : '还没有观看记录',
+              ? context.l10n.recentlyWatchedTitle(stats.lastWatchName!)
+              : context.l10n.noWatchHistoryYet,
           onTap: () => context.pushNamed('/settings/history/'),
         ),
         SettingsCategoryTile(
           icon: Icons.download_rounded,
-          title: '离线下载',
-          description: '缓存任务与本地文件',
+          title: context.l10n.offlineDownloads,
+          description: context.l10n.downloadTasksAndLocalFiles,
           onTap: () => context.pushNamed('/settings/download/'),
         ),
         SettingsCategoryTile(
           icon: Icons.settings_rounded,
-          title: '设置',
-          description: '播放、弹幕、外观与规则',
+          title: context.l10n.settings,
+          description: context.l10n.settingsOverviewDescription,
           onTap: () => context.pushNamed('/settings/'),
         ),
       ],
@@ -257,8 +258,9 @@ class _CollectHero extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final lastWatchTime = stats.lastWatchTime;
     final String caption = lastWatchTime == null
-        ? '收藏番剧后会在这里汇总'
-        : '最近观看 ${formatTimestampToRelativeTime(lastWatchTime.millisecondsSinceEpoch ~/ 1000)}';
+        ? context.l10n.collectionSummaryHint
+        : context.l10n.recentlyWatchedTime(formatTimestampToRelativeTime(
+            lastWatchTime.millisecondsSinceEpoch ~/ 1000));
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -286,7 +288,7 @@ class _CollectHero extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Text(
-                '我的追番',
+                context.l10n.myCollection,
                 style: textTheme.titleMedium?.copyWith(
                   color: colorScheme.onSurface,
                 ),
@@ -305,7 +307,7 @@ class _CollectHero extends StatelessWidget {
                   ),
                 ),
                 TextSpan(
-                  text: ' 部',
+                  text: ' ${context.l10n.animeUnit}',
                   style: textTheme.titleMedium?.copyWith(
                     color: colorScheme.onSurfaceVariant,
                   ),
@@ -425,4 +427,3 @@ class _StatTile extends StatelessWidget {
     );
   }
 }
-

@@ -5,6 +5,7 @@ import 'package:kazumi/bean/dialog/adaptive_bottom_sheet.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
 import 'package:kazumi/bean/dialog/material_bottom_sheet.dart';
 import 'package:kazumi/bean/settings/settings_list.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/player/player_controller.dart';
 import 'package:kazumi/utils/device.dart';
 
@@ -99,7 +100,8 @@ class _VideoDetailsSheetState extends State<VideoDetailsSheet>
   /// [context] must sit below this sheet's ScaffoldMessenger.
   void _copyToClipboard(BuildContext context, String value) {
     Clipboard.setData(ClipboardData(text: value));
-    KazumiDialog.showToast(message: '已复制到剪贴板', context: context);
+    KazumiDialog.showToast(
+        message: context.l10n.copiedToClipboard, context: context);
   }
 
   @override
@@ -120,8 +122,8 @@ class _VideoDetailsSheetState extends State<VideoDetailsSheet>
               _buildCompactHeader(context)
             else ...[
               MaterialBottomSheetHeader(
-                title: '视频详情',
-                description: '实时播放状态与诊断信息',
+                title: context.l10n.videoDetails,
+                description: context.l10n.videoDetailsDescription,
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: _buildHeaderActions(context),
@@ -129,7 +131,7 @@ class _VideoDetailsSheetState extends State<VideoDetailsSheet>
               ),
               MaterialBottomSheetSegmentedTabs(
                 controller: _tabController,
-                labels: const ['状态', '日志'],
+                labels: [context.l10n.status, context.l10n.logs],
               ),
             ],
             Expanded(
@@ -157,7 +159,7 @@ class _VideoDetailsSheetState extends State<VideoDetailsSheet>
       child: Row(
         children: [
           Text(
-            '视频详情',
+            context.l10n.videoDetails,
             style: theme.textTheme.titleMedium?.copyWith(
               color: colorScheme.onSurface,
               fontWeight: FontWeight.w700,
@@ -170,7 +172,7 @@ class _VideoDetailsSheetState extends State<VideoDetailsSheet>
                 constraints: const BoxConstraints(maxWidth: 300),
                 child: MaterialBottomSheetSegmentedTabs(
                   controller: _tabController,
-                  labels: const ['状态', '日志'],
+                  labels: [context.l10n.status, context.l10n.logs],
                   padding: EdgeInsets.zero,
                 ),
               ),
@@ -203,7 +205,7 @@ class _VideoDetailsSheetState extends State<VideoDetailsSheet>
       const SizedBox(width: 8),
       IconButton.filledTonal(
         onPressed: () => Navigator.of(context).pop(),
-        tooltip: '关闭',
+        tooltip: context.l10n.close,
         icon: const Icon(Icons.close_rounded),
       ),
     ];
@@ -216,7 +218,7 @@ class _VideoDetailsSheetState extends State<VideoDetailsSheet>
         onPressed: logs.isEmpty
             ? null
             : () => _copyToClipboard(context, logs.join('\n')),
-        tooltip: '复制全部日志',
+        tooltip: context.l10n.copyAllLogs,
         icon: const Icon(Icons.copy),
       );
     });
@@ -232,34 +234,36 @@ class _VideoDetailsSheetState extends State<VideoDetailsSheet>
       return SettingsList(
         sections: [
           SettingsSection(
-            title: const Text('播放源'),
+            title: Text(context.l10n.playbackSource),
             tiles: [
-              _statusTile(
-                  Icons.link_rounded, '媒体地址', playerController.videoUrl),
-              _statusTile(
-                  Icons.playlist_play_rounded, '播放列表', debug.playerPlaylist),
+              _statusTile(Icons.link_rounded, context.l10n.mediaUrl,
+                  playerController.videoUrl),
+              _statusTile(Icons.playlist_play_rounded, context.l10n.playlist,
+                  debug.playerPlaylist),
             ],
           ),
           SettingsSection(
-            title: const Text('视频'),
+            title: Text(context.l10n.video),
             tiles: [
-              _statusTile(Icons.aspect_ratio_rounded, '分辨率', resolution),
-              _statusTile(Icons.tune_rounded, '视频参数', debug.playerVideoParams),
-              _statusTile(
-                  Icons.video_file_rounded, '视频轨道', debug.playerVideoTracks),
-              _statusTile(
-                  Icons.speed_rounded, '视频码率', debug.playerVideoBitrate),
+              _statusTile(Icons.aspect_ratio_rounded, context.l10n.resolution,
+                  resolution),
+              _statusTile(Icons.tune_rounded, context.l10n.videoParameters,
+                  debug.playerVideoParams),
+              _statusTile(Icons.video_file_rounded, context.l10n.videoTracks,
+                  debug.playerVideoTracks),
+              _statusTile(Icons.speed_rounded, context.l10n.videoBitrate,
+                  debug.playerVideoBitrate),
             ],
           ),
           SettingsSection(
-            title: const Text('音频'),
+            title: Text(context.l10n.audio),
             tiles: [
-              _statusTile(
-                  Icons.graphic_eq_rounded, '音频参数', debug.playerAudioParams),
-              _statusTile(
-                  Icons.audio_file_rounded, '音频轨道', debug.playerAudioTracks),
-              _statusTile(
-                  Icons.speed_rounded, '音频码率', debug.playerAudioBitrate),
+              _statusTile(Icons.graphic_eq_rounded,
+                  context.l10n.audioParameters, debug.playerAudioParams),
+              _statusTile(Icons.audio_file_rounded, context.l10n.audioTracks,
+                  debug.playerAudioTracks),
+              _statusTile(Icons.speed_rounded, context.l10n.audioBitrate,
+                  debug.playerAudioBitrate),
             ],
           ),
         ],
@@ -273,7 +277,7 @@ class _VideoDetailsSheetState extends State<VideoDetailsSheet>
     return SettingsTile(
       leading: icon,
       title: Text(label),
-      description: Text(value.isEmpty ? '暂无数据' : value),
+      description: Text(value.isEmpty ? context.l10n.noData : value),
       enabled: value.isNotEmpty,
       onPressed: (context) => _copyToClipboard(context, value),
     );
@@ -360,7 +364,7 @@ class _VideoDetailsSheetState extends State<VideoDetailsSheet>
           ),
           const SizedBox(height: 12),
           Text(
-            '暂无运行日志',
+            context.l10n.noRuntimeLogs,
             style: theme.textTheme.titleMedium?.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),

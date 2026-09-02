@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
 
 /// Deletions edit [aliases] in place and then fire [onAliasesChanged], so the
@@ -30,7 +31,7 @@ void showCustomKeywordDialog({required ValueChanged<String> onSubmit}) {
 
   KazumiDialog.show(
     builder: (context) => AlertDialog(
-      title: const Text('输入别名'),
+      title: Text(context.l10n.enterAlias),
       content: TextField(
         onChanged: (value) => keyword = value,
         onSubmitted: submit,
@@ -39,13 +40,13 @@ void showCustomKeywordDialog({required ValueChanged<String> onSubmit}) {
         TextButton(
           onPressed: KazumiDialog.dismiss,
           child: Text(
-            '取消',
+            context.l10n.cancel,
             style: TextStyle(color: Theme.of(context).colorScheme.outline),
           ),
         ),
         TextButton(
           onPressed: () => submit(keyword),
-          child: const Text('确认'),
+          child: Text(context.l10n.confirm),
         ),
       ],
     ),
@@ -80,13 +81,13 @@ class _AliasPickerDialogState extends State<_AliasPickerDialog> {
   void _confirmDelete(int index) {
     KazumiDialog.show(
       builder: (context) => AlertDialog(
-        title: const Text('删除确认'),
-        content: const Text('删除后无法恢复，确认要永久删除这个别名吗？'),
+        title: Text(context.l10n.deleteConfirmation),
+        content: Text(context.l10n.deleteAliasConfirmation),
         actions: [
           TextButton(
             onPressed: KazumiDialog.dismiss,
             child: Text(
-              '取消',
+              context.l10n.cancel,
               style: TextStyle(color: Theme.of(context).colorScheme.outline),
             ),
           ),
@@ -100,7 +101,7 @@ class _AliasPickerDialogState extends State<_AliasPickerDialog> {
                 Navigator.of(this.context).pop();
               }
             },
-            child: const Text('确认'),
+            child: Text(context.l10n.confirm),
           ),
         ],
       ),

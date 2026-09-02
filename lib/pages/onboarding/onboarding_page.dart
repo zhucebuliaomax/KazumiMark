@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:kazumi/bean/appbar/sys_app_bar.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/my/my_controller.dart';
 import 'package:kazumi/pages/onboarding/steps/disclaimer_step.dart';
 import 'package:kazumi/pages/onboarding/steps/mirror_settings_step.dart';
@@ -66,9 +67,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   String get primaryLabel {
     if (currentIndex == 0 && !agreed) {
-      return '同意并继续';
+      return context.l10n.agreeAndContinue;
     }
-    return currentIndex == stepCount - 1 ? '完成' : '下一步';
+    return currentIndex == stepCount - 1
+        ? context.l10n.finish
+        : context.l10n.nextStep;
   }
 
   void _goToPage(int index) {
@@ -114,7 +117,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
           installingBundled = false;
         });
       }
-      KazumiDialog.showToast(message: '初始化规则失败');
+      KazumiDialog.showToast(message: currentL10n.initializeRulesFailed);
       return;
     }
     if (!mounted) {
@@ -158,14 +161,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
               TextButton(
                 onPressed: () => exit(0),
                 child: Text(
-                  '退出',
+                  context.l10n.exit,
                   style: TextStyle(color: colorScheme.outline),
                 ),
               )
             else
               TextButton(
                 onPressed: _previousPage,
-                child: const Text('上一步'),
+                child: Text(context.l10n.previousStep),
               ),
             Expanded(
               child: Center(

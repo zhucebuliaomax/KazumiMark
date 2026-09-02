@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:kazumi/bean/appbar/sys_app_bar.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
 import 'package:kazumi/bean/widget/empty_state_widget.dart';
 import 'package:kazumi/modules/download/download_module.dart';
@@ -47,17 +48,17 @@ class _DownloadPageState extends State<DownloadPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const SysAppBar(title: Text('下载管理')),
+      appBar: SysAppBar(title: Text(context.l10n.downloadManagement)),
       body: Observer(builder: (context) {
         final recordKeys = downloadController.recordKeys.toList();
         // Drop expansion state for deleted records, so a re-downloaded
         // bangumi gets a fresh default instead of a stale cached one.
         _expanded.removeWhere((key, _) => !recordKeys.contains(key));
         if (recordKeys.isEmpty) {
-          return const Center(
+          return Center(
             child: GeneralEmptyState(
               icon: Icons.download_rounded,
-              title: '暂无下载内容',
+              title: context.l10n.noDownloads,
             ),
           );
         }
@@ -107,7 +108,7 @@ class _DownloadPageState extends State<DownloadPage> {
             record.bangumiId,
             record.pluginName,
           );
-          KazumiDialog.showToast(message: '已开始恢复下载');
+          KazumiDialog.showToast(message: currentL10n.resumingDownloads);
         },
         onDeleteAll: () => _confirmDeleteRecord(record),
         totalSpeed: totalSpeed,
@@ -134,7 +135,8 @@ class _DownloadPageState extends State<DownloadPage> {
   String _getStatusText(DownloadRecord record, DownloadEpisode episode) {
     switch (episode.status) {
       case DownloadStatus.completed:
-        return '已完成 · ${formatBytes(episode.totalBytes)}';
+        return context.l10n
+            .downloadCompletedSize(formatBytes(episode.totalBytes));
       case DownloadStatus.downloading:
         final speed = downloadController.getSpeed(
           record.bangumiId,
@@ -143,15 +145,18 @@ class _DownloadPageState extends State<DownloadPage> {
         );
         final speedText = speed > 0 ? ' · ${formatSpeed(speed)}' : '';
         return '${(episode.progressPercent * 100).toStringAsFixed(0)}% · '
-            '${episode.downloadedSegments}/${episode.totalSegments} 分片$speedText';
+            '${context.l10n.downloadSegmentProgress(episode.downloadedSegments, episode.totalSegments, speedText)}';
       case DownloadStatus.failed:
-        return episode.errorMessage.isNotEmpty ? episode.errorMessage : '下载失败';
+        return episode.errorMessage.isNotEmpty
+            ? episode.errorMessage
+            : context.l10n.downloadFailed;
       case DownloadStatus.paused:
-        return '已暂停 · ${(episode.progressPercent * 100).toStringAsFixed(0)}%';
+        return context.l10n.downloadPausedPercent(
+            (episode.progressPercent * 100).toStringAsFixed(0));
       case DownloadStatus.pending:
-        return '排队中';
+        return context.l10n.queued;
       case DownloadStatus.resolving:
-        return '正在解析视频源';
+        return context.l10n.parsingVideoSource;
       default:
         return '';
     }
@@ -168,7 +173,7 @@ class _DownloadPageState extends State<DownloadPage> {
           icon: Icon(Icons.play_circle_outline,
               size: 20, color: colorScheme.primary),
           onPressed: () => _playEpisode(record, episode),
-          tooltip: '播放',
+          tooltip: context.l10n.play,
           visualDensity: VisualDensity.compact,
         ));
         break;
@@ -180,7 +185,7 @@ class _DownloadPageState extends State<DownloadPage> {
             record.pluginName,
             episode.episodeNumber,
           ),
-          tooltip: '暂停',
+          tooltip: context.l10n.pause,
           visualDensity: VisualDensity.compact,
         ));
         break;
@@ -192,7 +197,7 @@ class _DownloadPageState extends State<DownloadPage> {
             pluginName: record.pluginName,
             episodeNumber: episode.episodeNumber,
           ),
-          tooltip: '继续',
+          tooltip: context.l10n.resume,
           visualDensity: VisualDensity.compact,
         ));
         break;
@@ -204,23 +209,22 @@ class _DownloadPageState extends State<DownloadPage> {
             pluginName: record.pluginName,
             episodeNumber: episode.episodeNumber,
           ),
-          tooltip: '重试',
+          tooltip: context.l10n.retry,
           visualDensity: VisualDensity.compact,
         ));
         break;
       case DownloadStatus.pending:
         buttons.add(IconButton(
-          icon: Icon(Icons.priority_high,
-              size: 20, color: colorScheme.primary),
+          icon: Icon(Icons.priority_high, size: 20, color: colorScheme.primary),
           onPressed: () {
             downloadController.priorityDownload(
               bangumiId: record.bangumiId,
               pluginName: record.pluginName,
               episodeNumber: episode.episodeNumber,
             );
-            KazumiDialog.showToast(message: '已插队优先下载');
+            KazumiDialog.showToast(message: currentL10n.downloadPrioritized);
           },
-          tooltip: '优先下载',
+          tooltip: context.l10n.prioritizeDownload,
           visualDensity: VisualDensity.compact,
         ));
         break;
@@ -232,7 +236,7 @@ class _DownloadPageState extends State<DownloadPage> {
       icon: Icon(Icons.delete_outline,
           size: 20, color: colorScheme.onSurfaceVariant),
       onPressed: () => _confirmDeleteEpisode(record, episode),
-      tooltip: '删除',
+      tooltip: context.l10n.delete,
       visualDensity: VisualDensity.compact,
     ));
 
@@ -246,7 +250,7 @@ class _DownloadPageState extends State<DownloadPage> {
       episode.episodeNumber,
     );
     if (localPath == null) {
-      KazumiDialog.showToast(message: '本地文件不存在');
+      KazumiDialog.showToast(message: currentL10n.localFileMissing);
       return;
     }
 
@@ -288,14 +292,16 @@ class _DownloadPageState extends State<DownloadPage> {
   void _confirmDeleteEpisode(DownloadRecord record, DownloadEpisode episode) {
     KazumiDialog.show(
       builder: (context) => AlertDialog(
-        title: const Text('删除下载'),
-        content: Text(
-            '确定要删除「${episode.episodeName.isNotEmpty ? episode.episodeName : '第${episode.episodeNumber}集'}」的下载文件吗？'),
+        title: Text(context.l10n.deleteDownload),
+        content: Text(context.l10n.deleteEpisodeDownloadConfirmation(
+            episode.episodeName.isNotEmpty
+                ? episode.episodeName
+                : context.l10n.episodeNumber(episode.episodeNumber))),
         actions: [
           TextButton(
             onPressed: () => KazumiDialog.dismiss(),
             child: Text(
-              '取消',
+              context.l10n.cancel,
               style: TextStyle(color: Theme.of(context).colorScheme.outline),
             ),
           ),
@@ -309,7 +315,7 @@ class _DownloadPageState extends State<DownloadPage> {
               KazumiDialog.dismiss();
             },
             child: Text(
-              '删除',
+              context.l10n.delete,
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
@@ -321,13 +327,14 @@ class _DownloadPageState extends State<DownloadPage> {
   void _confirmDeleteRecord(DownloadRecord record) {
     KazumiDialog.show(
       builder: (context) => AlertDialog(
-        title: const Text('删除全部下载'),
-        content: Text('确定要删除「${record.bangumiName}」的所有下载文件吗？'),
+        title: Text(context.l10n.deleteAllDownloads),
+        content: Text(context.l10n
+            .deleteAllAnimeDownloadsConfirmation(record.bangumiName)),
         actions: [
           TextButton(
             onPressed: () => KazumiDialog.dismiss(),
             child: Text(
-              '取消',
+              context.l10n.cancel,
               style: TextStyle(color: Theme.of(context).colorScheme.outline),
             ),
           ),
@@ -340,7 +347,7 @@ class _DownloadPageState extends State<DownloadPage> {
               KazumiDialog.dismiss();
             },
             child: Text(
-              '删除',
+              context.l10n.delete,
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),

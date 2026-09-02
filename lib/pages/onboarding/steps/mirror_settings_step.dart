@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/onboarding/onboarding_step_layout.dart';
 import 'package:kazumi/services/storage/storage.dart';
 
@@ -25,8 +26,8 @@ class _MirrorSettingsStepState extends State<MirrorSettingsStep> {
     final colorScheme = Theme.of(context).colorScheme;
     return OnboardingStepLayout(
       leading: const OnboardingStepIcon(icon: Icons.public_rounded),
-      title: '网络镜像',
-      subtitle: '中国大陆用户推荐启用，提升访问速度',
+      title: context.l10n.networkMirrors,
+      subtitle: context.l10n.networkMirrorsDescription,
       child: Align(
         alignment: Alignment.topCenter,
         child: Card(
@@ -41,8 +42,8 @@ class _MirrorSettingsStepState extends State<MirrorSettingsStep> {
             children: [
               SwitchListTile(
                 secondary: const Icon(Icons.travel_explore_rounded),
-                title: const Text('Bangumi 镜像'),
-                subtitle: const Text('加速热门与时间表加载'),
+                title: Text(context.l10n.bangumiMirror),
+                subtitle: Text(context.l10n.bangumiMirrorDescription),
                 value: enableBangumiProxy,
                 onChanged: (value) async {
                   enableBangumiProxy = value;
@@ -55,8 +56,8 @@ class _MirrorSettingsStepState extends State<MirrorSettingsStep> {
               ),
               SwitchListTile(
                 secondary: const Icon(Icons.extension_rounded),
-                title: const Text('规则仓库镜像'),
-                subtitle: const Text('加速规则的下载与更新'),
+                title: Text(context.l10n.ruleRepositoryMirror),
+                subtitle: Text(context.l10n.ruleRepositoryMirrorDescription),
                 value: enableGitProxy,
                 onChanged: (value) async {
                   enableGitProxy = value;
@@ -75,7 +76,7 @@ class _MirrorSettingsStepState extends State<MirrorSettingsStep> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        '可稍后在 设置 → 同步设置 中修改',
+                        context.l10n.mirrorSettingsLaterHint,
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall

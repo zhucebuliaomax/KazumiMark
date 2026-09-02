@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:kazumi/pages/download/download_controller.dart';
 import 'package:kazumi/pages/history/history_controller.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/player/player_controller.dart';
 import 'package:kazumi/pages/route_error_page.dart';
 import 'package:kazumi/pages/video/video_controller.dart';
@@ -18,7 +19,7 @@ final videoModule = createModule(
       child: (context, state) {
         final args = state.arguments;
         if (args is! VideoPlaybackArgs) {
-          return const RouteErrorPage(message: '播放参数无效，请返回后重试。');
+          return RouteErrorPage(message: currentL10n.invalidPlaybackParameters);
         }
         return VideoPage(
           args: args,

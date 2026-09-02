@@ -1,7 +1,8 @@
+import 'package:kazumi/l10n/l10n.dart';
+
 /// This class asks for DateTime to get a string to indicate seasonal anime
 class AnimeSeason {
   late DateTime _date;
-  final _seasons = ['冬季', '春季', '夏季', '秋季'];
 
   AnimeSeason(DateTime date) {
     _date = date;
@@ -48,7 +49,13 @@ class AnimeSeason {
   String toString() {
     var yas = _getYearAndSeason(_date);
 
-    return '${yas[0]}年${_seasons[yas[1]]}新番';
+    final season = switch (yas[1]) {
+      0 => currentL10n.winter,
+      1 => currentL10n.spring,
+      2 => currentL10n.summer,
+      _ => currentL10n.autumn,
+    };
+    return currentL10n.seasonAnime(yas[0], season);
   }
 }
 

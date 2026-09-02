@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/onboarding/onboarding_step_layout.dart';
 import 'package:kazumi/services/logging/logger.dart';
 
@@ -29,7 +30,7 @@ class _DisclaimerStepState extends State<DisclaimerStep> {
         error: error,
         stackTrace: stackTrace,
       );
-      text = '免责声明加载失败，请退出后重试。';
+      text = currentL10n.disclaimerLoadFailed;
     }
     if (!mounted) {
       return;
@@ -45,8 +46,8 @@ class _DisclaimerStepState extends State<DisclaimerStep> {
     final textTheme = Theme.of(context).textTheme;
     return OnboardingStepLayout(
       leading: const OnboardingStepIcon(icon: Icons.waving_hand_rounded),
-      title: '欢迎使用',
-      subtitle: '请阅读并同意免责声明',
+      title: context.l10n.welcome,
+      subtitle: context.l10n.readAndAcceptDisclaimer,
       child: Card(
         elevation: 0,
         margin: EdgeInsets.zero,

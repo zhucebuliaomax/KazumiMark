@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:kazumi/pages/player/player_item_panel.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/player/player_keyboard_shortcuts.dart';
 import 'package:kazumi/pages/player/controller/player_super_resolution.dart';
 import 'package:kazumi/pages/player/player_panel_hold.dart';
@@ -288,7 +289,7 @@ class _PlayerItemState extends State<PlayerItem>
       return;
     }
     if (!supported) {
-      KazumiDialog.showToast(message: '当前设备不支持画中画');
+      KazumiDialog.showToast(message: currentL10n.pictureInPictureUnsupported);
       return;
     }
     setState(() {
@@ -306,7 +307,7 @@ class _PlayerItemState extends State<PlayerItem>
     if (entered || !mounted) {
       return;
     }
-    KazumiDialog.showToast(message: '进入画中画失败');
+    KazumiDialog.showToast(message: currentL10n.enterPictureInPictureFailed);
     setState(() {
       _pipEnterRequested = false;
     });
@@ -409,11 +410,11 @@ class _PlayerItemState extends State<PlayerItem>
     }
 
     if (targetEpisode > episodes.length) {
-      KazumiDialog.showToast(message: '已经是最新一集');
+      KazumiDialog.showToast(message: currentL10n.alreadyLatestEpisode);
       return;
     }
     if (targetEpisode <= 0) {
-      KazumiDialog.showToast(message: '已经是第一集');
+      KazumiDialog.showToast(message: currentL10n.alreadyFirstEpisode);
       return;
     }
 
@@ -425,7 +426,8 @@ class _PlayerItemState extends State<PlayerItem>
     // the toast here is progress feedback only.
     final targetRef = videoPageController.resolveEpisode(targetSelection);
     if (targetRef != null) {
-      KazumiDialog.showToast(message: '正在加载${targetRef.displayTitle}');
+      KazumiDialog.showToast(
+          message: currentL10n.loadingEpisode(targetRef.displayTitle));
     }
     widget.changeEpisode(targetEpisode, currentRoad: currentRoad);
   }
@@ -750,7 +752,7 @@ class _PlayerItemState extends State<PlayerItem>
     _playScreenshotFeedback();
 
     if (isDesktop()) {
-      KazumiDialog.showToast(message: '桌面端暂未支持保存截图');
+      KazumiDialog.showToast(message: currentL10n.desktopScreenshotUnsupported);
       return;
     }
 
@@ -758,7 +760,7 @@ class _PlayerItemState extends State<PlayerItem>
       Uint8List? screenshot = await playerController.screenshotPng();
 
       if (screenshot == null) {
-        KazumiDialog.showToast(message: '截图失败：未获取到图像');
+        KazumiDialog.showToast(message: currentL10n.screenshotNoImage);
         return;
       }
 
@@ -768,10 +770,12 @@ class _PlayerItemState extends State<PlayerItem>
         skipIfExists: false,
       );
       if (!result.isSuccess) {
-        KazumiDialog.showToast(message: '截图保存失败：${result.errorMessage}');
+        KazumiDialog.showToast(
+            message: currentL10n
+                .screenshotSaveFailed(result.errorMessage ?? 'Unknown error'));
       }
     } catch (e) {
-      KazumiDialog.showToast(message: '截图失败：$e');
+      KazumiDialog.showToast(message: currentL10n.screenshotFailed('$e'));
     }
   }
 
@@ -793,15 +797,14 @@ class _PlayerItemState extends State<PlayerItem>
       if (androidVideoRenderer == 'mediacodec_embed') {
         await KazumiDialog.show(builder: (context) {
           return AlertDialog(
-            title: const Text('兼容性提示'),
-            content: const Text('MediaCodec 渲染器不支持超分辨率功能。\n\n'
-                '如需使用超分辨率，请在播放设置中将视频渲染器切换为 gpu 或 gpu-next。'),
+            title: Text(context.l10n.compatibilityNotice),
+            content: Text(context.l10n.mediaCodecSuperResolutionUnsupported),
             actions: [
               TextButton(
                 onPressed: () {
                   KazumiDialog.dismiss();
                 },
-                child: const Text('确定'),
+                child: Text(context.l10n.confirm),
               ),
             ],
           );
@@ -823,12 +826,12 @@ class _PlayerItemState extends State<PlayerItem>
 
         return StatefulBuilder(builder: (context, setState) {
           return AlertDialog(
-            title: const Text('性能提示'),
+            title: Text(context.l10n.performanceNotice),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('启用超分辨率（质量档）可能会造成设备卡顿，是否继续？'),
+                Text(context.l10n.superResolutionPerformanceWarning),
                 const SizedBox(height: 12),
                 Row(
                   mainAxisSize: MainAxisSize.min,
@@ -838,7 +841,7 @@ class _PlayerItemState extends State<PlayerItem>
                       onChanged: (value) =>
                           setState(() => dontAskAgain = value ?? false),
                     ),
-                    const Text('下次不再询问'),
+                    Text(context.l10n.doNotAskAgain),
                   ],
                 ),
               ],
@@ -854,7 +857,7 @@ class _PlayerItemState extends State<PlayerItem>
                   }
                   KazumiDialog.dismiss();
                 },
-                child: const Text('取消'),
+                child: Text(context.l10n.cancel),
               ),
               TextButton(
                 onPressed: () async {
@@ -867,7 +870,7 @@ class _PlayerItemState extends State<PlayerItem>
                   }
                   KazumiDialog.dismiss();
                 },
-                child: const Text('确认'),
+                child: Text(context.l10n.confirm),
               ),
             ],
           );
@@ -973,14 +976,14 @@ class _PlayerItemState extends State<PlayerItem>
           index++;
           setPlaybackSpeed(defaultPlaySpeedList[index]);
         } else {
-          KazumiDialog.showToast(message: '已达倍速上限');
+          KazumiDialog.showToast(message: currentL10n.maximumSpeedReached);
         }
       } else if (type == "down") {
         if (index > 0) {
           index--;
           setPlaybackSpeed(defaultPlaySpeedList[index]);
         } else {
-          KazumiDialog.showToast(message: '已达倍速下限');
+          KazumiDialog.showToast(message: currentL10n.minimumSpeedReached);
         }
       }
     } catch (e) {
@@ -1158,7 +1161,8 @@ class _PlayerItemState extends State<PlayerItem>
           // instead of silently retrying here every second.
           final nextRef = videoPageController.resolveEpisode(nextSelection);
           if (nextRef != null) {
-            KazumiDialog.showToast(message: '正在加载${nextRef.displayTitle}');
+            KazumiDialog.showToast(
+                message: currentL10n.loadingEpisode(nextRef.displayTitle));
           }
           try {
             playerTimer!.cancel();
@@ -1173,18 +1177,19 @@ class _PlayerItemState extends State<PlayerItem>
 
   void showDanmakuSearchDialog(String keyword) async {
     KazumiDialog.dismiss();
-    KazumiDialog.showLoading(msg: '弹幕检索中');
+    KazumiDialog.showLoading(msg: currentL10n.searchingDanmaku);
     DanmakuSearchResponse danmakuSearchResponse;
     try {
       danmakuSearchResponse = await DanmakuApi.searchAnimes(keyword);
     } catch (e) {
       KazumiDialog.dismiss();
-      KazumiDialog.showToast(message: '弹幕检索错误: ${e.toString()}');
+      KazumiDialog.showToast(
+          message: currentL10n.danmakuSearchError(e.toString()));
       return;
     }
     KazumiDialog.dismiss();
     if (danmakuSearchResponse.animes.isEmpty) {
-      KazumiDialog.showToast(message: '未找到匹配结果');
+      KazumiDialog.showToast(message: currentL10n.noMatchingResults);
       return;
     }
     await KazumiDialog.show(builder: (context) {
@@ -1198,7 +1203,7 @@ class _PlayerItemState extends State<PlayerItem>
                 Padding(
                   padding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
                   child: Text(
-                    '结果较多，仅显示部分条目，可补充更完整的番剧名缩小范围',
+                    context.l10n.tooManyDanmakuResultsHint,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.outline,
                         ),
@@ -1212,7 +1217,7 @@ class _PlayerItemState extends State<PlayerItem>
                       : Text(danmakuInfo.typeDescription),
                   onTap: () async {
                     KazumiDialog.dismiss();
-                    KazumiDialog.showLoading(msg: '弹幕检索中');
+                    KazumiDialog.showLoading(msg: currentL10n.searchingDanmaku);
                     final DanmakuEpisodeResponse danmakuEpisodeResponse;
                     try {
                       danmakuEpisodeResponse =
@@ -1221,12 +1226,14 @@ class _PlayerItemState extends State<PlayerItem>
                     } catch (e) {
                       KazumiDialog.dismiss();
                       KazumiDialog.showToast(
-                          message: '弹幕检索错误: ${e.toString()}');
+                          message:
+                              currentL10n.danmakuSearchError(e.toString()));
                       return;
                     }
                     KazumiDialog.dismiss();
                     if (danmakuEpisodeResponse.episodes.isEmpty) {
-                      KazumiDialog.showToast(message: '未找到匹配结果');
+                      KazumiDialog.showToast(
+                          message: currentL10n.noMatchingResults);
                       return;
                     }
                     KazumiDialog.show(builder: (context) {
@@ -1256,15 +1263,20 @@ class _PlayerItemState extends State<PlayerItem>
                                     if (hasDanmakus) {
                                       playerController.danmaku
                                           .setDanmakuEnabled(true);
-                                      KazumiDialog.showToast(message: '弹幕切换成功');
+                                      KazumiDialog.showToast(
+                                          message: currentL10n
+                                              .danmakuSwitchSucceeded);
                                     } else {
                                       playerController.danmaku
                                           .setDanmakuEnabled(false);
                                       KazumiDialog.showToast(
-                                          message: '未找到弹幕内容');
+                                          message:
+                                              currentL10n.noDanmakuContent);
                                     }
                                   } catch (e) {
-                                    KazumiDialog.showToast(message: '弹幕切换失败');
+                                    KazumiDialog.showToast(
+                                        message:
+                                            currentL10n.danmakuSwitchFailed);
                                   }
                                 },
                               );
@@ -1288,11 +1300,11 @@ class _PlayerItemState extends State<PlayerItem>
     KazumiDialog.show(
       builder: (context) {
         return AlertDialog(
-          title: const Text('弹幕检索'),
+          title: Text(context.l10n.danmakuSearch),
           content: TextFormField(
             initialValue: searchKeyword,
-            decoration: const InputDecoration(
-              hintText: '番剧名',
+            decoration: InputDecoration(
+              hintText: context.l10n.animeName,
             ),
             onChanged: (value) => searchKeyword = value,
             onFieldSubmitted: (keyword) {
@@ -1305,7 +1317,7 @@ class _PlayerItemState extends State<PlayerItem>
                 KazumiDialog.dismiss();
               },
               child: Text(
-                '取消',
+                context.l10n.cancel,
                 style: TextStyle(color: Theme.of(context).colorScheme.outline),
               ),
             ),
@@ -1313,8 +1325,8 @@ class _PlayerItemState extends State<PlayerItem>
               onPressed: () {
                 showDanmakuSearchDialog(searchKeyword);
               },
-              child: const Text(
-                '提交',
+              child: Text(
+                context.l10n.submit,
               ),
             ),
           ],

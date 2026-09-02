@@ -6,6 +6,7 @@ import 'package:kazumi/pages/plugin_editor/plugin_view_page.dart';
 import 'package:kazumi/pages/route_error_page.dart';
 import 'package:kazumi/plugins/plugins.dart';
 import 'package:kazumi/plugins/plugins_controller.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 final pluginModule = createModule(
   path: '/plugin',
@@ -28,7 +29,9 @@ final pluginModule = createModule(
         child: (context, state) {
           final plugin = state.arguments;
           if (plugin is! Plugin) {
-            return const RouteErrorPage(message: '规则测试参数无效，请返回后重试。');
+            return RouteErrorPage(
+              message: context.l10n.invalidRuleTestParameters,
+            );
           }
           return PluginTestPage(plugin: plugin);
         },
@@ -38,7 +41,9 @@ final pluginModule = createModule(
         child: (context, state) {
           final plugin = state.arguments;
           if (plugin is! Plugin) {
-            return const RouteErrorPage(message: '规则编辑参数无效，请返回后重试。');
+            return RouteErrorPage(
+              message: context.l10n.invalidRuleEditorParameters,
+            );
           }
           return PluginEditorPage(
             plugin: plugin,

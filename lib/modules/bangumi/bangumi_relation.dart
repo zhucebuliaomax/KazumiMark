@@ -1,4 +1,5 @@
 import 'package:kazumi/modules/bangumi/bangumi_item.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 typedef BangumiRelationFetcher = Future<List<BangumiRelation>> Function(int id);
 
@@ -47,7 +48,7 @@ class BangumiRelation {
 
     final relation = (json['relation'] ?? '').toString().trim();
     return BangumiRelation(
-      relation: relation.isEmpty ? '关联' : relation,
+      relation: relation.isEmpty ? currentL10n.related : relation,
       bangumiItem: BangumiItem(
         id: id,
         type: type,

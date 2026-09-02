@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:kazumi/bean/widget/image_preview.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/collect/collect_module.dart';
 import 'package:kazumi/pages/index_page.dart';
 import 'package:kazumi/pages/info/info_module.dart';
@@ -91,7 +92,7 @@ final indexModule = createModule(
         '/error',
         child: (context, state) => Scaffold(
           appBar: AppBar(title: const Text('Kazumi Max')),
-          body: const Center(child: Text('初始化失败')),
+          body: Center(child: Text(currentL10n.initializationFailed)),
         ),
       )
       ..module(tabModule)
@@ -101,7 +102,8 @@ final indexModule = createModule(
         child: (context, state) {
           final args = state.arguments;
           if (args is! ImageViewerRouteArgs) {
-            return const RouteErrorPage(message: '图片预览参数无效，请返回后重试。');
+            return RouteErrorPage(
+                message: currentL10n.invalidImagePreviewParameters);
           }
           return ImageViewer(
             imageUrls: args.imageUrls,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/bbcode/bbcode_widget.dart';
 import 'package:kazumi/bean/widget/bangumi_avatar.dart';
 import 'package:kazumi/modules/comments/comment_item.dart';
@@ -175,7 +176,7 @@ class _CommentBody extends StatelessWidget {
     if (content.isEmpty) {
       final theme = Theme.of(context);
       return Text(
-        '该评论已被删除',
+        context.l10n.commentDeleted,
         style: theme.textTheme.bodyMedium?.copyWith(
           color: theme.colorScheme.onSurfaceVariant,
           fontStyle: FontStyle.italic,

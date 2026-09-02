@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/my/my_controller.dart';
 import 'package:kazumi/services/sync/bangumi_sync_service.dart';
 import 'package:kazumi/services/sync/webdav.dart';
@@ -116,23 +117,20 @@ class _InitPageState extends State<InitPage> {
         clickMaskDismiss: false,
         builder: (context) {
           return AlertDialog(
-            title: const Text('需要通知权限'),
-            content: const Text(
-              '开启通知权限后，可以在后台下载时显示进度，并防止系统终止下载任务。\n\n'
-              '如果拒绝，下载功能仍可使用，但在后台时可能被系统中断。',
-            ),
+            title: Text(context.l10n.notificationPermissionRequired),
+            content: Text(context.l10n.notificationPermissionDescription),
             actions: [
               TextButton(
                 onPressed: () => KazumiDialog.dismiss(popWith: false),
                 child: Text(
-                  '稍后再说',
+                  context.l10n.notNow,
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.outline),
                 ),
               ),
               TextButton(
                 onPressed: () => KazumiDialog.dismiss(popWith: true),
-                child: const Text('允许'),
+                child: Text(context.l10n.allow),
               ),
             ],
           );
@@ -207,7 +205,7 @@ class _InitPageState extends State<InitPage> {
           error: e,
         );
         KazumiDialog.showToast(
-          message: '初始化Bangumi失败，已关闭 Bangumi 同步: ${e.toString()}',
+          message: currentL10n.bangumiInitializationFailed(e.toString()),
         );
       }
     }
@@ -225,16 +223,15 @@ class _InitPageState extends State<InitPage> {
           return PopScope(
             canPop: false,
             child: AlertDialog(
-              title: const Text('X11环境检测'),
-              content: const Text(
-                  '检测到您当前运行在X11环境下，Kazumi在X11环境下可能出现性能问题或界面异常，建议切换到Wayland以获得更好的体验。您是否希望在X11下继续使用Kazumi？'),
+              title: Text(context.l10n.x11EnvironmentDetected),
+              content: Text(context.l10n.x11EnvironmentWarning),
               actions: [
                 TextButton(
                   onPressed: () {
                     exit(0);
                   },
                   child: Text(
-                    '退出',
+                    context.l10n.exit,
                     style:
                         TextStyle(color: Theme.of(context).colorScheme.outline),
                   ),
@@ -243,7 +240,7 @@ class _InitPageState extends State<InitPage> {
                   onPressed: () {
                     KazumiDialog.dismiss();
                   },
-                  child: const Text('继续'),
+                  child: Text(context.l10n.continueAction),
                 ),
               ],
             ),
@@ -262,17 +259,17 @@ class _InitPageState extends State<InitPage> {
     final create = await KazumiDialog.show<bool>(
       clickMaskDismiss: false,
       builder: (context) => AlertDialog(
-        title: const Text('创建桌面快捷方式'),
-        content: const Text('是否在桌面创建 Kazumi 的快捷方式？'),
+        title: Text(context.l10n.createDesktopShortcut),
+        content: Text(context.l10n.createDesktopShortcutConfirmation),
         actions: [
           TextButton(
             onPressed: () => KazumiDialog.dismiss(popWith: false),
-            child: Text('暂不创建',
+            child: Text(context.l10n.doNotCreateNow,
                 style: TextStyle(color: Theme.of(context).colorScheme.outline)),
           ),
           TextButton(
             onPressed: () => KazumiDialog.dismiss(popWith: true),
-            child: const Text('创建'),
+            child: Text(context.l10n.create),
           ),
         ],
       ),
@@ -281,7 +278,10 @@ class _InitPageState extends State<InitPage> {
     await GStorage.putSetting(SettingsKeys.shortcutDialogShown, true);
     if (create ?? false) {
       final success = await WindowsShortcut.createDesktopShortcut();
-      KazumiDialog.showToast(message: success ? '桌面快捷方式已创建' : '桌面快捷方式创建失败');
+      KazumiDialog.showToast(
+          message: success
+              ? currentL10n.desktopShortcutCreated
+              : currentL10n.desktopShortcutCreationFailed);
     }
   }
 
@@ -311,9 +311,9 @@ class _InitPageState extends State<InitPage> {
     }
     if (count != 0) {
       KazumiDialog.showToast(
-        message: '检测到 $count 条规则可以更新',
+        message: currentL10n.ruleUpdatesAvailable(count),
         showActionButton: true,
-        actionLabel: '全部更新',
+        actionLabel: currentL10n.updateAll,
         onActionPressed: () => updateAllPluginsWithFeedback(
           pluginsController,
           ensureCatalog: false,

@@ -1,26 +1,28 @@
+import 'package:kazumi/l10n/l10n.dart';
+
 String formatTimestampToRelativeTime(int timeStamp) {
   final difference = DateTime.now()
       .difference(DateTime.fromMillisecondsSinceEpoch(timeStamp * 1000));
 
   if (difference.inDays > 365) {
-    return '${difference.inDays ~/ 365}年前';
+    return currentL10n.yearsAgo(difference.inDays ~/ 365);
   } else if (difference.inDays > 30) {
-    return '${difference.inDays ~/ 30}个月前';
+    return currentL10n.monthsAgo(difference.inDays ~/ 30);
   } else if (difference.inDays > 0) {
-    return '${difference.inDays}天前';
+    return currentL10n.daysAgo(difference.inDays);
   } else if (difference.inHours > 0) {
-    return '${difference.inHours}小时前';
+    return currentL10n.hoursAgo(difference.inHours);
   } else if (difference.inMinutes > 0) {
-    return '${difference.inMinutes}分钟前';
+    return currentL10n.minutesAgo(difference.inMinutes);
   }
-  return '刚刚';
+  return currentL10n.justNow;
 }
 
 String dateFormat(int timeStamp, {String formatType = 'list'}) {
   final time = (DateTime.now().millisecondsSinceEpoch / 1000).round();
   final distance = time - timeStamp;
-  var currentYearStr = 'MM月DD日 hh:mm';
-  var lastYearStr = 'YY年MM月DD日 hh:mm';
+  var currentYearStr = currentL10n.datePatternMonthDayTime;
+  var lastYearStr = currentL10n.datePatternYearMonthDayTime;
   if (formatType == 'detail') {
     currentYearStr = 'MM-DD hh:mm';
     lastYearStr = 'YY-MM-DD hh:mm';
@@ -32,11 +34,11 @@ String dateFormat(int timeStamp, {String formatType = 'list'}) {
     );
   }
   if (distance <= 60) {
-    return '刚刚';
+    return currentL10n.justNow;
   } else if (distance <= 3600) {
-    return '${(distance / 60).floor()}分钟前';
+    return currentL10n.minutesAgo((distance / 60).floor());
   } else if (distance <= 43200) {
-    return '${(distance / 60 / 60).floor()}小时前';
+    return currentL10n.hoursAgo((distance / 60 / 60).floor());
   } else if (DateTime.fromMillisecondsSinceEpoch(time * 1000).year ==
       DateTime.fromMillisecondsSinceEpoch(timeStamp * 1000).year) {
     return _customTimestampString(
@@ -94,7 +96,7 @@ String _customTimestampString({
   if (int.parse(yy) == DateTime.now().year &&
       int.parse(mm) == DateTime.now().month &&
       int.parse(dd) == DateTime.now().day) {
-    return '今天';
+    return currentL10n.today;
   }
   return formatted;
 }

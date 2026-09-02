@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/bean/card/network_img_layer.dart';
 import 'package:kazumi/bean/card/rule_card.dart';
 import 'package:kazumi/modules/download/download_module.dart';
@@ -59,9 +60,9 @@ class DownloadRecordCard extends StatelessWidget {
             totalCount;
     final allCompleted = completedCount >= totalCount;
 
-    var meta = '$completedCount/$totalCount 已完成';
+    var meta = context.l10n.completedDownloadCount(completedCount, totalCount);
     if (activeCount > 0) {
-      meta += ' · $activeCount 项进行中';
+      meta += context.l10n.activeDownloadCountSuffix(activeCount);
       if (totalSpeed > 0) {
         meta += ' · ${formatSpeed(totalSpeed)}';
       }
@@ -127,7 +128,7 @@ class DownloadRecordCard extends StatelessWidget {
                       Icons.more_vert,
                       color: colorScheme.onSurfaceVariant,
                     ),
-                    tooltip: '更多操作',
+                    tooltip: context.l10n.moreActions,
                     onSelected: (value) {
                       if (value == 'resume_all') {
                         onResumeAll();
@@ -136,14 +137,14 @@ class DownloadRecordCard extends StatelessWidget {
                       }
                     },
                     itemBuilder: (context) => [
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'resume_all',
-                        child: Text('全部开始'),
+                        child: Text(context.l10n.startAll),
                       ),
                       PopupMenuItem(
                         value: 'delete',
                         child: Text(
-                          '全部删除',
+                          context.l10n.deleteAll,
                           style: TextStyle(color: colorScheme.error),
                         ),
                       ),
@@ -230,7 +231,7 @@ class DownloadEpisodeTile extends StatelessWidget {
                   Text(
                     episode.episodeName.isNotEmpty
                         ? episode.episodeName
-                        : '第${episode.episodeNumber}集',
+                        : context.l10n.episodeNumber(episode.episodeNumber),
                     style: textTheme.bodyMedium,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

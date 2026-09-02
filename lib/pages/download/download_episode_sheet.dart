@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
 import 'package:kazumi/bean/dialog/material_bottom_sheet.dart';
@@ -93,10 +94,11 @@ class _DownloadEpisodeSheetState extends State<DownloadEpisodeSheet> {
         return Column(
           children: [
             MaterialBottomSheetHeader(
-              title: '下载选集',
+              title: context.l10n.selectEpisodesToDownload,
               description: downloadedCount > 0
-                  ? '共 $episodeCount 集 · $downloadedCount 集已加入下载'
-                  : '共 $episodeCount 集',
+                  ? context.l10n.downloadEpisodeCountWithAdded(
+                      episodeCount, downloadedCount)
+                  : context.l10n.totalEpisodeCount(episodeCount),
               onClose: () => Navigator.of(context).pop(),
             ),
             Expanded(
@@ -165,8 +167,12 @@ class _DownloadEpisodeSheetState extends State<DownloadEpisodeSheet> {
                       label: Stack(
                         alignment: Alignment.center,
                         children: [
-                          const Opacity(opacity: 0, child: Text('取消全选')),
-                          Text(allSelected ? '取消全选' : '全选'),
+                          Opacity(
+                              opacity: 0,
+                              child: Text(context.l10n.deselectAll)),
+                          Text(allSelected
+                              ? context.l10n.deselectAll
+                              : context.l10n.selectAll),
                         ],
                       ),
                     ),
@@ -181,8 +187,9 @@ class _DownloadEpisodeSheetState extends State<DownloadEpisodeSheet> {
                             : () => _startBatchDownload(context),
                         icon: const Icon(Icons.download_rounded),
                         label: Text(_selectedEpisodes.isEmpty
-                            ? '开始下载'
-                            : '下载 ${_selectedEpisodes.length} 集'),
+                            ? context.l10n.startDownload
+                            : context.l10n.downloadSelectedEpisodes(
+                                _selectedEpisodes.length)),
                       ),
                     ),
                   ],
@@ -222,7 +229,7 @@ class _DownloadEpisodeSheetState extends State<DownloadEpisodeSheet> {
     }
 
     KazumiDialog.showToast(
-      message: '已添加 ${sortedEpisodes.length} 集到下载队列，可在下载管理中查看',
+      message: currentL10n.episodesAddedToDownloadQueue(sortedEpisodes.length),
     );
   }
 }

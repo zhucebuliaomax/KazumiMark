@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:kazumi/bean/appbar/sys_app_bar.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 class RouteErrorPage extends StatelessWidget {
   const RouteErrorPage({
@@ -26,7 +27,7 @@ class RouteErrorPage extends StatelessWidget {
               const SizedBox(height: 24),
               FilledButton(
                 onPressed: () => context.navigate('/tab/popular/'),
-                child: const Text('返回首页'),
+                child: Text(context.l10n.returnHome),
               ),
             ],
           ),

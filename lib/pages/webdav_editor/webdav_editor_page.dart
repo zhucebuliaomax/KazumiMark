@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/services/storage/storage.dart';
 import 'package:kazumi/bean/appbar/sys_app_bar.dart';
 import 'package:kazumi/services/sync/webdav.dart';
@@ -42,8 +43,8 @@ class _WebDavEditorPageState extends State<WebDavEditorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const SysAppBar(
-        title: Text('WEBDAV编辑'),
+      appBar: SysAppBar(
+        title: Text(context.l10n.webDavEditor),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -104,16 +105,19 @@ class _WebDavEditorPageState extends State<WebDavEditorPage> {
           try {
             await webDav.init();
           } catch (e) {
-            KazumiDialog.showToast(message: '配置失败 ${e.toString()}');
+            KazumiDialog.showToast(
+                message: currentL10n.configurationFailed(e.toString()));
             await GStorage.putSetting(SettingsKeys.webDavEnable, false);
             return;
           }
-          KazumiDialog.showToast(message: '配置成功, 开始测试');
+          KazumiDialog.showToast(
+              message: currentL10n.configurationSucceededTesting);
           try {
             await webDav.ping();
-            KazumiDialog.showToast(message: '测试成功');
+            KazumiDialog.showToast(message: currentL10n.testSucceeded);
           } catch (e) {
-            KazumiDialog.showToast(message: '测试失败 ${e.toString()}');
+            KazumiDialog.showToast(
+                message: currentL10n.testFailedWithError(e.toString()));
             await GStorage.putSetting(SettingsKeys.webDavEnable, false);
           }
         },

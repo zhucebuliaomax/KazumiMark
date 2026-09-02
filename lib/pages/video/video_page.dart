@@ -3,6 +3,7 @@ import 'package:canvas_danmaku/models/danmaku_content_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:kazumi/pages/player/player_controller.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/video/video_controller.dart';
 import 'package:kazumi/pages/video/danmaku_send_sheet.dart';
 import 'package:kazumi/pages/video/video_playback_args.dart';
@@ -474,15 +475,15 @@ class _VideoPageState extends State<VideoPage>
     keyboardFocus.requestFocus();
     if (playerController.danmaku.danDanmakus.isEmpty) {
       KazumiDialog.showToast(
-        message: '当前剧集不支持弹幕发送的说',
+        message: currentL10n.danmakuSendingUnsupported,
       );
       return false;
     }
     if (msg.isEmpty) {
-      KazumiDialog.showToast(message: '弹幕内容为空');
+      KazumiDialog.showToast(message: currentL10n.danmakuEmpty);
       return false;
     } else if (msg.length > 100) {
-      KazumiDialog.showToast(message: '弹幕内容过长');
+      KazumiDialog.showToast(message: currentL10n.danmakuTooLong);
       return false;
     }
 
@@ -490,12 +491,13 @@ class _VideoPageState extends State<VideoPage>
 
     if (destination == DanmakuDestination.chatRoom) {
       if (playerController.syncplay.syncplayRoom.isEmpty) {
-        KazumiDialog.showToast(message: '你还没有加入一起看，无法发送聊天室弹幕');
+        KazumiDialog.showToast(
+            message: currentL10n.joinWatchTogetherBeforeChatDanmaku);
         return false;
       }
 
-      final sender =
-          playerController.syncplay.syncplayController?.username ?? '我';
+      final sender = playerController.syncplay.syncplayController?.username ??
+          currentL10n.me;
       final String displayText = '$sender：$msg';
 
       playerController.danmaku.canvasController.addDanmaku(
@@ -530,7 +532,7 @@ class _VideoPageState extends State<VideoPage>
 
   Future<bool> showDanmakuDestinationPickerAndSend(String msg) async {
     if (msg.trim().isEmpty) {
-      KazumiDialog.showToast(message: '弹幕内容为空');
+      KazumiDialog.showToast(message: currentL10n.danmakuEmpty);
       return false;
     }
 
@@ -545,21 +547,22 @@ class _VideoPageState extends State<VideoPage>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               MaterialBottomSheetHeader(
-                title: '发送弹幕至',
-                description: '选择这条弹幕的发送位置',
+                title: context.l10n.sendDanmakuTo,
+                description: context.l10n.chooseDanmakuDestination,
                 onClose: () => Navigator.of(context).pop(),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: MaterialBottomSheetGroup(
-                  title: '发送位置',
+                  title: context.l10n.sendDestination,
                   children: [
                     ListTile(
                       contentPadding:
                           const EdgeInsets.symmetric(horizontal: 16),
                       leading: const Icon(Icons.groups_rounded),
-                      title: const Text('发送到聊天室'),
-                      subtitle: const Text('同步观看成员均可看到'),
+                      title: Text(context.l10n.sendToChatRoom),
+                      subtitle:
+                          Text(context.l10n.visibleToWatchTogetherMembers),
                       onTap: () => Navigator.of(context)
                           .pop(DanmakuDestination.chatRoom),
                     ),
@@ -567,8 +570,8 @@ class _VideoPageState extends State<VideoPage>
                       contentPadding:
                           const EdgeInsets.symmetric(horizontal: 16),
                       leading: const Icon(Icons.cloud_upload_rounded),
-                      title: const Text('发送到远程弹幕库'),
-                      subtitle: const Text('作为视频弹幕发送'),
+                      title: Text(context.l10n.sendToRemoteDanmaku),
+                      subtitle: Text(context.l10n.sendAsVideoDanmaku),
                       onTap: () => Navigator.of(context)
                           .pop(DanmakuDestination.remoteDanmaku),
                     ),
@@ -755,8 +758,9 @@ class _VideoPageState extends State<VideoPage>
                                 const SizedBox(height: 10),
                                 Text(
                                   videoPageController.loading
-                                      ? '视频资源解析中'
-                                      : '视频资源解析成功, 播放器加载中',
+                                      ? context.l10n.parsingVideoResource
+                                      : context.l10n
+                                          .videoResourceParsedLoadingPlayer,
                                   style: const TextStyle(color: Colors.white),
                                 ),
                               ],
@@ -878,7 +882,7 @@ class _VideoPageState extends State<VideoPage>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(' 合集 '),
+          Text(' ${context.l10n.anthology} '),
           Expanded(
             child: Text(
               videoPageController.title,
@@ -910,7 +914,7 @@ class _VideoPageState extends State<VideoPage>
                     visibleRoad >= 0 &&
                             visibleRoad < videoPageController.roadList.length
                         ? '${videoPageController.roadList[visibleRoad].name} '
-                        : '播放线路${visibleRoad + 1} ',
+                        : '${context.l10n.playbackRoadNumber(visibleRoad + 1)} ',
                     style: const TextStyle(fontSize: 13),
                   ),
                 ),
@@ -1014,7 +1018,7 @@ class _VideoPageState extends State<VideoPage>
             int count0 = count;
             final episodeName = count0 - 1 < road.identifier.length
                 ? road.identifier[count0 - 1]
-                : '第$count0集';
+                : context.l10n.episodeNumber(count0);
             cardList.add(Container(
               margin: const EdgeInsets.only(bottom: 4),
               child: Material(
@@ -1134,9 +1138,9 @@ class _VideoPageState extends State<VideoPage>
                       menuJumpToCurrentEpisode();
                     }
                   },
-                  tabs: const [
-                    Tab(text: '选集'),
-                    Tab(text: '评论'),
+                  tabs: [
+                    Tab(text: context.l10n.episodes),
+                    Tab(text: context.l10n.comments),
                   ],
                 ),
                 if (MediaQuery.sizeOf(context).width <=
@@ -1158,15 +1162,19 @@ class _VideoPageState extends State<VideoPage>
                         if (danmakuOn && !videoPageController.loading) {
                           showMobileDanmakuInput();
                         } else if (videoPageController.loading) {
-                          KazumiDialog.showToast(message: '请等待视频加载完成');
+                          KazumiDialog.showToast(
+                              message: currentL10n.waitForVideoToLoad);
                         } else {
-                          KazumiDialog.showToast(message: '请先打开弹幕');
+                          KazumiDialog.showToast(
+                              message: currentL10n.openDanmakuFirst);
                         }
                       },
                       child: Row(
                         children: [
                           Text(
-                            danmakuOn ? '  点我发弹幕  ' : '  已关闭弹幕  ',
+                            danmakuOn
+                                ? '  ${context.l10n.tapToSendDanmaku}  '
+                                : '  ${context.l10n.danmakuDisabled}  ',
                             softWrap: false,
                             overflow: TextOverflow.clip,
                             style: TextStyle(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 const double materialBottomSheetRadius = 24;
 const EdgeInsets materialBottomSheetContentPadding =
@@ -63,7 +64,7 @@ class MaterialBottomSheetHeader extends StatelessWidget {
                 const SizedBox(width: 12),
                 IconButton.filledTonal(
                   onPressed: onClose,
-                  tooltip: '关闭',
+                  tooltip: context.l10n.close,
                   icon: const Icon(Icons.close_rounded),
                 ),
               ],
@@ -187,9 +188,8 @@ class _ConnectedSegmentState extends State<_ConnectedSegment> {
           // A press only bites on a segment that is not already selected.
           var inner = _connectedInnerCorner +
               (outerCorner - _connectedInnerCorner) * selection;
-          inner += (_connectedPressedInnerCorner - inner) *
-              press *
-              (1 - selection);
+          inner +=
+              (_connectedPressedInnerCorner - inner) * press * (1 - selection);
           final animated = Radius.circular(inner);
           return Material(
             // ToggleButtonDefaults fills the selected segment with `primary`,

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:kazumi/bean/dialog/adaptive_bottom_sheet.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/info/rating_review_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -39,13 +40,13 @@ class InfoPage extends StatefulWidget {
 }
 
 class _InfoPageState extends State<InfoPage> with TickerProviderStateMixin {
-  static const List<String> _infoTabs = <String>[
-    '概览',
-    '吐槽',
-    '角色',
-    '关联',
-    '制作人员',
-  ];
+  List<String> get _infoTabs => <String>[
+        context.l10n.overview,
+        context.l10n.comments,
+        context.l10n.characters,
+        context.l10n.related,
+        context.l10n.staff,
+      ];
   static const int _commentsTabIndex = 1;
   static const Duration _minimumBangumiInfoLoadingDuration =
       Duration(milliseconds: 600);
@@ -182,13 +183,13 @@ class _InfoPageState extends State<InfoPage> with TickerProviderStateMixin {
     final token =
         GStorage.getSetting(SettingsKeys.bangumiAccessToken).toString().trim();
     if (token.isEmpty) {
-      KazumiDialog.showToast(message: '请先在同步设置中绑定你的 Bangumi 配置以发表吐槽');
+      KazumiDialog.showToast(message: currentL10n.bindBangumiBeforeCommenting);
       return;
     }
     final localType = infoController.collectController
         .getCollectType(infoController.bangumiItem);
     if (localType == 0) {
-      KazumiDialog.showToast(message: '请先追番后再发表评价');
+      KazumiDialog.showToast(message: currentL10n.collectBeforeReviewing);
       return;
     }
     KazumiDialog.show(
@@ -225,7 +226,7 @@ class _InfoPageState extends State<InfoPage> with TickerProviderStateMixin {
         enforceMinimumLoadingDuration: true,
       );
     }
-    infoTabController = TabController(length: _infoTabs.length, vsync: this);
+    infoTabController = TabController(length: 5, vsync: this);
     _fabTabIndex = infoTabController.index;
     showRating = GStorage.getSetting(SettingsKeys.showRating);
     infoTabController.addListener(onInfoTabChanged);
@@ -501,13 +502,13 @@ class _InfoPageState extends State<InfoPage> with TickerProviderStateMixin {
           ),
           floatingActionButton: showRatingFab
               ? FloatingActionButton.extended(
-                  tooltip: '吐槽',
+                  tooltip: context.l10n.comments,
                   onPressed: onBangumiRatingTap,
-                  label: const Text('发表吐槽'),
+                  label: Text(context.l10n.postComment),
                   icon: const Icon(Icons.rate_review_rounded),
                 )
               : FloatingActionButton.extended(
-                  tooltip: '开始观看',
+                  tooltip: context.l10n.startWatching,
                   onPressed: () {
                     showAdaptiveBottomSheet<void>(
                       backgroundColor:
@@ -518,7 +519,7 @@ class _InfoPageState extends State<InfoPage> with TickerProviderStateMixin {
                       },
                     );
                   },
-                  label: const Text('开始观看'),
+                  label: Text(context.l10n.startWatching),
                   icon: const Icon(Icons.play_arrow_rounded),
                 ),
         ),

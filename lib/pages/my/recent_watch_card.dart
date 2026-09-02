@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:kazumi/bean/card/network_img_layer.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/modules/my/recent_watch_item.dart';
 import 'package:kazumi/services/player/history_playback_service.dart';
 import 'package:kazumi/services/plugin/rule_engine_models.dart'
@@ -39,7 +40,7 @@ class _RecentWatchCardState extends State<RecentWatchCard> {
     final cancelToken = RuleCancelToken();
     _cancelToken = cancelToken;
     KazumiDialog.showLoading(
-      msg: '获取中',
+      msg: currentL10n.fetching,
       barrierDismissible: isDesktop(),
       onDismiss: cancelToken.cancel,
     );
@@ -96,7 +97,7 @@ class _RecentWatchCardState extends State<RecentWatchCard> {
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        '看到 ${item.episodeLabel}',
+                        context.l10n.watchedToEpisode(item.episodeLabel),
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),
@@ -184,10 +185,8 @@ class _RecentWatchCardState extends State<RecentWatchCard> {
       ),
       child: Text(
         label,
-        style: Theme.of(context)
-            .textTheme
-            .labelSmall
-            ?.copyWith(color: foreground),
+        style:
+            Theme.of(context).textTheme.labelSmall?.copyWith(color: foreground),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kazumi/bean/widget/play_pause_icon.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/player/player_adjustment_hud.dart';
 import 'package:kazumi/pages/player/controller/player_aspect_ratio.dart';
 import 'package:kazumi/pages/player/controller/player_super_resolution.dart';
@@ -90,7 +91,7 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
     KazumiDialog.show(builder: (context) {
       String input = "";
       return AlertDialog(
-        title: const Text('跳过秒数'),
+        title: Text(context.l10n.skipSeconds),
         content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
           return TextField(
@@ -110,7 +111,7 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
           TextButton(
             onPressed: () => KazumiDialog.dismiss(),
             child: Text(
-              '取消',
+              context.l10n.cancel,
               style: TextStyle(color: Theme.of(context).colorScheme.outline),
             ),
           ),
@@ -123,7 +124,7 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
                 KazumiDialog.dismiss();
               }
             },
-            child: const Text('确定'),
+            child: Text(context.l10n.confirm),
           ),
         ],
       );
@@ -202,14 +203,19 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
             : () {
                 widget.handleDanmaku();
               },
-        tooltip: danmakuLoading ? '弹幕加载中...' : (danmakuOn ? '关闭弹幕' : '打开弹幕'),
+        tooltip: danmakuLoading
+            ? context.l10n.danmakuLoading
+            : (danmakuOn
+                ? context.l10n.closeDanmaku
+                : context.l10n.openDanmaku),
       );
     });
   }
 
   Widget forwardIcon() {
     return Tooltip(
-      message: '快进${playerController.playback.buttonSkipTime}秒，长按修改时间',
+      message:
+          context.l10n.skipButtonHint(playerController.playback.buttonSkipTime),
       child: GestureDetector(
         onLongPress: () => showForwardChange(),
         child: IconButton(
@@ -414,7 +420,9 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
             iconColor: Colors.white,
             playing: playerController.playback.playing,
           ),
-          tooltip: playerController.playback.playing ? '暂停' : '播放',
+          tooltip: playerController.playback.playing
+              ? context.l10n.pause
+              : context.l10n.play,
           onPressed: () {
             playerController.playOrPause();
           },
@@ -455,7 +463,9 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
                 icon: Icon(videoPageController.isFullscreen
                     ? Icons.fullscreen_exit_rounded
                     : Icons.fullscreen_rounded),
-                tooltip: videoPageController.isFullscreen ? '退出全屏' : '全屏',
+                tooltip: videoPageController.isFullscreen
+                    ? context.l10n.shortcutExitFullscreen
+                    : context.l10n.shortcutFullscreen,
                 onPressed: () {
                   widget.handleFullscreen();
                 },
@@ -472,7 +482,7 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
           IconButton(
             color: Colors.white,
             icon: const Icon(Icons.arrow_back_rounded),
-            tooltip: '返回',
+            tooltip: context.l10n.back,
             onPressed: () {
               widget.onBackPressed(context);
             },
@@ -500,7 +510,7 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
                   }
                   await widget.enterAndroidPictureInPicture();
                 },
-                tooltip: '画中画',
+                tooltip: context.l10n.pictureInPicture,
                 icon:
                     const Icon(Icons.picture_in_picture, color: Colors.white)),
           _buildDanmakuToggleButton(context),
@@ -522,7 +532,7 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
                     controller.open();
                   }
                 },
-                tooltip: '更多选项',
+                tooltip: context.l10n.moreOptions,
                 icon: const Icon(
                   Icons.more_vert,
                   color: Colors.white,
@@ -558,7 +568,7 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
                   constraints: BoxConstraints(minWidth: 112),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("视频比例"),
+                    child: Text(context.l10n.videoAspectRatio),
                   ),
                 ),
               ),
@@ -593,7 +603,7 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
                   constraints: BoxConstraints(minWidth: 112),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("倍速"),
+                    child: Text(context.l10n.playbackSpeedShort),
                   ),
                 ),
               ),
@@ -626,7 +636,7 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
                   constraints: BoxConstraints(minWidth: 112),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("超分辨率"),
+                    child: Text(context.l10n.superResolution),
                   ),
                 ),
               ),
@@ -639,7 +649,7 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
                   constraints: BoxConstraints(minWidth: 112),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("一起看"),
+                    child: Text(context.l10n.watchTogether),
                   ),
                 ),
               ),
@@ -652,7 +662,7 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
                   constraints: BoxConstraints(minWidth: 112),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("弹幕切换"),
+                    child: Text(context.l10n.switchDanmaku),
                   ),
                 ),
               ),
@@ -672,7 +682,7 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
                   constraints: BoxConstraints(minWidth: 112),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("弹幕设置"),
+                    child: Text(context.l10n.danmakuSettings),
                   ),
                 ),
               ),
@@ -685,7 +695,7 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
                   constraints: BoxConstraints(minWidth: 112),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("视频详情"),
+                    child: Text(context.l10n.videoDetails),
                   ),
                 ),
               ),
@@ -707,7 +717,7 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
                   constraints: BoxConstraints(minWidth: 112),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("远程投屏"),
+                    child: Text(context.l10n.remoteCasting),
                   ),
                 ),
               ),
@@ -720,7 +730,7 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
                   constraints: BoxConstraints(minWidth: 112),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("外部播放"),
+                    child: Text(context.l10n.externalPlayback),
                   ),
                 ),
               ),
@@ -736,7 +746,7 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          "不开启",
+                          context.l10n.doNotEnable,
                           style: TextStyle(
                             color: !TimedShutdownService().isActive
                                 ? Theme.of(context).colorScheme.primary
@@ -752,8 +762,9 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
                         TimedShutdownService().start(minutes,
                             onExpired: widget.pauseForTimedShutdown);
                         KazumiDialog.showToast(
-                            message:
-                                '已设置 ${TimedShutdownService().formatMinutesToDisplay(minutes)} 后定时关闭');
+                            message: context.l10n.timedShutdownSet(
+                                TimedShutdownService()
+                                    .formatMinutesToDisplay(minutes)));
                       },
                       child: Container(
                         height: 48,
@@ -761,7 +772,7 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "$minutes 分钟",
+                            context.l10n.minutesCount(minutes),
                             style: TextStyle(
                               color:
                                   TimedShutdownService().setMinutes == minutes
@@ -783,7 +794,7 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
                       constraints: BoxConstraints(minWidth: 112),
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("自定义"),
+                        child: Text(context.l10n.custom),
                       ),
                     ),
                   ),
@@ -799,8 +810,9 @@ class _SmallestPlayerItemPanelState extends State<SmallestPlayerItemPanel> {
                       builder: (context, remainingSeconds, child) {
                         return Text(
                           remainingSeconds > 0
-                              ? "定时关闭 (${TimedShutdownService().formatRemainingTime()})"
-                              : "定时关闭",
+                              ? context.l10n.timedShutdownRemaining(
+                                  TimedShutdownService().formatRemainingTime())
+                              : context.l10n.timedShutdown,
                         );
                       },
                     ),

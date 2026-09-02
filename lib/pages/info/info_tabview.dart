@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/bean/widget/error_widget.dart';
 import 'package:kazumi/bean/card/comments_card.dart';
 import 'package:kazumi/bean/card/character_card.dart';
@@ -107,7 +108,8 @@ class _InfoTabViewState extends State<InfoTabView>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('简介', style: TextStyle(fontSize: 18)),
+              Text(context.l10n.introduction,
+                  style: const TextStyle(fontSize: 18)),
               const SizedBox(height: 8),
               // https://stackoverflow.com/questions/54091055/flutter-how-to-get-the-number-of-text-lines
               // only show expand button when line > 7
@@ -143,7 +145,9 @@ class _InfoTabViewState extends State<InfoTabView>
                             fullIntro = !fullIntro;
                           });
                         },
-                        child: Text(fullIntro ? '加载更少' : '加载更多'),
+                        child: Text(fullIntro
+                            ? context.l10n.showLess
+                            : context.l10n.showMore),
                       ),
                     ],
                   );
@@ -157,7 +161,7 @@ class _InfoTabViewState extends State<InfoTabView>
                 }
               }),
               const SizedBox(height: 16),
-              Text('标签', style: TextStyle(fontSize: 18)),
+              Text(context.l10n.tags, style: const TextStyle(fontSize: 18)),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8.0,
@@ -170,7 +174,7 @@ class _InfoTabViewState extends State<InfoTabView>
                     // make tag expandable
                     return ActionChip(
                       label: Text(
-                        '更多 +',
+                        context.l10n.morePlus,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.primary),
                       ),
@@ -226,20 +230,20 @@ class _InfoTabViewState extends State<InfoTabView>
                   return SliverFillRemaining(
                     hasScrollBody: false,
                     child: GeneralErrorWidget(
-                      errMsg: '获取关联条目失败，请重试',
+                      errMsg: context.l10n.loadRelatedItemsFailed,
                       actions: [
                         GeneralErrorButton(
                           onPressed: widget.loadRelations,
-                          text: '重试',
+                          text: context.l10n.retry,
                         ),
                       ],
                     ),
                   );
                 }
                 if (widget.relationsHasLoaded && widget.relationList.isEmpty) {
-                  return const SliverFillRemaining(
+                  return SliverFillRemaining(
                     hasScrollBody: false,
-                    child: Center(child: Text('暂无关联条目')),
+                    child: Center(child: Text(context.l10n.noRelatedItems)),
                   );
                 }
 
@@ -430,23 +434,23 @@ class _InfoTabViewState extends State<InfoTabView>
                 if (widget.commentsQueryTimeout) {
                   return SliverFillRemaining(
                     child: GeneralErrorWidget(
-                      errMsg: '获取失败，请重试',
+                      errMsg: context.l10n.loadFailedRetry,
                       actions: [
                         GeneralErrorButton(
                           onPressed: () {
                             widget.loadMoreComments(
                                 loadMore: widget.commentsList.isNotEmpty);
                           },
-                          text: '重试',
+                          text: context.l10n.retry,
                         ),
                       ],
                     ),
                   );
                 }
                 if (widget.commentsIsEmpty) {
-                  return const SliverFillRemaining(
+                  return SliverFillRemaining(
                     child: Center(
-                      child: Text('什么都没有找到 (´;ω;`)'),
+                      child: Text(context.l10n.nothingFound),
                     ),
                   );
                 }
@@ -514,22 +518,22 @@ class _InfoTabViewState extends State<InfoTabView>
               if (widget.staffQueryTimeout) {
                 return SliverFillRemaining(
                   child: GeneralErrorWidget(
-                    errMsg: '获取失败，请重试',
+                    errMsg: context.l10n.loadFailedRetry,
                     actions: [
                       GeneralErrorButton(
                         onPressed: () {
                           widget.loadStaff();
                         },
-                        text: '重试',
+                        text: context.l10n.retry,
                       ),
                     ],
                   ),
                 );
               }
               if (widget.staffIsEmpty) {
-                return const SliverFillRemaining(
+                return SliverFillRemaining(
                   child: Center(
-                    child: Text('什么都没有找到 (´;ω;`)'),
+                    child: Text(context.l10n.nothingFound),
                   ),
                 );
               }
@@ -596,22 +600,22 @@ class _InfoTabViewState extends State<InfoTabView>
               if (widget.charactersQueryTimeout) {
                 return SliverFillRemaining(
                   child: GeneralErrorWidget(
-                    errMsg: '获取失败，请重试',
+                    errMsg: context.l10n.loadFailedRetry,
                     actions: [
                       GeneralErrorButton(
                         onPressed: () {
                           widget.loadCharacters();
                         },
-                        text: '重试',
+                        text: context.l10n.retry,
                       ),
                     ],
                   ),
                 );
               }
               if (widget.charactersIsEmpty) {
-                return const SliverFillRemaining(
+                return SliverFillRemaining(
                   child: Center(
-                    child: Text('什么都没有找到 (´;ω;`)'),
+                    child: Text(context.l10n.nothingFound),
                   ),
                 );
               }
@@ -701,7 +705,8 @@ class _RelatedBangumiCardH extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final textScaler =
         MediaQuery.textScalerOf(context).clamp(maxScaleFactor: 1.1);
-    final relationLabel = relation.relation.isEmpty ? '关联' : relation.relation;
+    final relationLabel =
+        relation.relation.isEmpty ? context.l10n.related : relation.relation;
     final bangumiItem = relation.toBangumiItem();
     final title = bangumiItem.nameCn.isEmpty
         ? bangumiItem.name.trim()

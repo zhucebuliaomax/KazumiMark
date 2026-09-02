@@ -12,6 +12,7 @@ import 'package:kazumi/pages/collect/collect_controller.dart';
 import 'package:kazumi/bean/appbar/sys_app_bar.dart';
 import 'package:kazumi/bean/widget/collect_button.dart';
 import 'package:kazumi/bean/widget/empty_state_widget.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/modules/collect/collect_sync_plan.dart';
 import 'package:kazumi/services/storage/storage.dart';
 
@@ -37,7 +38,8 @@ class _CollectPageState extends State<CollectPage>
   Future<bool> _syncBangumiWithProgress({
     required GlobalKey<_FullSyncProgressDialogState> progressDialogKey,
   }) async {
-    progressDialogKey.currentState?.update('准备同步 Bangumi 收藏...', null);
+    progressDialogKey.currentState
+        ?.update(currentL10n.preparingBangumiCollectionSync, null);
 
     await Future<void>.delayed(const Duration(milliseconds: 80));
 
@@ -69,16 +71,22 @@ class _CollectPageState extends State<CollectPage>
   }) {
     final List<String> states = [];
     if (plan.shouldSyncWebDavCollectibles) {
-      states.add(webDavSynced ? 'WebDav 已同步' : 'WebDav 未完成');
+      states.add(webDavSynced
+          ? currentL10n.webDavSynced
+          : currentL10n.webDavNotCompleted);
     }
     if (plan.shouldSyncBangumi) {
-      states.add(bangumiSynced ? 'Bangumi 已同步' : 'Bangumi 未完成');
+      states.add(bangumiSynced
+          ? currentL10n.bangumiSynced
+          : currentL10n.bangumiNotCompleted);
     }
     if (plan.shouldSyncWebDavCollectibles &&
         plan.shouldSyncBangumi &&
         webDavSynced &&
         bangumiSynced) {
-      states.add(webDavUploaded ? 'WebDav 已回传最新数据' : 'WebDav 未回传最新数据');
+      states.add(webDavUploaded
+          ? currentL10n.webDavLatestDataUploaded
+          : currentL10n.webDavLatestDataNotUploaded);
     }
     return states.join('，');
   }
@@ -100,7 +108,8 @@ class _CollectPageState extends State<CollectPage>
 
     try {
       if (plan.shouldSyncWebDavCollectibles) {
-        progressDialogKey.currentState?.update('正在同步 WebDav 收藏...', null);
+        progressDialogKey.currentState
+            ?.update(currentL10n.syncingWebDavCollection, null);
         webDavSynced =
             await collectController.syncCollectibles(showSuccessToast: false);
       }
@@ -115,7 +124,8 @@ class _CollectPageState extends State<CollectPage>
         webDavSynced: webDavSynced,
         bangumiSynced: bangumiSynced,
       )) {
-        progressDialogKey.currentState?.update('正在回传最新收藏到 WebDav...', null);
+        progressDialogKey.currentState
+            ?.update(currentL10n.uploadingLatestCollectionToWebDav, null);
         webDavUploaded = await collectController.uploadCollectiblesToWebDav(
           showSuccessToast: false,
         );
@@ -231,7 +241,7 @@ class _CollectPageState extends State<CollectPage>
             });
           }),
         ),
-        title: const Text('追番'),
+        title: Text(context.l10n.pageCollection),
         actions: [
           IconButton(
               onPressed: () {
@@ -258,11 +268,13 @@ class _CollectPageState extends State<CollectPage>
             bangumiEnabled: bgmSyncEnable,
           );
           if (!syncPlan.canSync) {
-            KazumiDialog.showToast(message: '同步功能不可用，请至少开启一个同步功能');
+            KazumiDialog.showToast(
+                message: currentL10n.syncUnavailableEnableOne);
             return;
           }
           if (showDelete) {
-            KazumiDialog.showToast(message: '编辑模式无法执行同步');
+            KazumiDialog.showToast(
+                message: currentL10n.syncUnavailableInEditMode);
             return;
           }
           if (syncCollectiblesing) {
@@ -301,10 +313,10 @@ class _CollectPageState extends State<CollectPage>
         children: contentGrid(collectController.collectibles),
       );
     } else {
-      return const Center(
+      return Center(
         child: GeneralEmptyState(
           icon: Icons.favorite_border_rounded,
-          title: '暂无追番内容',
+          title: context.l10n.noCollectionContent,
         ),
       );
     }
@@ -400,7 +412,7 @@ class _FullSyncProgressDialog extends StatefulWidget {
 }
 
 class _FullSyncProgressDialogState extends State<_FullSyncProgressDialog> {
-  String _progressText = '准备开始同步收藏...';
+  String _progressText = currentL10n.preparingCollectionSync;
   double? _progressValue;
 
   void update(String text, double? value) {
@@ -424,9 +436,9 @@ class _FullSyncProgressDialogState extends State<_FullSyncProgressDialog> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  '收藏全量同步中',
-                  style: TextStyle(
+                Text(
+                  context.l10n.fullCollectionSyncInProgress,
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),

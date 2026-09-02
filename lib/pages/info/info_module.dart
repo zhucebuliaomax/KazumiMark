@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:kazumi/modules/bangumi/bangumi_item.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/info/info_controller.dart';
 import 'package:kazumi/pages/info/info_page.dart';
 import 'package:kazumi/pages/route_error_page.dart';
@@ -14,7 +15,8 @@ final infoModule = createModule(
       child: (context, state) {
         final bangumiItem = state.arguments;
         if (bangumiItem is! BangumiItem) {
-          return const RouteErrorPage(message: '番组详情参数无效，请返回后重新打开。');
+          return RouteErrorPage(
+              message: currentL10n.invalidAnimeDetailsParameters);
         }
         return InfoPage(
           inputBangumiItem: bangumiItem,

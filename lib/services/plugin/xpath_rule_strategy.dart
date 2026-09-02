@@ -6,6 +6,7 @@ import 'package:kazumi/plugins/anti_crawler_config.dart';
 import 'package:kazumi/services/plugin/rule_engine_models.dart';
 import 'package:kazumi/utils/episode_url.dart';
 import 'package:xpath_selector_html_parser/xpath_selector_html_parser.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 enum XPathRuleFormatKind {
   invalidUrl,
@@ -58,7 +59,7 @@ class XPathRuleStrategy {
     final uri = Uri.tryParse(queryUrl);
     if (uri == null || !uri.hasScheme || uri.host.isEmpty) {
       throw XPathRuleFormatException(
-        '搜索 URL 无效: $queryUrl',
+        currentL10n.searchUrlInvalid(queryUrl),
         kind: XPathRuleFormatKind.invalidUrl,
       );
     }
@@ -86,7 +87,7 @@ class XPathRuleStrategy {
     final uri = Uri.tryParse(url);
     if (uri == null || !uri.hasScheme || uri.host.isEmpty) {
       throw XPathRuleFormatException(
-        '章节 URL 无效: $url',
+        currentL10n.chapterUrlInvalid(url),
         kind: XPathRuleFormatKind.invalidUrl,
       );
     }
@@ -132,7 +133,7 @@ class XPathRuleStrategy {
             )?.attributes['href']?.trim() ??
             '';
         if (name.isEmpty || source.isEmpty) {
-          diagnostics.add('搜索节点 $index 缺少名称或来源，已跳过');
+          diagnostics.add(currentL10n.searchNodeMissingNameOrSource(index));
           continue;
         }
         items.add(SearchItem(name: name, src: source));
@@ -140,7 +141,8 @@ class XPathRuleStrategy {
       } on XPathRuleFormatException {
         rethrow;
       } catch (error) {
-        diagnostics.add('搜索节点 $index 解析失败: $error');
+        diagnostics
+            .add(currentL10n.searchNodeParseFailed(index, error.toString()));
       }
     }
     return RuleSearchParseResult(
@@ -180,26 +182,32 @@ class XPathRuleStrategy {
             final source = episode.attributes['href']?.trim() ?? '';
             if (source.isEmpty) {
               diagnostics.add(
-                '线路 $roadIndex 的剧集节点 $episodeIndex 缺少 URL，已跳过',
+                currentL10n.episodeNodeMissingUrl(roadIndex, episodeIndex),
               );
               continue;
             }
             final name = (episode.text ?? '').replaceAll(RegExp(r'\s+'), '');
             urls.add(normalizeEpisodeUrl(config.baseUrl, source));
-            names.add(name.isEmpty ? '第${episodeIndex + 1}集' : name);
+            names.add(
+              name.isEmpty ? currentL10n.episodeNumber(episodeIndex + 1) : name,
+            );
           } catch (error) {
             diagnostics.add(
-              '线路 $roadIndex 的剧集节点 $episodeIndex 解析失败: $error',
+              currentL10n.episodeNodeParseFailed(
+                roadIndex,
+                episodeIndex,
+                error.toString(),
+              ),
             );
           }
         }
         if (urls.isEmpty) {
-          diagnostics.add('线路 $roadIndex 没有有效剧集，已跳过');
+          diagnostics.add(currentL10n.roadNoValidEpisodes(roadIndex));
           continue;
         }
         roads.add(
           Road(
-            name: '播放线路${roads.length + 1}',
+            name: currentL10n.playbackRouteNumber(roads.length + 1),
             data: urls,
             identifier: names,
           ),
@@ -207,7 +215,8 @@ class XPathRuleStrategy {
       } on XPathRuleFormatException {
         rethrow;
       } catch (error) {
-        diagnostics.add('线路节点 $roadIndex 解析失败: $error');
+        diagnostics
+            .add(currentL10n.roadNodeParseFailed(roadIndex, error.toString()));
       }
     }
     return RuleChapterParseResult(
@@ -270,8 +279,8 @@ class XPathRuleStrategy {
     try {
       final element = parse(raw).documentElement;
       if (element == null) {
-        throw const XPathRuleFormatException(
-          'HTML 响应没有根节点',
+        throw XPathRuleFormatException(
+          currentL10n.htmlResponseHasNoRoot,
           kind: XPathRuleFormatKind.invalidDocument,
         );
       }
@@ -280,7 +289,7 @@ class XPathRuleStrategy {
       rethrow;
     } catch (error) {
       throw XPathRuleFormatException(
-        'HTML 响应解析失败',
+        currentL10n.htmlResponseParseFailed,
         kind: XPathRuleFormatKind.invalidDocument,
         cause: error,
       );
@@ -295,7 +304,7 @@ class XPathRuleStrategy {
     final label = _fieldLabel(field);
     if (expression.trim().isEmpty) {
       throw XPathRuleFormatException(
-        '$label XPath 不能为空',
+        currentL10n.xpathRequired(label),
         kind: XPathRuleFormatKind.invalidSelector,
         field: field,
         expression: expression,
@@ -305,7 +314,7 @@ class XPathRuleStrategy {
       return query();
     } catch (error) {
       throw XPathRuleFormatException(
-        '$label XPath 无效: $expression',
+        currentL10n.xpathInvalid(label, expression),
         kind: XPathRuleFormatKind.invalidSelector,
         field: field,
         expression: expression,
@@ -316,14 +325,15 @@ class XPathRuleStrategy {
 
   String _fieldLabel(XPathRuleField field) {
     return switch (field) {
-      XPathRuleField.searchList => '搜索结果列表',
-      XPathRuleField.searchName => '条目名称',
-      XPathRuleField.searchResult => '条目链接',
-      XPathRuleField.chapterRoads => '播放线路列表',
-      XPathRuleField.chapterResult => '剧集列表',
-      XPathRuleField.captchaDetectValue => '验证页检测',
-      XPathRuleField.captchaImage => '验证码图片',
-      XPathRuleField.captchaButton => '验证按钮',
+      XPathRuleField.searchList => currentL10n.ruleEditorSearchListXPath,
+      XPathRuleField.searchName => currentL10n.ruleEditorItemNameXPath,
+      XPathRuleField.searchResult => currentL10n.ruleEditorItemLinkXPath,
+      XPathRuleField.chapterRoads => currentL10n.ruleEditorRoadListXPath,
+      XPathRuleField.chapterResult => currentL10n.ruleEditorEpisodeListXPath,
+      XPathRuleField.captchaDetectValue =>
+        currentL10n.ruleEditorCaptchaDetectionValue,
+      XPathRuleField.captchaImage => currentL10n.ruleEditorCaptchaImageXPath,
+      XPathRuleField.captchaButton => currentL10n.ruleEditorVerifyButtonXPath,
     };
   }
 
