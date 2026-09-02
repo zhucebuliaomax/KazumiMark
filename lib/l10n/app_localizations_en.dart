@@ -1427,4 +1427,287 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get search => 'Search';
+
+  @override
+  String get filter => 'Filter';
+
+  @override
+  String get imageSearch => 'Search by image';
+
+  @override
+  String tagFilter(String tag) {
+    return 'Tag: $tag';
+  }
+
+  @override
+  String sortFilter(String sort) {
+    return 'Sort: $sort';
+  }
+
+  @override
+  String seasonFilter(String season) {
+    return 'Season: $season';
+  }
+
+  @override
+  String dateFilter(String range) {
+    return 'Date: $range';
+  }
+
+  @override
+  String rankFilter(String range) {
+    return 'Rank: $range';
+  }
+
+  @override
+  String scoreFilter(String range) {
+    return 'Score: $range';
+  }
+
+  @override
+  String weekdayFilter(String weekdays) {
+    return 'Weekday: $weekdays';
+  }
+
+  @override
+  String get hideWatched => 'Hide watched';
+
+  @override
+  String get hideAbandoned => 'Hide dropped';
+
+  @override
+  String get noSearchSuggestions => 'No suggestions. Press Enter to search';
+
+  @override
+  String get nothingFound => 'Nothing was found (;´༎ຶД༎ຶ`)';
+
+  @override
+  String get tapToRetry => 'Tap to retry';
+
+  @override
+  String get filterConditions => 'Filters';
+
+  @override
+  String get filterConditionsDescription =>
+      'Combine tags, seasons, scores, and other filters to find anime faster.';
+
+  @override
+  String get sort => 'Sort';
+
+  @override
+  String get sortDescription => 'Choose which results appear first.';
+
+  @override
+  String get sortHeat => 'Popularity';
+
+  @override
+  String get sortRank => 'Rank';
+
+  @override
+  String get sortScore => 'Score';
+
+  @override
+  String get sortMatch => 'Relevance';
+
+  @override
+  String get tags => 'Tags';
+
+  @override
+  String get tagsDescription =>
+      'When multiple tags are selected, anime matching all of them are preferred.';
+
+  @override
+  String get customTag => 'Custom tag';
+
+  @override
+  String get addTag => 'Add tag';
+
+  @override
+  String get clearTags => 'Clear tags';
+
+  @override
+  String get seasonAndDate => 'Season and date';
+
+  @override
+  String get seasonAndDateDescription =>
+      'Search by broadcast season or choose a more precise date range.';
+
+  @override
+  String get season => 'Season';
+
+  @override
+  String get customDate => 'Custom date';
+
+  @override
+  String get anyDate => 'Any date';
+
+  @override
+  String get numericRange => 'Numeric ranges';
+
+  @override
+  String get numericRangeDescription =>
+      'Only show anime within the selected score or ranking range.';
+
+  @override
+  String get enableScoreRange => 'Enable score range';
+
+  @override
+  String get enableRankRange => 'Enable rank range';
+
+  @override
+  String get weekday => 'Weekday';
+
+  @override
+  String get weekdayDescription =>
+      'Filter by broadcast weekday; selecting several matches any of them.';
+
+  @override
+  String weekdayNumber(int number) {
+    return 'Day $number';
+  }
+
+  @override
+  String get filterSection => 'Visibility';
+
+  @override
+  String get filterSectionDescription =>
+      'Choose whether to hide watched or dropped anime.';
+
+  @override
+  String get reset => 'Reset';
+
+  @override
+  String get apply => 'Apply';
+
+  @override
+  String get winter => 'Winter';
+
+  @override
+  String get spring => 'Spring';
+
+  @override
+  String get summer => 'Summer';
+
+  @override
+  String get autumn => 'Autumn';
+
+  @override
+  String get imageTooLarge => 'Images must be 25 MB or smaller';
+
+  @override
+  String get enterValidImageUrl => 'Enter a valid image URL';
+
+  @override
+  String get selectImageFirst => 'Select an image file first';
+
+  @override
+  String get unknownAnime => 'Unknown anime';
+
+  @override
+  String episodeValue(String episode) {
+    return 'Episode $episode';
+  }
+
+  @override
+  String episodesValue(String episodes) {
+    return 'Episodes: $episodes';
+  }
+
+  @override
+  String get unknownEpisode => 'Unknown episode';
+
+  @override
+  String get switchToImageUpload => 'Upload an image file instead';
+
+  @override
+  String get switchToImageUrl => 'Enter an image URL instead';
+
+  @override
+  String get searching => 'Searching…';
+
+  @override
+  String get startSearch => 'Start search';
+
+  @override
+  String get selectImage => 'Tap to select an image';
+
+  @override
+  String get supportedImageFormats => 'Supports JPG, PNG, and WEBP';
+
+  @override
+  String get imagePreviewFailed => 'Could not preview the image';
+
+  @override
+  String get imageSelected => 'Image selected';
+
+  @override
+  String get tapToReselectImage => 'Tap to choose another image';
+
+  @override
+  String get reselect => 'Choose again';
+
+  @override
+  String get enterImageUrl => 'Enter an image URL';
+
+  @override
+  String get clear => 'Clear';
+
+  @override
+  String get imageUrlPreviewHint => 'Enter an image URL to preview it';
+
+  @override
+  String get loading => 'Loading…';
+
+  @override
+  String get imageLoadFailed => 'Could not load the image';
+
+  @override
+  String get checkLinkValidity => 'Check that the link is valid';
+
+  @override
+  String get recognizingImage => 'Identifying image';
+
+  @override
+  String get recognizingImageDescription =>
+      'Please wait while the screenshot is matched to an anime';
+
+  @override
+  String get imageResultsPlaceholder => 'Search results will appear here';
+
+  @override
+  String get noImageSearchResults => 'No search results were returned';
+
+  @override
+  String get imageSearchStartHint =>
+      'Select an image file or enter an image URL to start searching';
+
+  @override
+  String get recognitionResults => 'Matches';
+
+  @override
+  String similarityValue(String value) {
+    return 'Similarity: $value';
+  }
+
+  @override
+  String timeRangeValue(String range) {
+    return 'Time: $range';
+  }
+
+  @override
+  String get imageSearchOriginalRatioTip =>
+      'Use an anime screenshot in its original aspect ratio';
+
+  @override
+  String get imageSearchQualityTip =>
+      'Use a clear screenshot without heavy compression or watermarks';
+
+  @override
+  String get searchEngineProvidedByPrefix => 'Search powered by ';
+
+  @override
+  String get searchEngineProvidedBySuffix => '';
+
+  @override
+  String get animeImageSearch => 'Anime screenshot search';
 }

@@ -1348,4 +1348,277 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get search => '搜索';
+
+  @override
+  String get filter => '筛选';
+
+  @override
+  String get imageSearch => '图片搜索';
+
+  @override
+  String tagFilter(String tag) {
+    return '标签：$tag';
+  }
+
+  @override
+  String sortFilter(String sort) {
+    return '排序：$sort';
+  }
+
+  @override
+  String seasonFilter(String season) {
+    return '季度：$season';
+  }
+
+  @override
+  String dateFilter(String range) {
+    return '日期：$range';
+  }
+
+  @override
+  String rankFilter(String range) {
+    return '排名：$range';
+  }
+
+  @override
+  String scoreFilter(String range) {
+    return '评分：$range';
+  }
+
+  @override
+  String weekdayFilter(String weekdays) {
+    return '星期：$weekdays';
+  }
+
+  @override
+  String get hideWatched => '隐藏已看';
+
+  @override
+  String get hideAbandoned => '隐藏已弃';
+
+  @override
+  String get noSearchSuggestions => '暂无搜索建议，按回车直接检索';
+
+  @override
+  String get nothingFound => '什么都没有找到 (;´༎ຶД༎ຶ`)';
+
+  @override
+  String get tapToRetry => '点击重试';
+
+  @override
+  String get filterConditions => '筛选条件';
+
+  @override
+  String get filterConditionsDescription => '组合标签、季度和评分等条件，更快找到想看的番剧。';
+
+  @override
+  String get sort => '排序';
+
+  @override
+  String get sortDescription => '选择列表优先展示的内容。';
+
+  @override
+  String get sortHeat => '热度';
+
+  @override
+  String get sortRank => '排名';
+
+  @override
+  String get sortScore => '评分';
+
+  @override
+  String get sortMatch => '匹配';
+
+  @override
+  String get tags => '标签';
+
+  @override
+  String get tagsDescription => '选择多个标签时，会优先寻找同时包含这些标签的番剧。';
+
+  @override
+  String get customTag => '自定义标签';
+
+  @override
+  String get addTag => '添加标签';
+
+  @override
+  String get clearTags => '清空标签';
+
+  @override
+  String get seasonAndDate => '季度与日期';
+
+  @override
+  String get seasonAndDateDescription => '按播出季度查找，也可以指定更精确的日期范围。';
+
+  @override
+  String get season => '季度';
+
+  @override
+  String get customDate => '自定义日期';
+
+  @override
+  String get anyDate => '不限日期';
+
+  @override
+  String get numericRange => '数值范围';
+
+  @override
+  String get numericRangeDescription => '只显示符合评分或排名范围的番剧。';
+
+  @override
+  String get enableScoreRange => '启用评分范围';
+
+  @override
+  String get enableRankRange => '启用排名范围';
+
+  @override
+  String get weekday => '星期';
+
+  @override
+  String get weekdayDescription => '按放送星期过滤，多个星期按任一匹配处理。';
+
+  @override
+  String weekdayNumber(int number) {
+    return '周$number';
+  }
+
+  @override
+  String get filterSection => '过滤';
+
+  @override
+  String get filterSectionDescription => '控制是否隐藏已经看过或放弃的番剧。';
+
+  @override
+  String get reset => '重置';
+
+  @override
+  String get apply => '应用';
+
+  @override
+  String get winter => '冬季';
+
+  @override
+  String get spring => '春季';
+
+  @override
+  String get summer => '夏季';
+
+  @override
+  String get autumn => '秋季';
+
+  @override
+  String get imageTooLarge => '图片大小不能超过 25MB';
+
+  @override
+  String get enterValidImageUrl => '请输入有效的图片链接';
+
+  @override
+  String get selectImageFirst => '请先选择图片文件';
+
+  @override
+  String get unknownAnime => '未知番剧';
+
+  @override
+  String episodeValue(String episode) {
+    return '第 $episode 集';
+  }
+
+  @override
+  String episodesValue(String episodes) {
+    return '剧集：$episodes';
+  }
+
+  @override
+  String get unknownEpisode => '剧集未知';
+
+  @override
+  String get switchToImageUpload => '改为上传图片文件';
+
+  @override
+  String get switchToImageUrl => '改为输入图片 URL';
+
+  @override
+  String get searching => '搜索中…';
+
+  @override
+  String get startSearch => '开始搜索';
+
+  @override
+  String get selectImage => '点击选择图片';
+
+  @override
+  String get supportedImageFormats => '支持 JPG、PNG、WEBP 格式';
+
+  @override
+  String get imagePreviewFailed => '图片预览失败';
+
+  @override
+  String get imageSelected => '已选择图片';
+
+  @override
+  String get tapToReselectImage => '点击可重新选择图片';
+
+  @override
+  String get reselect => '重新选择';
+
+  @override
+  String get enterImageUrl => '请输入图片链接';
+
+  @override
+  String get clear => '清除';
+
+  @override
+  String get imageUrlPreviewHint => '输入图片链接后预览';
+
+  @override
+  String get loading => '加载中…';
+
+  @override
+  String get imageLoadFailed => '图片加载失败';
+
+  @override
+  String get checkLinkValidity => '请检查链接是否有效';
+
+  @override
+  String get recognizingImage => '正在识别图片';
+
+  @override
+  String get recognizingImageDescription => '请稍候，正在从截图中匹配番剧信息';
+
+  @override
+  String get imageResultsPlaceholder => '搜索结果将在这里展示';
+
+  @override
+  String get noImageSearchResults => '未获取到搜索结果';
+
+  @override
+  String get imageSearchStartHint => '选择图片文件或输入图片链接后开始搜索';
+
+  @override
+  String get recognitionResults => '识别结果';
+
+  @override
+  String similarityValue(String value) {
+    return '相似度：$value';
+  }
+
+  @override
+  String timeRangeValue(String range) {
+    return '时间：$range';
+  }
+
+  @override
+  String get imageSearchOriginalRatioTip => '仅支持使用原始比例番剧截图搜索结果';
+
+  @override
+  String get imageSearchQualityTip => '截图应清晰，避免过度压缩或添加水印';
+
+  @override
+  String get searchEngineProvidedByPrefix => '搜索引擎由 ';
+
+  @override
+  String get searchEngineProvidedBySuffix => ' 提供支持';
+
+  @override
+  String get animeImageSearch => '以图搜番';
 }

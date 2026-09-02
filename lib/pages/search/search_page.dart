@@ -6,6 +6,7 @@ import 'package:kazumi/bean/dialog/material_bottom_sheet.dart';
 import 'package:kazumi/bean/appbar/sys_app_bar.dart';
 import 'package:kazumi/bean/card/bangumi_card.dart';
 import 'package:kazumi/bean/widget/error_widget.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/modules/bangumi/bangumi_item.dart';
 import 'package:kazumi/pages/search/search_controller.dart';
 import 'package:kazumi/services/logging/logger.dart';
@@ -137,13 +138,13 @@ class _SearchPageState extends State<SearchPage> {
 
     for (final tag in filterState.tags) {
       chips.add(InputChip(
-        label: Text('标签: $tag'),
+        label: Text(currentL10n.tagFilter(tag)),
         onDeleted: () => _applyFilterState(_removeTag(tag), search: true),
       ));
     }
     if (filterState.sort != 'heat') {
       chips.add(InputChip(
-        label: Text('排序: ${_sortLabel(filterState.sort)}'),
+        label: Text(currentL10n.sortFilter(_sortLabel(filterState.sort))),
         onDeleted: () => _applyFilterState(
           filterState.copyWith(sort: 'heat'),
           search: true,
@@ -152,7 +153,7 @@ class _SearchPageState extends State<SearchPage> {
     }
     if (filterState.season.isNotEmpty) {
       chips.add(InputChip(
-        label: Text('季度: ${filterState.season}'),
+        label: Text(currentL10n.seasonFilter(filterState.season)),
         onDeleted: () => _applyFilterState(
           filterState.copyWith(season: '', dateRange: null),
           search: true,
@@ -160,8 +161,9 @@ class _SearchPageState extends State<SearchPage> {
       ));
     } else if (filterState.dateRange != null) {
       chips.add(InputChip(
-        label: Text(
-            '日期: ${filterState.dateRange!.start}..${filterState.dateRange!.end}'),
+        label: Text(currentL10n.dateFilter(
+          '${filterState.dateRange!.start}..${filterState.dateRange!.end}',
+        )),
         onDeleted: () => _applyFilterState(
           filterState.copyWith(dateRange: null),
           search: true,
@@ -170,7 +172,7 @@ class _SearchPageState extends State<SearchPage> {
     }
     if (filterState.rankRange?.isValid == true) {
       chips.add(InputChip(
-        label: Text('排名: ${filterState.rankRange!.toToken()}'),
+        label: Text(currentL10n.rankFilter(filterState.rankRange!.toToken())),
         onDeleted: () => _applyFilterState(
           filterState.copyWith(rankRange: null),
           search: true,
@@ -179,7 +181,7 @@ class _SearchPageState extends State<SearchPage> {
     }
     if (filterState.scoreRange?.isValid == true) {
       chips.add(InputChip(
-        label: Text('评分: ${filterState.scoreRange!.toToken()}'),
+        label: Text(currentL10n.scoreFilter(filterState.scoreRange!.toToken())),
         onDeleted: () => _applyFilterState(
           filterState.copyWith(scoreRange: null),
           search: true,
@@ -188,7 +190,7 @@ class _SearchPageState extends State<SearchPage> {
     }
     if (filterState.weekdays.isNotEmpty) {
       chips.add(InputChip(
-        label: Text('星期: ${filterState.weekdays.join(',')}'),
+        label: Text(currentL10n.weekdayFilter(filterState.weekdays.join(','))),
         onDeleted: () => _applyFilterState(
           filterState.copyWith(weekdays: []),
           search: true,
@@ -197,7 +199,7 @@ class _SearchPageState extends State<SearchPage> {
     }
     if (searchPageController.notShowWatchedBangumis) {
       chips.add(InputChip(
-        label: const Text('隐藏已看'),
+        label: Text(currentL10n.hideWatched),
         onDeleted: () async {
           await searchPageController.setNotShowWatchedBangumis(false);
         },
@@ -205,7 +207,7 @@ class _SearchPageState extends State<SearchPage> {
     }
     if (searchPageController.notShowAbandonedBangumis) {
       chips.add(InputChip(
-        label: const Text('隐藏已弃'),
+        label: Text(currentL10n.hideAbandoned),
         onDeleted: () async {
           await searchPageController.setNotShowAbandonedBangumis(false);
         },
@@ -231,12 +233,12 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       appBar: SysAppBar(
         backgroundColor: Colors.transparent,
-        title: const Text("搜索"),
+        title: Text(currentL10n.search),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: showWorkbench,
         icon: const Icon(Icons.tune),
-        label: const Text("筛选"),
+        label: Text(currentL10n.filter),
       ),
       body: Column(
         children: [
@@ -258,7 +260,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 barTrailing: [
                   IconButton(
-                    tooltip: '图片搜索',
+                    tooltip: currentL10n.imageSearch,
                     onPressed: () async {
                       final result = await context.pushNamed('/search/image');
                       if (result is String && result.isNotEmpty) {
@@ -277,10 +279,10 @@ class _SearchPageState extends State<SearchPage> {
                   Observer(
                     builder: (context) {
                       if (controller.text.isNotEmpty) {
-                        return const SizedBox(
+                        return SizedBox(
                           height: 400,
                           child: Center(
-                            child: Text("暂无搜索建议，按回车直接检索"),
+                            child: Text(currentL10n.noSearchSuggestions),
                           ),
                         );
                       } else {
@@ -338,7 +340,7 @@ class _SearchPageState extends State<SearchPage> {
                   child: SizedBox(
                     height: 400,
                     child: GeneralErrorWidget(
-                      errMsg: '什么都没有找到 (;´༎ຶД༎ຶ`)',
+                      errMsg: currentL10n.nothingFound,
                       actions: [
                         GeneralErrorButton(
                           onPressed: () {
@@ -346,7 +348,7 @@ class _SearchPageState extends State<SearchPage> {
                                 searchController.text,
                                 type: 'init');
                           },
-                          text: '点击重试',
+                          text: currentL10n.tapToRetry,
                         ),
                       ],
                     ),
@@ -586,8 +588,8 @@ class _SearchWorkbenchSheetState extends State<_SearchWorkbenchSheet> {
       child: Column(
         children: [
           MaterialBottomSheetHeader(
-            title: '筛选条件',
-            description: '组合标签、季度和评分等条件，更快找到想看的番剧。',
+            title: currentL10n.filterConditions,
+            description: currentL10n.filterConditionsDescription,
             onClose: () => Navigator.pop(context),
           ),
           Expanded(
@@ -595,8 +597,8 @@ class _SearchWorkbenchSheetState extends State<_SearchWorkbenchSheet> {
               padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
               children: [
                 MaterialBottomSheetSection(
-                  title: '排序',
-                  description: '选择列表优先展示的内容。',
+                  title: currentL10n.sort,
+                  description: currentL10n.sortDescription,
                   icon: Icons.sort_rounded,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
@@ -607,19 +609,23 @@ class _SearchWorkbenchSheetState extends State<_SearchWorkbenchSheet> {
                           draft = draft.copyWith(sort: value.first);
                         });
                       },
-                      segments: const [
-                        ButtonSegment(value: 'heat', label: Text('热度')),
-                        ButtonSegment(value: 'rank', label: Text('排名')),
-                        ButtonSegment(value: 'score', label: Text('评分')),
-                        ButtonSegment(value: 'match', label: Text('匹配')),
+                      segments: [
+                        ButtonSegment(
+                            value: 'heat', label: Text(currentL10n.sortHeat)),
+                        ButtonSegment(
+                            value: 'rank', label: Text(currentL10n.sortRank)),
+                        ButtonSegment(
+                            value: 'score', label: Text(currentL10n.sortScore)),
+                        ButtonSegment(
+                            value: 'match', label: Text(currentL10n.sortMatch)),
                       ],
                     ),
                   ),
                 ),
                 const SizedBox(height: 12),
                 MaterialBottomSheetSection(
-                  title: '标签',
-                  description: '选择多个标签时，会优先寻找同时包含这些标签的番剧。',
+                  title: currentL10n.tags,
+                  description: currentL10n.tagsDescription,
                   icon: Icons.sell_outlined,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -653,16 +659,17 @@ class _SearchWorkbenchSheetState extends State<_SearchWorkbenchSheet> {
                           Expanded(
                             child: TextField(
                               controller: tagController,
-                              decoration: const InputDecoration(
-                                labelText: '自定义标签',
-                                prefixIcon: Icon(Icons.add_circle_outline),
+                              decoration: InputDecoration(
+                                labelText: currentL10n.customTag,
+                                prefixIcon:
+                                    const Icon(Icons.add_circle_outline),
                               ),
                               onSubmitted: addTag,
                             ),
                           ),
                           const SizedBox(width: 8),
                           IconButton.filledTonal(
-                            tooltip: '添加标签',
+                            tooltip: currentL10n.addTag,
                             onPressed: () => addTag(tagController.text),
                             icon: const Icon(Icons.add),
                           ),
@@ -694,7 +701,7 @@ class _SearchWorkbenchSheetState extends State<_SearchWorkbenchSheet> {
                             setState(() => draft = draft.copyWith(tags: []));
                           },
                           icon: const Icon(Icons.clear_all),
-                          label: const Text('清空标签'),
+                          label: Text(currentL10n.clearTags),
                         ),
                       ],
                     ],
@@ -702,17 +709,18 @@ class _SearchWorkbenchSheetState extends State<_SearchWorkbenchSheet> {
                 ),
                 const SizedBox(height: 12),
                 MaterialBottomSheetSection(
-                  title: '季度与日期',
-                  description: '按播出季度查找，也可以指定更精确的日期范围。',
+                  title: currentL10n.seasonAndDate,
+                  description: currentL10n.seasonAndDateDescription,
                   icon: Icons.calendar_month,
                   child: Column(
                     children: [
                       DropdownButtonFormField<String>(
                         initialValue:
                             draft.season.isEmpty ? null : draft.season,
-                        decoration: const InputDecoration(
-                          labelText: '季度',
-                          prefixIcon: Icon(Icons.event_available_outlined),
+                        decoration: InputDecoration(
+                          labelText: currentL10n.season,
+                          prefixIcon:
+                              const Icon(Icons.event_available_outlined),
                         ),
                         items: [
                           for (final season in seasonOptions)
@@ -741,7 +749,7 @@ class _SearchWorkbenchSheetState extends State<_SearchWorkbenchSheet> {
                               onPressed: pickCustomDateRange,
                               icon: const Icon(Icons.date_range),
                               label: Text(draft.dateRange == null
-                                  ? '自定义日期'
+                                  ? currentL10n.customDate
                                   : '${draft.dateRange!.start}..${draft.dateRange!.end}'),
                             ),
                             if (draft.season.isNotEmpty ||
@@ -756,7 +764,7 @@ class _SearchWorkbenchSheetState extends State<_SearchWorkbenchSheet> {
                                   });
                                 },
                                 icon: const Icon(Icons.clear),
-                                label: const Text('不限日期'),
+                                label: Text(currentL10n.anyDate),
                               ),
                           ],
                         ),
@@ -766,13 +774,13 @@ class _SearchWorkbenchSheetState extends State<_SearchWorkbenchSheet> {
                 ),
                 const SizedBox(height: 12),
                 MaterialBottomSheetSection(
-                  title: '数值范围',
-                  description: '只显示符合评分或排名范围的番剧。',
+                  title: currentL10n.numericRange,
+                  description: currentL10n.numericRangeDescription,
                   icon: Icons.tune_rounded,
                   child: Column(
                     children: [
                       _SearchSwitchTile(
-                        title: '启用评分范围',
+                        title: currentL10n.enableScoreRange,
                         value: draft.scoreRange?.isValid == true,
                         onChanged: (value) {
                           setState(() {
@@ -790,7 +798,7 @@ class _SearchWorkbenchSheetState extends State<_SearchWorkbenchSheet> {
                       if (draft.scoreRange?.isValid == true)
                         _buildScoreRangeSlider(draft.scoreRange!),
                       _SearchSwitchTile(
-                        title: '启用排名范围',
+                        title: currentL10n.enableRankRange,
                         value: draft.rankRange?.isValid == true,
                         onChanged: (value) {
                           setState(() {
@@ -809,8 +817,8 @@ class _SearchWorkbenchSheetState extends State<_SearchWorkbenchSheet> {
                 ),
                 const SizedBox(height: 12),
                 MaterialBottomSheetSection(
-                  title: '星期',
-                  description: '按放送星期过滤，多个星期按任一匹配处理。',
+                  title: currentL10n.weekday,
+                  description: currentL10n.weekdayDescription,
                   icon: Icons.today_outlined,
                   child: Wrap(
                     spacing: 8,
@@ -818,7 +826,7 @@ class _SearchWorkbenchSheetState extends State<_SearchWorkbenchSheet> {
                     children: [
                       for (int weekday = 1; weekday <= 7; weekday++)
                         FilterChip(
-                          label: Text('周$weekday'),
+                          label: Text(currentL10n.weekdayNumber(weekday)),
                           selected: draft.weekdays.contains(weekday),
                           showCheckmark: false,
                           onSelected: (selected) {
@@ -839,20 +847,20 @@ class _SearchWorkbenchSheetState extends State<_SearchWorkbenchSheet> {
                 ),
                 const SizedBox(height: 12),
                 MaterialBottomSheetSection(
-                  title: '过滤',
-                  description: '控制是否隐藏已经看过或放弃的番剧。',
+                  title: currentL10n.filterSection,
+                  description: currentL10n.filterSectionDescription,
                   icon: Icons.filter_alt_outlined,
                   child: Column(
                     children: [
                       _SearchSwitchTile(
-                        title: '隐藏已看',
+                        title: currentL10n.hideWatched,
                         value: notShowWatched,
                         onChanged: (value) {
                           setState(() => notShowWatched = value);
                         },
                       ),
                       _SearchSwitchTile(
-                        title: '隐藏已弃',
+                        title: currentL10n.hideAbandoned,
                         value: notShowAbandoned,
                         onChanged: (value) {
                           setState(() => notShowAbandoned = value);
@@ -877,7 +885,7 @@ class _SearchWorkbenchSheetState extends State<_SearchWorkbenchSheet> {
                     });
                   },
                   icon: const Icon(Icons.restart_alt),
-                  label: const Text('重置'),
+                  label: Text(currentL10n.reset),
                 ),
                 const Spacer(),
                 FilledButton.icon(
@@ -893,7 +901,7 @@ class _SearchWorkbenchSheetState extends State<_SearchWorkbenchSheet> {
                     );
                   },
                   icon: const Icon(Icons.check),
-                  label: const Text('应用'),
+                  label: Text(currentL10n.apply),
                 ),
               ],
             ),
@@ -957,26 +965,26 @@ RangeValues _safeRangeValues(
 String _sortLabel(String sort) {
   switch (sort) {
     case 'rank':
-      return '排名';
+      return currentL10n.sortRank;
     case 'score':
-      return '评分';
+      return currentL10n.sortScore;
     case 'match':
-      return '匹配';
+      return currentL10n.sortMatch;
     default:
-      return '热度';
+      return currentL10n.sortHeat;
   }
 }
 
 String _seasonLabel(int quarter) {
   switch (quarter) {
     case 1:
-      return '冬季';
+      return currentL10n.winter;
     case 2:
-      return '春季';
+      return currentL10n.spring;
     case 3:
-      return '夏季';
+      return currentL10n.summer;
     case 4:
-      return '秋季';
+      return currentL10n.autumn;
     default:
       return '';
   }

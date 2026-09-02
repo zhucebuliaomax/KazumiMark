@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:kazumi/bean/appbar/sys_app_bar.dart';
 import 'package:kazumi/bean/card/network_img_layer.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/modules/search/image_search_module.dart';
 import 'package:kazumi/pages/search/search_controller.dart';
 import 'package:kazumi/utils/constants.dart';
@@ -77,7 +78,7 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
     if (imageBytes > maxImageBytes) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('图片大小不能超过 25MB')),
+        SnackBar(content: Text(currentL10n.imageTooLarge)),
       );
       return;
     }
@@ -95,14 +96,14 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
       final imageUrl = _urlController.text.trim();
       final uri = Uri.tryParse(imageUrl);
       if (imageUrl.isEmpty || uri == null || !uri.hasScheme) {
-        KazumiDialog.showToast(message: '请输入有效的图片链接');
+        KazumiDialog.showToast(message: currentL10n.enterValidImageUrl);
         return;
       }
       await _searchPageController.searchImageByUrl(imageUrl);
     } else {
       final imageFile = _selectedImageFile;
       if (imageFile == null) {
-        KazumiDialog.showToast(message: '请先选择图片文件');
+        KazumiDialog.showToast(message: currentL10n.selectImageFirst);
         return;
       }
       await _searchPageController.searchImageByFile(imageFile);
@@ -131,7 +132,7 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
         title?.romaji ??
         title?.english ??
         result.filename ??
-        '未知番剧';
+        currentL10n.unknownAnime;
   }
 
   static String _formatTraceEpisode(dynamic episode) {
@@ -140,15 +141,15 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
     }
 
     if (episode is num) {
-      return '第 ${formatEpisodeValue(episode)} 集';
+      return currentL10n.episodeValue(formatEpisodeValue(episode));
     }
     if (episode is List && episode.isNotEmpty) {
       final episodes = episode.whereType<num>().map(formatEpisodeValue);
       if (episodes.isNotEmpty) {
-        return '剧集: ${episodes.join(' / ')}';
+        return currentL10n.episodesValue(episodes.join(' / '));
       }
     }
-    return '剧集未知';
+    return currentL10n.unknownEpisode;
   }
 
   int _resolveCrossAxisCount(double width) {
@@ -172,7 +173,7 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
     return Scaffold(
       appBar: SysAppBar(
         backgroundColor: Colors.transparent,
-        title: const Text('图片搜索'),
+        title: Text(currentL10n.imageSearch),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
@@ -196,7 +197,9 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
                       _isUrlMode ? Icons.upload_file : Icons.link,
                       size: 18,
                     ),
-                    label: Text(_isUrlMode ? '改为上传图片文件' : '改为输入图片 URL'),
+                    label: Text(_isUrlMode
+                        ? currentL10n.switchToImageUpload
+                        : currentL10n.switchToImageUrl),
                   ),
                 ),
                 Observer(
@@ -219,8 +222,8 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
                           : const Icon(Icons.image_search_rounded),
                       label: Text(
                         _searchPageController.isImageSearching
-                            ? '搜索中...'
-                            : '开始搜索',
+                            ? currentL10n.searching
+                            : currentL10n.startSearch,
                         style: const TextStyle(fontSize: 16),
                       ),
                     ),
@@ -271,14 +274,14 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    '点击选择图片',
+                    currentL10n.selectImage,
                     style: textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    '支持 JPG、PNG、WEBP 格式',
+                    currentL10n.supportedImageFormats,
                     style: textTheme.bodySmall?.copyWith(
                       color: colorScheme.onSurfaceVariant,
                     ),
@@ -293,7 +296,7 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) => Center(
                       child: Text(
-                        '图片预览失败',
+                        currentL10n.imagePreviewFailed,
                         style: textTheme.bodyMedium?.copyWith(
                           color: colorScheme.error,
                         ),
@@ -324,7 +327,7 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                _selectedImageName ?? '已选择图片',
+                                _selectedImageName ?? currentL10n.imageSelected,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: textTheme.titleMedium?.copyWith(
@@ -334,7 +337,7 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                '点击可重新选择图片',
+                                currentL10n.tapToReselectImage,
                                 style: textTheme.bodySmall?.copyWith(
                                   color: Colors.white.withValues(alpha: 0.78),
                                 ),
@@ -345,7 +348,7 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
                         IconButton.filledTonal(
                           onPressed: _pickImageFile,
                           icon: const Icon(Icons.edit_outlined),
-                          tooltip: '重新选择',
+                          tooltip: currentL10n.reselect,
                         ),
                       ],
                     ),
@@ -365,7 +368,7 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
         TextField(
           controller: _urlController,
           decoration: InputDecoration(
-            hintText: '请输入图片链接',
+            hintText: currentL10n.enterImageUrl,
             hintStyle: TextStyle(
               color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
               fontSize: 13,
@@ -374,7 +377,7 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
             suffixIcon: IconButton(
               icon: const Icon(Icons.clear),
               onPressed: _urlController.clear,
-              tooltip: '清除',
+              tooltip: currentL10n.clear,
             ),
             filled: true,
             fillColor:
@@ -429,7 +432,7 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '输入图片链接后预览',
+                    currentL10n.imageUrlPreviewHint,
                     style: textTheme.bodySmall?.copyWith(
                       color:
                           colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
@@ -457,7 +460,7 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        '加载中...',
+                        currentL10n.loading,
                         style: textTheme.bodySmall?.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),
@@ -477,14 +480,14 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '图片加载失败',
+                      currentL10n.imageLoadFailed,
                       style: textTheme.bodySmall?.copyWith(
                         color: colorScheme.error,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '请检查链接是否有效',
+                      currentL10n.checkLinkValidity,
                       style: textTheme.bodySmall?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
@@ -511,8 +514,8 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
               height: 28,
               child: CircularProgressIndicator(strokeWidth: 2.5),
             ),
-            title: '正在识别图片',
-            description: '请稍候，正在从截图中匹配番剧信息',
+            title: currentL10n.recognizingImage,
+            description: currentL10n.recognizingImageDescription,
           );
         }
 
@@ -529,9 +532,12 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
                   ? colorScheme.primary
                   : colorScheme.error,
             ),
-            title: errorMessage.isEmpty ? '搜索结果将在这里展示' : '未获取到搜索结果',
-            description:
-                errorMessage.isEmpty ? '选择图片文件或输入图片链接后开始搜索' : errorMessage,
+            title: errorMessage.isEmpty
+                ? currentL10n.imageResultsPlaceholder
+                : currentL10n.noImageSearchResults,
+            description: errorMessage.isEmpty
+                ? currentL10n.imageSearchStartHint
+                : errorMessage,
           );
         }
 
@@ -539,7 +545,7 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '识别结果',
+              currentL10n.recognitionResults,
               style: textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
@@ -681,12 +687,16 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
                       _buildInfoLine(
                         textTheme,
                         colorScheme,
-                        '相似度: ${formatTraceSimilarity(result.similarity)}',
+                        currentL10n.similarityValue(
+                          formatTraceSimilarity(result.similarity),
+                        ),
                       ),
                       _buildInfoLine(
                         textTheme,
                         colorScheme,
-                        '时间: ${durationToString(Duration(seconds: (result.from ?? 0).floor()))} - ${durationToString(Duration(seconds: (result.to ?? 0).floor()))}',
+                        currentL10n.timeRangeValue(
+                          '${durationToString(Duration(seconds: (result.from ?? 0).floor()))} - ${durationToString(Duration(seconds: (result.to ?? 0).floor()))}',
+                        ),
                       ),
                     ],
                   ),
@@ -728,13 +738,13 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
     final dotColor = colorScheme.onSurfaceVariant.withValues(alpha: 0.6);
 
     final tips = <Widget>[
-      Text('仅支持使用原始比例番剧截图搜索结果', style: baseStyle),
-      Text('截图应清晰，避免过度压缩或添加水印', style: baseStyle),
+      Text(currentL10n.imageSearchOriginalRatioTip, style: baseStyle),
+      Text(currentL10n.imageSearchQualityTip, style: baseStyle),
       RichText(
         text: TextSpan(
           style: baseStyle,
           children: [
-            const TextSpan(text: '搜索引擎由 '),
+            TextSpan(text: currentL10n.searchEngineProvidedByPrefix),
             WidgetSpan(
               alignment: PlaceholderAlignment.baseline,
               baseline: TextBaseline.alphabetic,
@@ -746,7 +756,7 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
                 child: Text('trace.moe', style: linkStyle),
               ),
             ),
-            const TextSpan(text: ' 提供支持'),
+            TextSpan(text: currentL10n.searchEngineProvidedBySuffix),
           ],
         ),
       ),
@@ -764,7 +774,7 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
             ),
             const SizedBox(width: 6),
             Text(
-              '以图搜番',
+              currentL10n.animeImageSearch,
               style: textTheme.labelLarge?.copyWith(
                 color: colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w600,

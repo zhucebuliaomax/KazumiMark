@@ -2575,6 +2575,504 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'搜索'**
   String get search;
+
+  /// No description provided for @filter.
+  ///
+  /// In zh, this message translates to:
+  /// **'筛选'**
+  String get filter;
+
+  /// No description provided for @imageSearch.
+  ///
+  /// In zh, this message translates to:
+  /// **'图片搜索'**
+  String get imageSearch;
+
+  /// No description provided for @tagFilter.
+  ///
+  /// In zh, this message translates to:
+  /// **'标签：{tag}'**
+  String tagFilter(String tag);
+
+  /// No description provided for @sortFilter.
+  ///
+  /// In zh, this message translates to:
+  /// **'排序：{sort}'**
+  String sortFilter(String sort);
+
+  /// No description provided for @seasonFilter.
+  ///
+  /// In zh, this message translates to:
+  /// **'季度：{season}'**
+  String seasonFilter(String season);
+
+  /// No description provided for @dateFilter.
+  ///
+  /// In zh, this message translates to:
+  /// **'日期：{range}'**
+  String dateFilter(String range);
+
+  /// No description provided for @rankFilter.
+  ///
+  /// In zh, this message translates to:
+  /// **'排名：{range}'**
+  String rankFilter(String range);
+
+  /// No description provided for @scoreFilter.
+  ///
+  /// In zh, this message translates to:
+  /// **'评分：{range}'**
+  String scoreFilter(String range);
+
+  /// No description provided for @weekdayFilter.
+  ///
+  /// In zh, this message translates to:
+  /// **'星期：{weekdays}'**
+  String weekdayFilter(String weekdays);
+
+  /// No description provided for @hideWatched.
+  ///
+  /// In zh, this message translates to:
+  /// **'隐藏已看'**
+  String get hideWatched;
+
+  /// No description provided for @hideAbandoned.
+  ///
+  /// In zh, this message translates to:
+  /// **'隐藏已弃'**
+  String get hideAbandoned;
+
+  /// No description provided for @noSearchSuggestions.
+  ///
+  /// In zh, this message translates to:
+  /// **'暂无搜索建议，按回车直接检索'**
+  String get noSearchSuggestions;
+
+  /// No description provided for @nothingFound.
+  ///
+  /// In zh, this message translates to:
+  /// **'什么都没有找到 (;´༎ຶД༎ຶ`)'**
+  String get nothingFound;
+
+  /// No description provided for @tapToRetry.
+  ///
+  /// In zh, this message translates to:
+  /// **'点击重试'**
+  String get tapToRetry;
+
+  /// No description provided for @filterConditions.
+  ///
+  /// In zh, this message translates to:
+  /// **'筛选条件'**
+  String get filterConditions;
+
+  /// No description provided for @filterConditionsDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'组合标签、季度和评分等条件，更快找到想看的番剧。'**
+  String get filterConditionsDescription;
+
+  /// No description provided for @sort.
+  ///
+  /// In zh, this message translates to:
+  /// **'排序'**
+  String get sort;
+
+  /// No description provided for @sortDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'选择列表优先展示的内容。'**
+  String get sortDescription;
+
+  /// No description provided for @sortHeat.
+  ///
+  /// In zh, this message translates to:
+  /// **'热度'**
+  String get sortHeat;
+
+  /// No description provided for @sortRank.
+  ///
+  /// In zh, this message translates to:
+  /// **'排名'**
+  String get sortRank;
+
+  /// No description provided for @sortScore.
+  ///
+  /// In zh, this message translates to:
+  /// **'评分'**
+  String get sortScore;
+
+  /// No description provided for @sortMatch.
+  ///
+  /// In zh, this message translates to:
+  /// **'匹配'**
+  String get sortMatch;
+
+  /// No description provided for @tags.
+  ///
+  /// In zh, this message translates to:
+  /// **'标签'**
+  String get tags;
+
+  /// No description provided for @tagsDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'选择多个标签时，会优先寻找同时包含这些标签的番剧。'**
+  String get tagsDescription;
+
+  /// No description provided for @customTag.
+  ///
+  /// In zh, this message translates to:
+  /// **'自定义标签'**
+  String get customTag;
+
+  /// No description provided for @addTag.
+  ///
+  /// In zh, this message translates to:
+  /// **'添加标签'**
+  String get addTag;
+
+  /// No description provided for @clearTags.
+  ///
+  /// In zh, this message translates to:
+  /// **'清空标签'**
+  String get clearTags;
+
+  /// No description provided for @seasonAndDate.
+  ///
+  /// In zh, this message translates to:
+  /// **'季度与日期'**
+  String get seasonAndDate;
+
+  /// No description provided for @seasonAndDateDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'按播出季度查找，也可以指定更精确的日期范围。'**
+  String get seasonAndDateDescription;
+
+  /// No description provided for @season.
+  ///
+  /// In zh, this message translates to:
+  /// **'季度'**
+  String get season;
+
+  /// No description provided for @customDate.
+  ///
+  /// In zh, this message translates to:
+  /// **'自定义日期'**
+  String get customDate;
+
+  /// No description provided for @anyDate.
+  ///
+  /// In zh, this message translates to:
+  /// **'不限日期'**
+  String get anyDate;
+
+  /// No description provided for @numericRange.
+  ///
+  /// In zh, this message translates to:
+  /// **'数值范围'**
+  String get numericRange;
+
+  /// No description provided for @numericRangeDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'只显示符合评分或排名范围的番剧。'**
+  String get numericRangeDescription;
+
+  /// No description provided for @enableScoreRange.
+  ///
+  /// In zh, this message translates to:
+  /// **'启用评分范围'**
+  String get enableScoreRange;
+
+  /// No description provided for @enableRankRange.
+  ///
+  /// In zh, this message translates to:
+  /// **'启用排名范围'**
+  String get enableRankRange;
+
+  /// No description provided for @weekday.
+  ///
+  /// In zh, this message translates to:
+  /// **'星期'**
+  String get weekday;
+
+  /// No description provided for @weekdayDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'按放送星期过滤，多个星期按任一匹配处理。'**
+  String get weekdayDescription;
+
+  /// No description provided for @weekdayNumber.
+  ///
+  /// In zh, this message translates to:
+  /// **'周{number}'**
+  String weekdayNumber(int number);
+
+  /// No description provided for @filterSection.
+  ///
+  /// In zh, this message translates to:
+  /// **'过滤'**
+  String get filterSection;
+
+  /// No description provided for @filterSectionDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'控制是否隐藏已经看过或放弃的番剧。'**
+  String get filterSectionDescription;
+
+  /// No description provided for @reset.
+  ///
+  /// In zh, this message translates to:
+  /// **'重置'**
+  String get reset;
+
+  /// No description provided for @apply.
+  ///
+  /// In zh, this message translates to:
+  /// **'应用'**
+  String get apply;
+
+  /// No description provided for @winter.
+  ///
+  /// In zh, this message translates to:
+  /// **'冬季'**
+  String get winter;
+
+  /// No description provided for @spring.
+  ///
+  /// In zh, this message translates to:
+  /// **'春季'**
+  String get spring;
+
+  /// No description provided for @summer.
+  ///
+  /// In zh, this message translates to:
+  /// **'夏季'**
+  String get summer;
+
+  /// No description provided for @autumn.
+  ///
+  /// In zh, this message translates to:
+  /// **'秋季'**
+  String get autumn;
+
+  /// No description provided for @imageTooLarge.
+  ///
+  /// In zh, this message translates to:
+  /// **'图片大小不能超过 25MB'**
+  String get imageTooLarge;
+
+  /// No description provided for @enterValidImageUrl.
+  ///
+  /// In zh, this message translates to:
+  /// **'请输入有效的图片链接'**
+  String get enterValidImageUrl;
+
+  /// No description provided for @selectImageFirst.
+  ///
+  /// In zh, this message translates to:
+  /// **'请先选择图片文件'**
+  String get selectImageFirst;
+
+  /// No description provided for @unknownAnime.
+  ///
+  /// In zh, this message translates to:
+  /// **'未知番剧'**
+  String get unknownAnime;
+
+  /// No description provided for @episodeValue.
+  ///
+  /// In zh, this message translates to:
+  /// **'第 {episode} 集'**
+  String episodeValue(String episode);
+
+  /// No description provided for @episodesValue.
+  ///
+  /// In zh, this message translates to:
+  /// **'剧集：{episodes}'**
+  String episodesValue(String episodes);
+
+  /// No description provided for @unknownEpisode.
+  ///
+  /// In zh, this message translates to:
+  /// **'剧集未知'**
+  String get unknownEpisode;
+
+  /// No description provided for @switchToImageUpload.
+  ///
+  /// In zh, this message translates to:
+  /// **'改为上传图片文件'**
+  String get switchToImageUpload;
+
+  /// No description provided for @switchToImageUrl.
+  ///
+  /// In zh, this message translates to:
+  /// **'改为输入图片 URL'**
+  String get switchToImageUrl;
+
+  /// No description provided for @searching.
+  ///
+  /// In zh, this message translates to:
+  /// **'搜索中…'**
+  String get searching;
+
+  /// No description provided for @startSearch.
+  ///
+  /// In zh, this message translates to:
+  /// **'开始搜索'**
+  String get startSearch;
+
+  /// No description provided for @selectImage.
+  ///
+  /// In zh, this message translates to:
+  /// **'点击选择图片'**
+  String get selectImage;
+
+  /// No description provided for @supportedImageFormats.
+  ///
+  /// In zh, this message translates to:
+  /// **'支持 JPG、PNG、WEBP 格式'**
+  String get supportedImageFormats;
+
+  /// No description provided for @imagePreviewFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'图片预览失败'**
+  String get imagePreviewFailed;
+
+  /// No description provided for @imageSelected.
+  ///
+  /// In zh, this message translates to:
+  /// **'已选择图片'**
+  String get imageSelected;
+
+  /// No description provided for @tapToReselectImage.
+  ///
+  /// In zh, this message translates to:
+  /// **'点击可重新选择图片'**
+  String get tapToReselectImage;
+
+  /// No description provided for @reselect.
+  ///
+  /// In zh, this message translates to:
+  /// **'重新选择'**
+  String get reselect;
+
+  /// No description provided for @enterImageUrl.
+  ///
+  /// In zh, this message translates to:
+  /// **'请输入图片链接'**
+  String get enterImageUrl;
+
+  /// No description provided for @clear.
+  ///
+  /// In zh, this message translates to:
+  /// **'清除'**
+  String get clear;
+
+  /// No description provided for @imageUrlPreviewHint.
+  ///
+  /// In zh, this message translates to:
+  /// **'输入图片链接后预览'**
+  String get imageUrlPreviewHint;
+
+  /// No description provided for @loading.
+  ///
+  /// In zh, this message translates to:
+  /// **'加载中…'**
+  String get loading;
+
+  /// No description provided for @imageLoadFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'图片加载失败'**
+  String get imageLoadFailed;
+
+  /// No description provided for @checkLinkValidity.
+  ///
+  /// In zh, this message translates to:
+  /// **'请检查链接是否有效'**
+  String get checkLinkValidity;
+
+  /// No description provided for @recognizingImage.
+  ///
+  /// In zh, this message translates to:
+  /// **'正在识别图片'**
+  String get recognizingImage;
+
+  /// No description provided for @recognizingImageDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'请稍候，正在从截图中匹配番剧信息'**
+  String get recognizingImageDescription;
+
+  /// No description provided for @imageResultsPlaceholder.
+  ///
+  /// In zh, this message translates to:
+  /// **'搜索结果将在这里展示'**
+  String get imageResultsPlaceholder;
+
+  /// No description provided for @noImageSearchResults.
+  ///
+  /// In zh, this message translates to:
+  /// **'未获取到搜索结果'**
+  String get noImageSearchResults;
+
+  /// No description provided for @imageSearchStartHint.
+  ///
+  /// In zh, this message translates to:
+  /// **'选择图片文件或输入图片链接后开始搜索'**
+  String get imageSearchStartHint;
+
+  /// No description provided for @recognitionResults.
+  ///
+  /// In zh, this message translates to:
+  /// **'识别结果'**
+  String get recognitionResults;
+
+  /// No description provided for @similarityValue.
+  ///
+  /// In zh, this message translates to:
+  /// **'相似度：{value}'**
+  String similarityValue(String value);
+
+  /// No description provided for @timeRangeValue.
+  ///
+  /// In zh, this message translates to:
+  /// **'时间：{range}'**
+  String timeRangeValue(String range);
+
+  /// No description provided for @imageSearchOriginalRatioTip.
+  ///
+  /// In zh, this message translates to:
+  /// **'仅支持使用原始比例番剧截图搜索结果'**
+  String get imageSearchOriginalRatioTip;
+
+  /// No description provided for @imageSearchQualityTip.
+  ///
+  /// In zh, this message translates to:
+  /// **'截图应清晰，避免过度压缩或添加水印'**
+  String get imageSearchQualityTip;
+
+  /// No description provided for @searchEngineProvidedByPrefix.
+  ///
+  /// In zh, this message translates to:
+  /// **'搜索引擎由 '**
+  String get searchEngineProvidedByPrefix;
+
+  /// No description provided for @searchEngineProvidedBySuffix.
+  ///
+  /// In zh, this message translates to:
+  /// **' 提供支持'**
+  String get searchEngineProvidedBySuffix;
+
+  /// No description provided for @animeImageSearch.
+  ///
+  /// In zh, this message translates to:
+  /// **'以图搜番'**
+  String get animeImageSearch;
 }
 
 class _AppLocalizationsDelegate
