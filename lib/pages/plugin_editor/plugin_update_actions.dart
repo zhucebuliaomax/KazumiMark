@@ -1,18 +1,19 @@
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/plugins/plugins_controller.dart';
 
 Future<void> updateAllPluginsWithFeedback(
   PluginsController controller, {
   required bool ensureCatalog,
 }) async {
-  KazumiDialog.showToast(message: '更新中');
+  KazumiDialog.showToast(message: currentL10n.updating);
   try {
     final result = await controller.tryUpdateAllPlugin(
       ensureCatalog: ensureCatalog,
     );
     KazumiDialog.showToast(message: _batchUpdateMessage(result));
   } catch (_) {
-    KazumiDialog.showToast(message: '更新规则失败');
+    KazumiDialog.showToast(message: currentL10n.updateRulesFailed);
   }
 }
 
@@ -21,19 +22,24 @@ Future<PluginUpdateResult> updatePluginWithFeedback(
   String name, {
   required bool installing,
 }) async {
-  KazumiDialog.showToast(message: installing ? '导入中' : '更新中');
+  KazumiDialog.showToast(
+    message: installing ? currentL10n.importing : currentL10n.updating,
+  );
   late final PluginUpdateResult result;
   try {
     result = await controller.tryUpdatePluginByName(name);
   } catch (_) {
-    KazumiDialog.showToast(message: '保存规则失败');
+    KazumiDialog.showToast(message: currentL10n.saveRuleFailed);
     return PluginUpdateResult.failed;
   }
   final message = switch (result) {
-    PluginUpdateResult.updated => installing ? '导入成功' : '更新成功',
-    PluginUpdateResult.requiresNewerClient => '规则需要更高版本客户端',
-    PluginUpdateResult.failed => installing ? '导入规则失败' : '更新规则失败',
-    PluginUpdateResult.notNewer => '远程规则版本不高于本地，已跳过更新',
+    PluginUpdateResult.updated =>
+      installing ? currentL10n.importSucceeded : currentL10n.updateSucceeded,
+    PluginUpdateResult.requiresNewerClient =>
+      currentL10n.ruleRequiresNewerClient,
+    PluginUpdateResult.failed =>
+      installing ? currentL10n.importRuleFailed : currentL10n.updateRulesFailed,
+    PluginUpdateResult.notNewer => currentL10n.remoteRuleNotNewer,
   };
   KazumiDialog.showToast(message: message);
   return result;
@@ -41,23 +47,23 @@ Future<PluginUpdateResult> updatePluginWithFeedback(
 
 String _batchUpdateMessage(PluginBatchUpdateResult result) {
   if (result.hasNoCandidates) {
-    return '没有可更新的规则';
+    return currentL10n.noRulesToUpdate;
   }
   if (result.failed == 0 &&
       result.requiresNewerClient == 0 &&
       result.notNewer == 0) {
-    return '更新成功 ${result.updated} 条';
+    return currentL10n.updateSuccessCount(result.updated);
   }
 
-  final parts = <String>['成功 ${result.updated} 条'];
+  final parts = <String>[currentL10n.successCount(result.updated)];
   if (result.requiresNewerClient > 0) {
-    parts.add('不兼容 ${result.requiresNewerClient} 条');
+    parts.add(currentL10n.incompatibleCount(result.requiresNewerClient));
   }
   if (result.notNewer > 0) {
-    parts.add('已跳过 ${result.notNewer} 条');
+    parts.add(currentL10n.skippedCount(result.notNewer));
   }
   if (result.failed > 0) {
-    parts.add('失败 ${result.failed} 条');
+    parts.add(currentL10n.failedCount(result.failed));
   }
-  return '更新完成：${parts.join('，')}';
+  return currentL10n.updateSummary(parts.join(', '));
 }

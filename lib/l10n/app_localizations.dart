@@ -3073,6 +3073,498 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'以图搜番'**
   String get animeImageSearch;
+
+  /// No description provided for @saveRuleOrderFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'保存规则顺序失败'**
+  String get saveRuleOrderFailed;
+
+  /// No description provided for @createRule.
+  ///
+  /// In zh, this message translates to:
+  /// **'新建规则'**
+  String get createRule;
+
+  /// No description provided for @importFromRuleRepository.
+  ///
+  /// In zh, this message translates to:
+  /// **'从规则仓库导入'**
+  String get importFromRuleRepository;
+
+  /// No description provided for @importFromClipboard.
+  ///
+  /// In zh, this message translates to:
+  /// **'从剪贴板导入'**
+  String get importFromClipboard;
+
+  /// No description provided for @importFromFile.
+  ///
+  /// In zh, this message translates to:
+  /// **'从文件导入'**
+  String get importFromFile;
+
+  /// No description provided for @importRulesFromClipboard.
+  ///
+  /// In zh, this message translates to:
+  /// **'从剪贴板导入规则'**
+  String get importRulesFromClipboard;
+
+  /// No description provided for @ruleImportInputHint.
+  ///
+  /// In zh, this message translates to:
+  /// **'可粘贴多条 kazumi:// 链接或 JSON 数组'**
+  String get ruleImportInputHint;
+
+  /// No description provided for @importAction.
+  ///
+  /// In zh, this message translates to:
+  /// **'导入'**
+  String get importAction;
+
+  /// No description provided for @selectedFileUnreadable.
+  ///
+  /// In zh, this message translates to:
+  /// **'无法读取所选文件'**
+  String get selectedFileUnreadable;
+
+  /// No description provided for @readRuleFileFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'读取规则文件失败：{error}'**
+  String readRuleFileFailed(String error);
+
+  /// No description provided for @noRulesToImport.
+  ///
+  /// In zh, this message translates to:
+  /// **'没有可导入的规则'**
+  String get noRulesToImport;
+
+  /// No description provided for @ruleImportSummary.
+  ///
+  /// In zh, this message translates to:
+  /// **'导入完成：成功 {success} 条，跳过重复 {duplicates} 条，失败 {failures} 条'**
+  String ruleImportSummary(int success, int duplicates, int failures);
+
+  /// No description provided for @saveImportedRulesFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'保存导入规则失败：{error}'**
+  String saveImportedRulesFailed(String error);
+
+  /// No description provided for @checkRuleUpdatesFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'检查规则更新失败'**
+  String get checkRuleUpdatesFailed;
+
+  /// No description provided for @selectedItemCount.
+  ///
+  /// In zh, this message translates to:
+  /// **'已选择 {count} 项'**
+  String selectedItemCount(int count);
+
+  /// No description provided for @deleteRules.
+  ///
+  /// In zh, this message translates to:
+  /// **'删除规则'**
+  String get deleteRules;
+
+  /// No description provided for @deleteSelectedRulesConfirmation.
+  ///
+  /// In zh, this message translates to:
+  /// **'确定要删除选中的 {count} 条规则吗？'**
+  String deleteSelectedRulesConfirmation(int count);
+
+  /// No description provided for @deleteRuleFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'删除规则失败'**
+  String get deleteRuleFailed;
+
+  /// No description provided for @delete.
+  ///
+  /// In zh, this message translates to:
+  /// **'删除'**
+  String get delete;
+
+  /// No description provided for @updateAll.
+  ///
+  /// In zh, this message translates to:
+  /// **'更新全部'**
+  String get updateAll;
+
+  /// No description provided for @addRule.
+  ///
+  /// In zh, this message translates to:
+  /// **'添加规则'**
+  String get addRule;
+
+  /// No description provided for @noAvailableRules.
+  ///
+  /// In zh, this message translates to:
+  /// **'啊咧（⊙.⊙） 没有可用规则的说'**
+  String get noAvailableRules;
+
+  /// No description provided for @updateAvailable.
+  ///
+  /// In zh, this message translates to:
+  /// **'可更新'**
+  String get updateAvailable;
+
+  /// No description provided for @searchValid.
+  ///
+  /// In zh, this message translates to:
+  /// **'搜索有效'**
+  String get searchValid;
+
+  /// No description provided for @ruleUpdateStatusUnavailable.
+  ///
+  /// In zh, this message translates to:
+  /// **'尚未获取规则更新状态'**
+  String get ruleUpdateStatusUnavailable;
+
+  /// No description provided for @ruleNotInRepository.
+  ///
+  /// In zh, this message translates to:
+  /// **'规则仓库中没有当前规则'**
+  String get ruleNotInRepository;
+
+  /// No description provided for @ruleAlreadyLatest.
+  ///
+  /// In zh, this message translates to:
+  /// **'规则已是最新'**
+  String get ruleAlreadyLatest;
+
+  /// No description provided for @update.
+  ///
+  /// In zh, this message translates to:
+  /// **'更新'**
+  String get update;
+
+  /// No description provided for @edit.
+  ///
+  /// In zh, this message translates to:
+  /// **'编辑'**
+  String get edit;
+
+  /// No description provided for @test.
+  ///
+  /// In zh, this message translates to:
+  /// **'测试'**
+  String get test;
+
+  /// No description provided for @ruleLink.
+  ///
+  /// In zh, this message translates to:
+  /// **'规则链接'**
+  String get ruleLink;
+
+  /// No description provided for @copyToClipboard.
+  ///
+  /// In zh, this message translates to:
+  /// **'复制到剪贴板'**
+  String get copyToClipboard;
+
+  /// No description provided for @share.
+  ///
+  /// In zh, this message translates to:
+  /// **'分享'**
+  String get share;
+
+  /// No description provided for @updating.
+  ///
+  /// In zh, this message translates to:
+  /// **'更新中'**
+  String get updating;
+
+  /// No description provided for @importing.
+  ///
+  /// In zh, this message translates to:
+  /// **'导入中'**
+  String get importing;
+
+  /// No description provided for @updateRulesFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'更新规则失败'**
+  String get updateRulesFailed;
+
+  /// No description provided for @saveRuleFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'保存规则失败'**
+  String get saveRuleFailed;
+
+  /// No description provided for @importSucceeded.
+  ///
+  /// In zh, this message translates to:
+  /// **'导入成功'**
+  String get importSucceeded;
+
+  /// No description provided for @updateSucceeded.
+  ///
+  /// In zh, this message translates to:
+  /// **'更新成功'**
+  String get updateSucceeded;
+
+  /// No description provided for @ruleRequiresNewerClient.
+  ///
+  /// In zh, this message translates to:
+  /// **'规则需要更高版本客户端'**
+  String get ruleRequiresNewerClient;
+
+  /// No description provided for @importRuleFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'导入规则失败'**
+  String get importRuleFailed;
+
+  /// No description provided for @remoteRuleNotNewer.
+  ///
+  /// In zh, this message translates to:
+  /// **'远程规则版本不高于本地，已跳过更新'**
+  String get remoteRuleNotNewer;
+
+  /// No description provided for @noRulesToUpdate.
+  ///
+  /// In zh, this message translates to:
+  /// **'没有可更新的规则'**
+  String get noRulesToUpdate;
+
+  /// No description provided for @updateSuccessCount.
+  ///
+  /// In zh, this message translates to:
+  /// **'更新成功 {count} 条'**
+  String updateSuccessCount(int count);
+
+  /// No description provided for @successCount.
+  ///
+  /// In zh, this message translates to:
+  /// **'成功 {count} 条'**
+  String successCount(int count);
+
+  /// No description provided for @incompatibleCount.
+  ///
+  /// In zh, this message translates to:
+  /// **'不兼容 {count} 条'**
+  String incompatibleCount(int count);
+
+  /// No description provided for @skippedCount.
+  ///
+  /// In zh, this message translates to:
+  /// **'已跳过 {count} 条'**
+  String skippedCount(int count);
+
+  /// No description provided for @failedCount.
+  ///
+  /// In zh, this message translates to:
+  /// **'失败 {count} 条'**
+  String failedCount(int count);
+
+  /// No description provided for @updateSummary.
+  ///
+  /// In zh, this message translates to:
+  /// **'更新完成：{summary}'**
+  String updateSummary(String summary);
+
+  /// No description provided for @pluginTestTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'{name} 测试'**
+  String pluginTestTitle(String name);
+
+  /// No description provided for @startTest.
+  ///
+  /// In zh, this message translates to:
+  /// **'开始测试'**
+  String get startTest;
+
+  /// No description provided for @searchRequestTest.
+  ///
+  /// In zh, this message translates to:
+  /// **'1. 搜索请求测试'**
+  String get searchRequestTest;
+
+  /// No description provided for @searchParseTest.
+  ///
+  /// In zh, this message translates to:
+  /// **'2. 搜索解析测试'**
+  String get searchParseTest;
+
+  /// No description provided for @chapterListTest.
+  ///
+  /// In zh, this message translates to:
+  /// **'3. 章节列表测试'**
+  String get chapterListTest;
+
+  /// No description provided for @testKeyword.
+  ///
+  /// In zh, this message translates to:
+  /// **'测试关键词'**
+  String get testKeyword;
+
+  /// No description provided for @retryTest.
+  ///
+  /// In zh, this message translates to:
+  /// **'重试测试'**
+  String get retryTest;
+
+  /// No description provided for @testing.
+  ///
+  /// In zh, this message translates to:
+  /// **'测试中…'**
+  String get testing;
+
+  /// No description provided for @testNotRun.
+  ///
+  /// In zh, this message translates to:
+  /// **'未执行测试'**
+  String get testNotRun;
+
+  /// No description provided for @responseLength.
+  ///
+  /// In zh, this message translates to:
+  /// **'{format} 长度：{count} 字符'**
+  String responseLength(String format, int count);
+
+  /// No description provided for @runTestHint.
+  ///
+  /// In zh, this message translates to:
+  /// **'点击顶部“开始测试”按钮执行'**
+  String get runTestHint;
+
+  /// No description provided for @parsing.
+  ///
+  /// In zh, this message translates to:
+  /// **'解析中…'**
+  String get parsing;
+
+  /// No description provided for @parseNotRun.
+  ///
+  /// In zh, this message translates to:
+  /// **'未执行解析'**
+  String get parseNotRun;
+
+  /// No description provided for @noParsedResults.
+  ///
+  /// In zh, this message translates to:
+  /// **'未解析到结果'**
+  String get noParsedResults;
+
+  /// No description provided for @skippedSuffix.
+  ///
+  /// In zh, this message translates to:
+  /// **'，跳过 {count} 条'**
+  String skippedSuffix(int count);
+
+  /// No description provided for @parsedResultCount.
+  ///
+  /// In zh, this message translates to:
+  /// **'解析到 {count} 条结果{skipped}'**
+  String parsedResultCount(int count, String skipped);
+
+  /// No description provided for @completeSearchRequestFirst.
+  ///
+  /// In zh, this message translates to:
+  /// **'请先完成搜索请求测试'**
+  String get completeSearchRequestFirst;
+
+  /// No description provided for @noSearchResultsParsed.
+  ///
+  /// In zh, this message translates to:
+  /// **'未解析到搜索结果'**
+  String get noSearchResultsParsed;
+
+  /// No description provided for @nodesSkipped.
+  ///
+  /// In zh, this message translates to:
+  /// **'部分节点被跳过（{count}）'**
+  String nodesSkipped(int count);
+
+  /// No description provided for @noMatchingFragment.
+  ///
+  /// In zh, this message translates to:
+  /// **'无匹配片段'**
+  String get noMatchingFragment;
+
+  /// No description provided for @hideMatchingFragment.
+  ///
+  /// In zh, this message translates to:
+  /// **'隐藏匹配片段'**
+  String get hideMatchingFragment;
+
+  /// No description provided for @viewMatchingFragment.
+  ///
+  /// In zh, this message translates to:
+  /// **'查看匹配片段'**
+  String get viewMatchingFragment;
+
+  /// No description provided for @linkValue.
+  ///
+  /// In zh, this message translates to:
+  /// **'链接：{link}'**
+  String linkValue(String link);
+
+  /// No description provided for @fetching.
+  ///
+  /// In zh, this message translates to:
+  /// **'获取中…'**
+  String get fetching;
+
+  /// No description provided for @noValidSearchResults.
+  ///
+  /// In zh, this message translates to:
+  /// **'无有效搜索结果'**
+  String get noValidSearchResults;
+
+  /// No description provided for @chapterParsingNotNeeded.
+  ///
+  /// In zh, this message translates to:
+  /// **'无需解析章节'**
+  String get chapterParsingNotNeeded;
+
+  /// No description provided for @chapterDataNotFetched.
+  ///
+  /// In zh, this message translates to:
+  /// **'未获取章节数据'**
+  String get chapterDataNotFetched;
+
+  /// No description provided for @playbackRoadCount.
+  ///
+  /// In zh, this message translates to:
+  /// **'获取到 {count} 个播放线路{skipped}'**
+  String playbackRoadCount(int count, String skipped);
+
+  /// No description provided for @chapterRuleMissing.
+  ///
+  /// In zh, this message translates to:
+  /// **'未填写章节规则'**
+  String get chapterRuleMissing;
+
+  /// No description provided for @parseValidResultFirst.
+  ///
+  /// In zh, this message translates to:
+  /// **'请先解析到有效结果'**
+  String get parseValidResultFirst;
+
+  /// No description provided for @noAvailableChapters.
+  ///
+  /// In zh, this message translates to:
+  /// **'无可用章节'**
+  String get noAvailableChapters;
+
+  /// No description provided for @playbackRoadTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'播放线路 {number}：{name}'**
+  String playbackRoadTitle(int number, String name);
+
+  /// No description provided for @chapterCount.
+  ///
+  /// In zh, this message translates to:
+  /// **'章节数量：{count}'**
+  String chapterCount(int count);
 }
 
 class _AppLocalizationsDelegate

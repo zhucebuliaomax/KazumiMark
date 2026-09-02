@@ -1621,4 +1621,290 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get animeImageSearch => '以图搜番';
+
+  @override
+  String get saveRuleOrderFailed => '保存规则顺序失败';
+
+  @override
+  String get createRule => '新建规则';
+
+  @override
+  String get importFromRuleRepository => '从规则仓库导入';
+
+  @override
+  String get importFromClipboard => '从剪贴板导入';
+
+  @override
+  String get importFromFile => '从文件导入';
+
+  @override
+  String get importRulesFromClipboard => '从剪贴板导入规则';
+
+  @override
+  String get ruleImportInputHint => '可粘贴多条 kazumi:// 链接或 JSON 数组';
+
+  @override
+  String get importAction => '导入';
+
+  @override
+  String get selectedFileUnreadable => '无法读取所选文件';
+
+  @override
+  String readRuleFileFailed(String error) {
+    return '读取规则文件失败：$error';
+  }
+
+  @override
+  String get noRulesToImport => '没有可导入的规则';
+
+  @override
+  String ruleImportSummary(int success, int duplicates, int failures) {
+    return '导入完成：成功 $success 条，跳过重复 $duplicates 条，失败 $failures 条';
+  }
+
+  @override
+  String saveImportedRulesFailed(String error) {
+    return '保存导入规则失败：$error';
+  }
+
+  @override
+  String get checkRuleUpdatesFailed => '检查规则更新失败';
+
+  @override
+  String selectedItemCount(int count) {
+    return '已选择 $count 项';
+  }
+
+  @override
+  String get deleteRules => '删除规则';
+
+  @override
+  String deleteSelectedRulesConfirmation(int count) {
+    return '确定要删除选中的 $count 条规则吗？';
+  }
+
+  @override
+  String get deleteRuleFailed => '删除规则失败';
+
+  @override
+  String get delete => '删除';
+
+  @override
+  String get updateAll => '更新全部';
+
+  @override
+  String get addRule => '添加规则';
+
+  @override
+  String get noAvailableRules => '啊咧（⊙.⊙） 没有可用规则的说';
+
+  @override
+  String get updateAvailable => '可更新';
+
+  @override
+  String get searchValid => '搜索有效';
+
+  @override
+  String get ruleUpdateStatusUnavailable => '尚未获取规则更新状态';
+
+  @override
+  String get ruleNotInRepository => '规则仓库中没有当前规则';
+
+  @override
+  String get ruleAlreadyLatest => '规则已是最新';
+
+  @override
+  String get update => '更新';
+
+  @override
+  String get edit => '编辑';
+
+  @override
+  String get test => '测试';
+
+  @override
+  String get ruleLink => '规则链接';
+
+  @override
+  String get copyToClipboard => '复制到剪贴板';
+
+  @override
+  String get share => '分享';
+
+  @override
+  String get updating => '更新中';
+
+  @override
+  String get importing => '导入中';
+
+  @override
+  String get updateRulesFailed => '更新规则失败';
+
+  @override
+  String get saveRuleFailed => '保存规则失败';
+
+  @override
+  String get importSucceeded => '导入成功';
+
+  @override
+  String get updateSucceeded => '更新成功';
+
+  @override
+  String get ruleRequiresNewerClient => '规则需要更高版本客户端';
+
+  @override
+  String get importRuleFailed => '导入规则失败';
+
+  @override
+  String get remoteRuleNotNewer => '远程规则版本不高于本地，已跳过更新';
+
+  @override
+  String get noRulesToUpdate => '没有可更新的规则';
+
+  @override
+  String updateSuccessCount(int count) {
+    return '更新成功 $count 条';
+  }
+
+  @override
+  String successCount(int count) {
+    return '成功 $count 条';
+  }
+
+  @override
+  String incompatibleCount(int count) {
+    return '不兼容 $count 条';
+  }
+
+  @override
+  String skippedCount(int count) {
+    return '已跳过 $count 条';
+  }
+
+  @override
+  String failedCount(int count) {
+    return '失败 $count 条';
+  }
+
+  @override
+  String updateSummary(String summary) {
+    return '更新完成：$summary';
+  }
+
+  @override
+  String pluginTestTitle(String name) {
+    return '$name 测试';
+  }
+
+  @override
+  String get startTest => '开始测试';
+
+  @override
+  String get searchRequestTest => '1. 搜索请求测试';
+
+  @override
+  String get searchParseTest => '2. 搜索解析测试';
+
+  @override
+  String get chapterListTest => '3. 章节列表测试';
+
+  @override
+  String get testKeyword => '测试关键词';
+
+  @override
+  String get retryTest => '重试测试';
+
+  @override
+  String get testing => '测试中…';
+
+  @override
+  String get testNotRun => '未执行测试';
+
+  @override
+  String responseLength(String format, int count) {
+    return '$format 长度：$count 字符';
+  }
+
+  @override
+  String get runTestHint => '点击顶部“开始测试”按钮执行';
+
+  @override
+  String get parsing => '解析中…';
+
+  @override
+  String get parseNotRun => '未执行解析';
+
+  @override
+  String get noParsedResults => '未解析到结果';
+
+  @override
+  String skippedSuffix(int count) {
+    return '，跳过 $count 条';
+  }
+
+  @override
+  String parsedResultCount(int count, String skipped) {
+    return '解析到 $count 条结果$skipped';
+  }
+
+  @override
+  String get completeSearchRequestFirst => '请先完成搜索请求测试';
+
+  @override
+  String get noSearchResultsParsed => '未解析到搜索结果';
+
+  @override
+  String nodesSkipped(int count) {
+    return '部分节点被跳过（$count）';
+  }
+
+  @override
+  String get noMatchingFragment => '无匹配片段';
+
+  @override
+  String get hideMatchingFragment => '隐藏匹配片段';
+
+  @override
+  String get viewMatchingFragment => '查看匹配片段';
+
+  @override
+  String linkValue(String link) {
+    return '链接：$link';
+  }
+
+  @override
+  String get fetching => '获取中…';
+
+  @override
+  String get noValidSearchResults => '无有效搜索结果';
+
+  @override
+  String get chapterParsingNotNeeded => '无需解析章节';
+
+  @override
+  String get chapterDataNotFetched => '未获取章节数据';
+
+  @override
+  String playbackRoadCount(int count, String skipped) {
+    return '获取到 $count 个播放线路$skipped';
+  }
+
+  @override
+  String get chapterRuleMissing => '未填写章节规则';
+
+  @override
+  String get parseValidResultFirst => '请先解析到有效结果';
+
+  @override
+  String get noAvailableChapters => '无可用章节';
+
+  @override
+  String playbackRoadTitle(int number, String name) {
+    return '播放线路 $number：$name';
+  }
+
+  @override
+  String chapterCount(int count) {
+    return '章节数量：$count';
+  }
 }

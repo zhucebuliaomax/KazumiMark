@@ -1710,4 +1710,295 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get animeImageSearch => 'Anime screenshot search';
+
+  @override
+  String get saveRuleOrderFailed => 'Failed to save rule order';
+
+  @override
+  String get createRule => 'Create rule';
+
+  @override
+  String get importFromRuleRepository => 'Import from rule repository';
+
+  @override
+  String get importFromClipboard => 'Import from clipboard';
+
+  @override
+  String get importFromFile => 'Import from file';
+
+  @override
+  String get importRulesFromClipboard => 'Import rules from clipboard';
+
+  @override
+  String get ruleImportInputHint =>
+      'Paste multiple kazumi:// links or a JSON array';
+
+  @override
+  String get importAction => 'Import';
+
+  @override
+  String get selectedFileUnreadable => 'Could not read the selected file';
+
+  @override
+  String readRuleFileFailed(String error) {
+    return 'Failed to read rule file: $error';
+  }
+
+  @override
+  String get noRulesToImport => 'No rules to import';
+
+  @override
+  String ruleImportSummary(int success, int duplicates, int failures) {
+    return 'Import complete: $success succeeded, $duplicates duplicates skipped, $failures failed';
+  }
+
+  @override
+  String saveImportedRulesFailed(String error) {
+    return 'Failed to save imported rules: $error';
+  }
+
+  @override
+  String get checkRuleUpdatesFailed => 'Failed to check for rule updates';
+
+  @override
+  String selectedItemCount(int count) {
+    return '$count selected';
+  }
+
+  @override
+  String get deleteRules => 'Delete rules';
+
+  @override
+  String deleteSelectedRulesConfirmation(int count) {
+    return 'Delete the $count selected rules?';
+  }
+
+  @override
+  String get deleteRuleFailed => 'Failed to delete rule';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get updateAll => 'Update all';
+
+  @override
+  String get addRule => 'Add rule';
+
+  @override
+  String get noAvailableRules => 'No rules are available';
+
+  @override
+  String get updateAvailable => 'Update available';
+
+  @override
+  String get searchValid => 'Search valid';
+
+  @override
+  String get ruleUpdateStatusUnavailable =>
+      'Rule update status is not available yet';
+
+  @override
+  String get ruleNotInRepository => 'This rule is not in the rule repository';
+
+  @override
+  String get ruleAlreadyLatest => 'Rule is up to date';
+
+  @override
+  String get update => 'Update';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get test => 'Test';
+
+  @override
+  String get ruleLink => 'Rule link';
+
+  @override
+  String get copyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get share => 'Share';
+
+  @override
+  String get updating => 'Updating';
+
+  @override
+  String get importing => 'Importing';
+
+  @override
+  String get updateRulesFailed => 'Failed to update rules';
+
+  @override
+  String get saveRuleFailed => 'Failed to save rule';
+
+  @override
+  String get importSucceeded => 'Imported successfully';
+
+  @override
+  String get updateSucceeded => 'Updated successfully';
+
+  @override
+  String get ruleRequiresNewerClient =>
+      'This rule requires a newer app version';
+
+  @override
+  String get importRuleFailed => 'Failed to import rule';
+
+  @override
+  String get remoteRuleNotNewer =>
+      'The remote rule is not newer; update skipped';
+
+  @override
+  String get noRulesToUpdate => 'No rules can be updated';
+
+  @override
+  String updateSuccessCount(int count) {
+    return 'Updated $count rules';
+  }
+
+  @override
+  String successCount(int count) {
+    return '$count succeeded';
+  }
+
+  @override
+  String incompatibleCount(int count) {
+    return '$count incompatible';
+  }
+
+  @override
+  String skippedCount(int count) {
+    return '$count skipped';
+  }
+
+  @override
+  String failedCount(int count) {
+    return '$count failed';
+  }
+
+  @override
+  String updateSummary(String summary) {
+    return 'Update complete: $summary';
+  }
+
+  @override
+  String pluginTestTitle(String name) {
+    return 'Test $name';
+  }
+
+  @override
+  String get startTest => 'Start test';
+
+  @override
+  String get searchRequestTest => '1. Search request test';
+
+  @override
+  String get searchParseTest => '2. Search parsing test';
+
+  @override
+  String get chapterListTest => '3. Chapter list test';
+
+  @override
+  String get testKeyword => 'Test keyword';
+
+  @override
+  String get retryTest => 'Retry test';
+
+  @override
+  String get testing => 'Testing…';
+
+  @override
+  String get testNotRun => 'Test not run';
+
+  @override
+  String responseLength(String format, int count) {
+    return '$format length: $count characters';
+  }
+
+  @override
+  String get runTestHint => 'Tap Start test above to run it';
+
+  @override
+  String get parsing => 'Parsing…';
+
+  @override
+  String get parseNotRun => 'Parsing not run';
+
+  @override
+  String get noParsedResults => 'No results parsed';
+
+  @override
+  String skippedSuffix(int count) {
+    return ', $count skipped';
+  }
+
+  @override
+  String parsedResultCount(int count, String skipped) {
+    return 'Parsed $count results$skipped';
+  }
+
+  @override
+  String get completeSearchRequestFirst =>
+      'Complete the search request test first';
+
+  @override
+  String get noSearchResultsParsed => 'No search results were parsed';
+
+  @override
+  String nodesSkipped(int count) {
+    return 'Some nodes were skipped ($count)';
+  }
+
+  @override
+  String get noMatchingFragment => 'No matching fragment';
+
+  @override
+  String get hideMatchingFragment => 'Hide matching fragment';
+
+  @override
+  String get viewMatchingFragment => 'View matching fragment';
+
+  @override
+  String linkValue(String link) {
+    return 'Link: $link';
+  }
+
+  @override
+  String get fetching => 'Fetching…';
+
+  @override
+  String get noValidSearchResults => 'No valid search results';
+
+  @override
+  String get chapterParsingNotNeeded => 'Chapter parsing is not needed';
+
+  @override
+  String get chapterDataNotFetched => 'Chapter data has not been fetched';
+
+  @override
+  String playbackRoadCount(int count, String skipped) {
+    return 'Fetched $count playback sources$skipped';
+  }
+
+  @override
+  String get chapterRuleMissing => 'No chapter rule is configured';
+
+  @override
+  String get parseValidResultFirst => 'Parse a valid result first';
+
+  @override
+  String get noAvailableChapters => 'No chapters available';
+
+  @override
+  String playbackRoadTitle(int number, String name) {
+    return 'Source $number: $name';
+  }
+
+  @override
+  String chapterCount(int count) {
+    return 'Chapters: $count';
+  }
 }
