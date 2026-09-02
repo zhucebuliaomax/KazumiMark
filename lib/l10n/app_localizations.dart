@@ -1831,6 +1831,750 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'系统'**
   String get systemActive;
+
+  /// No description provided for @badCertificate.
+  ///
+  /// In zh, this message translates to:
+  /// **'证书有误！'**
+  String get badCertificate;
+
+  /// No description provided for @serverErrorRetry.
+  ///
+  /// In zh, this message translates to:
+  /// **'服务器异常，请稍后重试！'**
+  String get serverErrorRetry;
+
+  /// No description provided for @requestCancelledRetry.
+  ///
+  /// In zh, this message translates to:
+  /// **'请求已被取消，请重新请求'**
+  String get requestCancelledRetry;
+
+  /// No description provided for @connectionErrorCheckSettings.
+  ///
+  /// In zh, this message translates to:
+  /// **'连接错误，请检查网络设置'**
+  String get connectionErrorCheckSettings;
+
+  /// No description provided for @connectionTimeoutCheckSettings.
+  ///
+  /// In zh, this message translates to:
+  /// **'网络连接超时，请检查网络设置'**
+  String get connectionTimeoutCheckSettings;
+
+  /// No description provided for @responseTimeoutRetry.
+  ///
+  /// In zh, this message translates to:
+  /// **'响应超时，请稍后重试！'**
+  String get responseTimeoutRetry;
+
+  /// No description provided for @sendTimeoutCheckSettings.
+  ///
+  /// In zh, this message translates to:
+  /// **'发送请求超时，请检查网络设置'**
+  String get sendTimeoutCheckSettings;
+
+  /// No description provided for @responseParseTimeoutRetry.
+  ///
+  /// In zh, this message translates to:
+  /// **'响应解析超时，请稍后重试！'**
+  String get responseParseTimeoutRetry;
+
+  /// No description provided for @networkException.
+  ///
+  /// In zh, this message translates to:
+  /// **'{connection} 网络异常'**
+  String networkException(String connection);
+
+  /// No description provided for @responseParseFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'响应解析失败'**
+  String get responseParseFailed;
+
+  /// No description provided for @usingMobileData.
+  ///
+  /// In zh, this message translates to:
+  /// **'正在使用移动流量'**
+  String get usingMobileData;
+
+  /// No description provided for @usingWifi.
+  ///
+  /// In zh, this message translates to:
+  /// **'正在使用 Wi-Fi'**
+  String get usingWifi;
+
+  /// No description provided for @usingEthernet.
+  ///
+  /// In zh, this message translates to:
+  /// **'正在使用局域网'**
+  String get usingEthernet;
+
+  /// No description provided for @usingVpn.
+  ///
+  /// In zh, this message translates to:
+  /// **'正在使用代理网络'**
+  String get usingVpn;
+
+  /// No description provided for @usingOtherNetwork.
+  ///
+  /// In zh, this message translates to:
+  /// **'正在使用其他网络'**
+  String get usingOtherNetwork;
+
+  /// No description provided for @notConnected.
+  ///
+  /// In zh, this message translates to:
+  /// **'未连接到任何网络'**
+  String get notConnected;
+
+  /// No description provided for @enterKeyword.
+  ///
+  /// In zh, this message translates to:
+  /// **'请输入关键词'**
+  String get enterKeyword;
+
+  /// No description provided for @keywordTooLong.
+  ///
+  /// In zh, this message translates to:
+  /// **'关键词过长'**
+  String get keywordTooLong;
+
+  /// No description provided for @keywordAlreadyExists.
+  ///
+  /// In zh, this message translates to:
+  /// **'已存在该关键词'**
+  String get keywordAlreadyExists;
+
+  /// No description provided for @updateCheckFailedRetry.
+  ///
+  /// In zh, this message translates to:
+  /// **'检查更新失败，请稍后重试'**
+  String get updateCheckFailedRetry;
+
+  /// No description provided for @playerLoadFailedTryAnotherSource.
+  ///
+  /// In zh, this message translates to:
+  /// **'加载失败，请尝试更换其他视频来源'**
+  String get playerLoadFailedTryAnotherSource;
+
+  /// No description provided for @noAvailableCache.
+  ///
+  /// In zh, this message translates to:
+  /// **'未找到可用缓存'**
+  String get noAvailableCache;
+
+  /// No description provided for @onlineSourceUnavailable.
+  ///
+  /// In zh, this message translates to:
+  /// **'在线源不可用，请重新选择播放源'**
+  String get onlineSourceUnavailable;
+
+  /// No description provided for @launchingExternalPlayer.
+  ///
+  /// In zh, this message translates to:
+  /// **'尝试唤起外部播放器'**
+  String get launchingExternalPlayer;
+
+  /// No description provided for @externalPlayerLaunchFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'唤起外部播放器失败'**
+  String get externalPlayerLaunchFailed;
+
+  /// No description provided for @systemAppPickerUnavailable.
+  ///
+  /// In zh, this message translates to:
+  /// **'系统应用选择器不可用'**
+  String get systemAppPickerUnavailable;
+
+  /// No description provided for @deviceUnsupported.
+  ///
+  /// In zh, this message translates to:
+  /// **'暂不支持该设备'**
+  String get deviceUnsupported;
+
+  /// No description provided for @ruleUnsupported.
+  ///
+  /// In zh, this message translates to:
+  /// **'暂不支持该规则'**
+  String get ruleUnsupported;
+
+  /// No description provided for @downloadService.
+  ///
+  /// In zh, this message translates to:
+  /// **'下载服务'**
+  String get downloadService;
+
+  /// No description provided for @downloadServiceDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'视频下载后台服务'**
+  String get downloadServiceDescription;
+
+  /// No description provided for @downloading.
+  ///
+  /// In zh, this message translates to:
+  /// **'正在下载'**
+  String get downloading;
+
+  /// No description provided for @preparing.
+  ///
+  /// In zh, this message translates to:
+  /// **'准备中...'**
+  String get preparing;
+
+  /// No description provided for @pauseAll.
+  ///
+  /// In zh, this message translates to:
+  /// **'暂停全部'**
+  String get pauseAll;
+
+  /// No description provided for @downloadPaused.
+  ///
+  /// In zh, this message translates to:
+  /// **'下载已暂停'**
+  String get downloadPaused;
+
+  /// No description provided for @taskCount.
+  ///
+  /// In zh, this message translates to:
+  /// **'共 {count} 个任务'**
+  String taskCount(int count);
+
+  /// No description provided for @downloadingProgress.
+  ///
+  /// In zh, this message translates to:
+  /// **'正在下载（{active}/{total}）'**
+  String downloadingProgress(int active, int total);
+
+  /// No description provided for @insufficientStorage.
+  ///
+  /// In zh, this message translates to:
+  /// **'存储空间不足'**
+  String get insufficientStorage;
+
+  /// No description provided for @insufficientStorageRetry.
+  ///
+  /// In zh, this message translates to:
+  /// **'存储空间不足，请清理后重试'**
+  String get insufficientStorageRetry;
+
+  /// No description provided for @storagePermissionDenied.
+  ///
+  /// In zh, this message translates to:
+  /// **'存储权限被拒绝'**
+  String get storagePermissionDenied;
+
+  /// No description provided for @storageReadOnly.
+  ///
+  /// In zh, this message translates to:
+  /// **'存储为只读，无法写入'**
+  String get storageReadOnly;
+
+  /// No description provided for @storageErrorMessage.
+  ///
+  /// In zh, this message translates to:
+  /// **'存储错误：{message}'**
+  String storageErrorMessage(String message);
+
+  /// No description provided for @liveStreamDownloadUnsupported.
+  ///
+  /// In zh, this message translates to:
+  /// **'不支持下载直播流（无有效分片）'**
+  String get liveStreamDownloadUnsupported;
+
+  /// No description provided for @m3u8NoSegments.
+  ///
+  /// In zh, this message translates to:
+  /// **'M3U8 中未找到可下载的分片'**
+  String get m3u8NoSegments;
+
+  /// No description provided for @segmentDownloadFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'{count} 个分片下载失败'**
+  String segmentDownloadFailed(int count);
+
+  /// No description provided for @insufficientStorageAvailable.
+  ///
+  /// In zh, this message translates to:
+  /// **'存储空间不足（可用：{available}）'**
+  String insufficientStorageAvailable(String available);
+
+  /// No description provided for @urlNotM3u8.
+  ///
+  /// In zh, this message translates to:
+  /// **'URL 不是 M3U8 播放列表'**
+  String get urlNotM3u8;
+
+  /// No description provided for @responseTooLargeNotM3u8.
+  ///
+  /// In zh, this message translates to:
+  /// **'响应过大，不是 M3U8 播放列表'**
+  String get responseTooLargeNotM3u8;
+
+  /// No description provided for @timedShutdown.
+  ///
+  /// In zh, this message translates to:
+  /// **'定时关闭'**
+  String get timedShutdown;
+
+  /// No description provided for @timedShutdownExpired.
+  ///
+  /// In zh, this message translates to:
+  /// **'定时时间已到，视频已暂停'**
+  String get timedShutdownExpired;
+
+  /// No description provided for @timerRestarted.
+  ///
+  /// In zh, this message translates to:
+  /// **'已重新开始 {minutes} 分钟定时'**
+  String timerRestarted(int minutes);
+
+  /// No description provided for @repeat.
+  ///
+  /// In zh, this message translates to:
+  /// **'重复'**
+  String get repeat;
+
+  /// No description provided for @close.
+  ///
+  /// In zh, this message translates to:
+  /// **'关闭'**
+  String get close;
+
+  /// No description provided for @hoursAndMinutes.
+  ///
+  /// In zh, this message translates to:
+  /// **'{hours} 小时 {minutes} 分钟'**
+  String hoursAndMinutes(int hours, int minutes);
+
+  /// No description provided for @hourCount.
+  ///
+  /// In zh, this message translates to:
+  /// **'{hours} 小时'**
+  String hourCount(int hours);
+
+  /// No description provided for @minuteCount.
+  ///
+  /// In zh, this message translates to:
+  /// **'{minutes} 分钟'**
+  String minuteCount(int minutes);
+
+  /// No description provided for @customTimer.
+  ///
+  /// In zh, this message translates to:
+  /// **'自定义定时'**
+  String get customTimer;
+
+  /// No description provided for @selectValidTime.
+  ///
+  /// In zh, this message translates to:
+  /// **'请选择有效的时间'**
+  String get selectValidTime;
+
+  /// No description provided for @timedShutdownSet.
+  ///
+  /// In zh, this message translates to:
+  /// **'已设置 {duration} 后定时关闭'**
+  String timedShutdownSet(String duration);
+
+  /// No description provided for @hoursShort.
+  ///
+  /// In zh, this message translates to:
+  /// **'时'**
+  String get hoursShort;
+
+  /// No description provided for @minutesShort.
+  ///
+  /// In zh, this message translates to:
+  /// **'分'**
+  String get minutesShort;
+
+  /// No description provided for @bangumiDeleteUnsupported.
+  ///
+  /// In zh, this message translates to:
+  /// **'Bangumi 不支持删除收藏'**
+  String get bangumiDeleteUnsupported;
+
+  /// No description provided for @bangumiDeleteExplanation.
+  ///
+  /// In zh, this message translates to:
+  /// **'因为安全考虑，Bangumi 未提供删除接口。您可以把本地和远端收藏标记为“抛弃”，或仅删除本地收藏并打开网页手动删除 Bangumi 数据。'**
+  String get bangumiDeleteExplanation;
+
+  /// No description provided for @openWebPage.
+  ///
+  /// In zh, this message translates to:
+  /// **'打开网页'**
+  String get openWebPage;
+
+  /// No description provided for @markAsAbandoned.
+  ///
+  /// In zh, this message translates to:
+  /// **'标记为抛弃'**
+  String get markAsAbandoned;
+
+  /// No description provided for @bangumiPageOpenFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'无法打开 Bangumi 网页'**
+  String get bangumiPageOpenFailed;
+
+  /// No description provided for @bangumiNotInitializedChangeCancelled.
+  ///
+  /// In zh, this message translates to:
+  /// **'Bangumi 未初始化，同步失败，已取消本次状态修改'**
+  String get bangumiNotInitializedChangeCancelled;
+
+  /// No description provided for @syncingToBangumi.
+  ///
+  /// In zh, this message translates to:
+  /// **'正在同步到 Bangumi…'**
+  String get syncingToBangumi;
+
+  /// No description provided for @syncedToBangumi.
+  ///
+  /// In zh, this message translates to:
+  /// **'已同步到 Bangumi'**
+  String get syncedToBangumi;
+
+  /// No description provided for @bangumiSyncFailedChangeCancelled.
+  ///
+  /// In zh, this message translates to:
+  /// **'同步到 Bangumi 失败，已取消本次状态修改'**
+  String get bangumiSyncFailedChangeCancelled;
+
+  /// No description provided for @bangumiSyncFailedChangeCancelledWithError.
+  ///
+  /// In zh, this message translates to:
+  /// **'同步到 Bangumi 失败，已取消本次状态修改：{error}'**
+  String bangumiSyncFailedChangeCancelledWithError(String error);
+
+  /// No description provided for @webDavCollectSyncDisabled.
+  ///
+  /// In zh, this message translates to:
+  /// **'未开启 WebDAV 收藏同步'**
+  String get webDavCollectSyncDisabled;
+
+  /// No description provided for @webDavDisabledOrInvalid.
+  ///
+  /// In zh, this message translates to:
+  /// **'未开启 WebDAV 同步或配置无效'**
+  String get webDavDisabledOrInvalid;
+
+  /// No description provided for @webDavConnectionFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'WebDAV 连接失败：{error}'**
+  String webDavConnectionFailed(String error);
+
+  /// No description provided for @webDavSyncComplete.
+  ///
+  /// In zh, this message translates to:
+  /// **'WebDAV 同步完成'**
+  String get webDavSyncComplete;
+
+  /// No description provided for @webDavSyncFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'WebDAV 同步失败：{error}'**
+  String webDavSyncFailed(String error);
+
+  /// No description provided for @webDavUploadComplete.
+  ///
+  /// In zh, this message translates to:
+  /// **'WebDAV 上传完成'**
+  String get webDavUploadComplete;
+
+  /// No description provided for @webDavUploadFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'WebDAV 上传失败：{error}'**
+  String webDavUploadFailed(String error);
+
+  /// No description provided for @bangumiSyncDisabledEnableInSettings.
+  ///
+  /// In zh, this message translates to:
+  /// **'未开启 Bangumi 同步，请先在设置中启用'**
+  String get bangumiSyncDisabledEnableInSettings;
+
+  /// No description provided for @bangumiSyncNotInitializedCheckToken.
+  ///
+  /// In zh, this message translates to:
+  /// **'Bangumi 同步已开启但未初始化，请检查 Token 后重试'**
+  String get bangumiSyncNotInitializedCheckToken;
+
+  /// No description provided for @bangumiSyncComplete.
+  ///
+  /// In zh, this message translates to:
+  /// **'Bangumi 同步完成'**
+  String get bangumiSyncComplete;
+
+  /// No description provided for @noSyncDifferences.
+  ///
+  /// In zh, this message translates to:
+  /// **'未发现状态差异，无需同步'**
+  String get noSyncDifferences;
+
+  /// No description provided for @bangumiSyncFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'Bangumi 同步失败：{error}'**
+  String bangumiSyncFailed(String error);
+
+  /// No description provided for @bangumiAccessFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'Bangumi 访问失败：{error}'**
+  String bangumiAccessFailed(String error);
+
+  /// No description provided for @enterBangumiAccessToken.
+  ///
+  /// In zh, this message translates to:
+  /// **'请先填写 Bangumi Access Token'**
+  String get enterBangumiAccessToken;
+
+  /// No description provided for @bangumiOperationInProgress.
+  ///
+  /// In zh, this message translates to:
+  /// **'Bangumi：当前有操作正在进行，请稍后再试'**
+  String get bangumiOperationInProgress;
+
+  /// No description provided for @bangumiUsernameFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'Bangumi：获取用户名失败'**
+  String get bangumiUsernameFailed;
+
+  /// No description provided for @syncDisabled.
+  ///
+  /// In zh, this message translates to:
+  /// **'同步已关闭'**
+  String get syncDisabled;
+
+  /// No description provided for @bangumiSyncInProgress.
+  ///
+  /// In zh, this message translates to:
+  /// **'Bangumi 正在同步'**
+  String get bangumiSyncInProgress;
+
+  /// No description provided for @startingBangumiSync.
+  ///
+  /// In zh, this message translates to:
+  /// **'开始同步 Bangumi 状态'**
+  String get startingBangumiSync;
+
+  /// No description provided for @uploadingLocalStatus.
+  ///
+  /// In zh, this message translates to:
+  /// **'正在上传本地新增状态'**
+  String get uploadingLocalStatus;
+
+  /// No description provided for @uploadLocalStatusFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'上传本地新增状态失败'**
+  String get uploadLocalStatusFailed;
+
+  /// No description provided for @bangumiItemUploadFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'同步失败：条目 {id} 上传到 Bangumi 失败'**
+  String bangumiItemUploadFailed(int id);
+
+  /// No description provided for @fillingMissingLocalStatus.
+  ///
+  /// In zh, this message translates to:
+  /// **'正在补全本地缺失状态'**
+  String get fillingMissingLocalStatus;
+
+  /// No description provided for @resolvingConflictsLocalFirst.
+  ///
+  /// In zh, this message translates to:
+  /// **'本地优先：正在处理冲突状态'**
+  String get resolvingConflictsLocalFirst;
+
+  /// No description provided for @resolvingConflictsBangumiFirst.
+  ///
+  /// In zh, this message translates to:
+  /// **'Bangumi 优先：正在处理冲突状态'**
+  String get resolvingConflictsBangumiFirst;
+
+  /// No description provided for @bangumiStatusSyncComplete.
+  ///
+  /// In zh, this message translates to:
+  /// **'Bangumi 状态同步完成'**
+  String get bangumiStatusSyncComplete;
+
+  /// No description provided for @enterWebDavUrl.
+  ///
+  /// In zh, this message translates to:
+  /// **'请先填写 WebDAV URL'**
+  String get enterWebDavUrl;
+
+  /// No description provided for @episodeNumber.
+  ///
+  /// In zh, this message translates to:
+  /// **'第{number}集'**
+  String episodeNumber(int number);
+
+  /// No description provided for @episodeParseFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'集数解析失败'**
+  String get episodeParseFailed;
+
+  /// No description provided for @episodeNotDownloaded.
+  ///
+  /// In zh, this message translates to:
+  /// **'该集数未下载'**
+  String get episodeNotDownloaded;
+
+  /// No description provided for @danmakuLoadFailedManualSearch.
+  ///
+  /// In zh, this message translates to:
+  /// **'弹幕加载失败，可手动检索'**
+  String get danmakuLoadFailedManualSearch;
+
+  /// No description provided for @videoParseTimeoutRetry.
+  ///
+  /// In zh, this message translates to:
+  /// **'视频解析超时，请重试'**
+  String get videoParseTimeoutRetry;
+
+  /// No description provided for @videoParseFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'视频解析失败：{error}'**
+  String videoParseFailed(String error);
+
+  /// No description provided for @playlistNumber.
+  ///
+  /// In zh, this message translates to:
+  /// **'播放列表{number}'**
+  String playlistNumber(int number);
+
+  /// No description provided for @syncPlayInvalidServer.
+  ///
+  /// In zh, this message translates to:
+  /// **'SyncPlay：服务器地址不合法 {endpoint}'**
+  String syncPlayInvalidServer(String endpoint);
+
+  /// No description provided for @syncPlayInterrupted.
+  ///
+  /// In zh, this message translates to:
+  /// **'SyncPlay：同步中断 {message}'**
+  String syncPlayInterrupted(String message);
+
+  /// No description provided for @reconnect.
+  ///
+  /// In zh, this message translates to:
+  /// **'重新连接'**
+  String get reconnect;
+
+  /// No description provided for @syncPlayOnlyUser.
+  ///
+  /// In zh, this message translates to:
+  /// **'SyncPlay：您是当前房间中的唯一用户'**
+  String get syncPlayOnlyUser;
+
+  /// No description provided for @syncPlayFollowingUser.
+  ///
+  /// In zh, this message translates to:
+  /// **'SyncPlay：当前以用户 {username} 的进度为准'**
+  String syncPlayFollowingUser(String username);
+
+  /// No description provided for @syncPlayUserLeft.
+  ///
+  /// In zh, this message translates to:
+  /// **'SyncPlay：{username} 离开了房间'**
+  String syncPlayUserLeft(String username);
+
+  /// No description provided for @syncPlayUserJoined.
+  ///
+  /// In zh, this message translates to:
+  /// **'SyncPlay：{username} 加入了房间'**
+  String syncPlayUserJoined(String username);
+
+  /// No description provided for @unknownUser.
+  ///
+  /// In zh, this message translates to:
+  /// **'未知用户'**
+  String get unknownUser;
+
+  /// No description provided for @syncPlayEpisodeChanged.
+  ///
+  /// In zh, this message translates to:
+  /// **'SyncPlay：{username} 切换到第 {episode} 话'**
+  String syncPlayEpisodeChanged(String username, int episode);
+
+  /// No description provided for @syncPlayPaused.
+  ///
+  /// In zh, this message translates to:
+  /// **'SyncPlay：{username} 暂停了播放'**
+  String syncPlayPaused(String username);
+
+  /// No description provided for @syncPlayStarted.
+  ///
+  /// In zh, this message translates to:
+  /// **'SyncPlay：{username} 开始了播放'**
+  String syncPlayStarted(String username);
+
+  /// No description provided for @syncPlayConnectionFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'SyncPlay：连接失败 {message}'**
+  String syncPlayConnectionFailed(String message);
+
+  /// No description provided for @playerInternalError.
+  ///
+  /// In zh, this message translates to:
+  /// **'播放器内部错误：{error} {url}'**
+  String playerInternalError(String error, String url);
+
+  /// No description provided for @mobileDataLowMemoryMode.
+  ///
+  /// In zh, this message translates to:
+  /// **'正在使用移动数据，已临时启用低内存模式以减少缓存'**
+  String get mobileDataLowMemoryMode;
+
+  /// No description provided for @remoteCasting.
+  ///
+  /// In zh, this message translates to:
+  /// **'远程投屏'**
+  String get remoteCasting;
+
+  /// No description provided for @exit.
+  ///
+  /// In zh, this message translates to:
+  /// **'退出'**
+  String get exit;
+
+  /// No description provided for @startSearching.
+  ///
+  /// In zh, this message translates to:
+  /// **'开始搜索'**
+  String get startSearching;
+
+  /// No description provided for @castingToDevice.
+  ///
+  /// In zh, this message translates to:
+  /// **'尝试投屏至 {device}'**
+  String castingToDevice(String device);
+
+  /// No description provided for @dlnaErrorRetry.
+  ///
+  /// In zh, this message translates to:
+  /// **'DLNA 异常：{error}\n请尝试重新进入 DLNA 投屏或切换设备'**
+  String dlnaErrorRetry(String error);
+
+  /// No description provided for @search.
+  ///
+  /// In zh, this message translates to:
+  /// **'搜索'**
+  String get search;
 }
 
 class _AppLocalizationsDelegate

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/modules/collect/collect_sync_merger.dart';
 import 'package:kazumi/services/storage/storage.dart';
 import 'package:kazumi/services/logging/logger.dart';
@@ -42,7 +43,7 @@ class BangumiSyncService {
     initialized = false;
     username = '';
     if (_configuredToken.isEmpty) {
-      throw Exception('请先填写Bangumi Access Token');
+      throw Exception(currentL10n.enterBangumiAccessToken);
     }
     try {
       await ping();
@@ -55,13 +56,13 @@ class BangumiSyncService {
 
   Future<void> ping() async {
     if (isUsing) {
-      throw Exception('Bangumi: 当前有操作正在进行，请稍后再试');
+      throw Exception(currentL10n.bangumiOperationInProgress);
     }
     await _runExclusive(() async {
       try {
         final name = await BangumiApi.getUsername();
         if (name == null) {
-          throw Exception('Bangumi: 获取用户名失败');
+          throw Exception(currentL10n.bangumiUsernameFailed);
         } else {
           username = name;
         }
@@ -128,17 +129,17 @@ class BangumiSyncService {
   }) async {
     final syncEnable = GStorage.getSetting(SettingsKeys.bangumiSyncEnable);
     if (!syncEnable) {
-      KazumiDialog.showToast(message: '同步已关闭');
+      KazumiDialog.showToast(message: currentL10n.syncDisabled);
       KazumiLogger().i('Bangumi: sync disabled');
       return false;
     }
     if (isUsing) {
       KazumiLogger().w('Bangumi is currently syncing');
-      throw Exception('Bangumi 正在同步');
+      throw Exception(currentL10n.bangumiSyncInProgress);
     }
     return _runExclusive(() async {
       try {
-        onProgress?.call('开始同步 Bangumi 状态', 0, 0);
+        onProgress?.call(currentL10n.startingBangumiSync, 0, 0);
 
         final priority = BangumiSyncPriority.fromValue(
           GStorage.getSetting(SettingsKeys.bangumiSyncPriority),
@@ -160,31 +161,49 @@ class BangumiSyncService {
         final totalOperations = mergePlan.totalOperations;
 
         if (totalOperations == 0) {
-          onProgress?.call('未发现状态差异，无需同步', 1, 1);
+          onProgress?.call(currentL10n.noSyncDifferences, 1, 1);
           return false;
         }
 
         int syncedCount = 0;
         // 3. 仅本地有：直接上传到 Bangumi
         if (mergePlan.localOnlyUploads.isNotEmpty) {
-          onProgress?.call('正在上传本地新增状态', syncedCount, totalOperations);
+          onProgress?.call(
+            currentL10n.uploadingLocalStatus,
+            syncedCount,
+            totalOperations,
+          );
           for (final upload in mergePlan.localOnlyUploads) {
             final updated = await BangumiApi.updateBangumiByType(
               upload.bangumiId,
               upload.type,
             );
             if (!updated) {
-              onProgress?.call('上传本地新增状态失败', syncedCount, totalOperations);
-              throw Exception('同步失败：条目 ${upload.bangumiId} 上传到 Bangumi 失败');
+              onProgress?.call(
+                currentL10n.uploadLocalStatusFailed,
+                syncedCount,
+                totalOperations,
+              );
+              throw Exception(
+                currentL10n.bangumiItemUploadFailed(upload.bangumiId),
+              );
             }
             syncedCount++;
-            onProgress?.call('正在上传本地新增状态', syncedCount, totalOperations);
+            onProgress?.call(
+              currentL10n.uploadingLocalStatus,
+              syncedCount,
+              totalOperations,
+            );
           }
         }
 
         // 4. 仅远程有：直接补到本地
         if (mergePlan.remoteOnlyPuts.isNotEmpty) {
-          onProgress?.call('正在补全本地缺失状态', syncedCount, totalOperations);
+          onProgress?.call(
+            currentL10n.fillingMissingLocalStatus,
+            syncedCount,
+            totalOperations,
+          );
           for (final mutation in mergePlan.remoteOnlyPuts) {
             await GStorage.putCollectible(mutation.collectible);
             await _recordCollectibleChange(
@@ -193,26 +212,44 @@ class BangumiSyncService {
               mutation.collectible.type,
             );
             syncedCount++;
-            onProgress?.call('正在补全本地缺失状态', syncedCount, totalOperations);
+            onProgress?.call(
+              currentL10n.fillingMissingLocalStatus,
+              syncedCount,
+              totalOperations,
+            );
           }
         }
 
         // 5. 双方都有但不一致：按优先级处理
         if (priority == BangumiSyncPriority.localFirst) {
-          onProgress?.call('本地优先：正在处理冲突状态', syncedCount, totalOperations);
+          onProgress?.call(
+            currentL10n.resolvingConflictsLocalFirst,
+            syncedCount,
+            totalOperations,
+          );
           for (final upload in mergePlan.conflictUploads) {
             final updated = await BangumiApi.updateBangumiByType(
               upload.bangumiId,
               upload.type,
             );
             if (updated != true) {
-              throw Exception('同步失败：条目 ${upload.bangumiId} 上传到 Bangumi 失败');
+              throw Exception(
+                currentL10n.bangumiItemUploadFailed(upload.bangumiId),
+              );
             }
             syncedCount++;
-            onProgress?.call('本地优先：正在处理冲突状态', syncedCount, totalOperations);
+            onProgress?.call(
+              currentL10n.resolvingConflictsLocalFirst,
+              syncedCount,
+              totalOperations,
+            );
           }
         } else {
-          onProgress?.call('Bangumi优先：正在处理冲突状态', syncedCount, totalOperations);
+          onProgress?.call(
+            currentL10n.resolvingConflictsBangumiFirst,
+            syncedCount,
+            totalOperations,
+          );
           for (final mutation in mergePlan.conflictLocalUpdates) {
             await GStorage.putCollectible(mutation.collectible);
             await _recordCollectibleChange(
@@ -222,10 +259,13 @@ class BangumiSyncService {
             );
             syncedCount++;
             onProgress?.call(
-                'Bangumi优先：正在处理冲突状态', syncedCount, totalOperations);
+              currentL10n.resolvingConflictsBangumiFirst,
+              syncedCount,
+              totalOperations,
+            );
           }
         }
-        onProgress?.call('Bangumi 状态同步完成', 1, 1);
+        onProgress?.call(currentL10n.bangumiStatusSyncComplete, 1, 1);
         return true;
       } catch (e) {
         KazumiLogger().e('Bangumi sync failed', error: e);

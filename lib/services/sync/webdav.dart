@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:webdav_client/webdav_client.dart' as webdav;
 import 'package:path_provider/path_provider.dart';
 import 'package:kazumi/modules/history/history_sync.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/services/storage/storage.dart';
 import 'package:kazumi/services/logging/logger.dart';
 import 'package:kazumi/modules/collect/collect_module.dart';
@@ -45,7 +46,7 @@ class WebDav {
     webDavUsername = GStorage.getSetting(SettingsKeys.webDavUsername);
     webDavPassword = GStorage.getSetting(SettingsKeys.webDavPassword);
     if (webDavURL.isEmpty) {
-      throw Exception('请先填写WebDAV URL');
+      throw Exception(currentL10n.enterWebDavUrl);
     }
     client = webdav.newClient(
       webDavURL,

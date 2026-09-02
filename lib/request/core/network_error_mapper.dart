@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:kazumi/request/core/network_exception.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 class NetworkErrorMapper {
   const NetworkErrorMapper._();
@@ -10,7 +11,7 @@ class NetworkErrorMapper {
       case DioExceptionType.badCertificate:
         return NetworkException(
           type: NetworkExceptionType.badCertificate,
-          message: '证书有误！',
+          message: currentL10n.badCertificate,
           rawError: error,
           stackTrace: error.stackTrace,
         );
@@ -18,7 +19,7 @@ class NetworkErrorMapper {
         final statusCode = error.response?.statusCode;
         return NetworkException(
           type: NetworkExceptionType.badResponse,
-          message: '服务器异常，请稍后重试！',
+          message: currentL10n.serverErrorRetry,
           statusCode: statusCode,
           rawError: error,
           stackTrace: error.stackTrace,
@@ -26,42 +27,42 @@ class NetworkErrorMapper {
       case DioExceptionType.cancel:
         return NetworkException(
           type: NetworkExceptionType.cancel,
-          message: '请求已被取消，请重新请求',
+          message: currentL10n.requestCancelledRetry,
           rawError: error,
           stackTrace: error.stackTrace,
         );
       case DioExceptionType.connectionError:
         return NetworkException(
           type: NetworkExceptionType.connectionError,
-          message: '连接错误，请检查网络设置',
+          message: currentL10n.connectionErrorCheckSettings,
           rawError: error,
           stackTrace: error.stackTrace,
         );
       case DioExceptionType.connectionTimeout:
         return NetworkException(
           type: NetworkExceptionType.connectionTimeout,
-          message: '网络连接超时，请检查网络设置',
+          message: currentL10n.connectionTimeoutCheckSettings,
           rawError: error,
           stackTrace: error.stackTrace,
         );
       case DioExceptionType.receiveTimeout:
         return NetworkException(
           type: NetworkExceptionType.receiveTimeout,
-          message: '响应超时，请稍后重试！',
+          message: currentL10n.responseTimeoutRetry,
           rawError: error,
           stackTrace: error.stackTrace,
         );
       case DioExceptionType.sendTimeout:
         return NetworkException(
           type: NetworkExceptionType.sendTimeout,
-          message: '发送请求超时，请检查网络设置',
+          message: currentL10n.sendTimeoutCheckSettings,
           rawError: error,
           stackTrace: error.stackTrace,
         );
       case DioExceptionType.transformTimeout:
         return NetworkException(
           type: NetworkExceptionType.parseError,
-          message: '响应解析超时，请稍后重试！',
+          message: currentL10n.responseParseTimeoutRetry,
           rawError: error,
           stackTrace: error.stackTrace,
         );
@@ -69,7 +70,7 @@ class NetworkErrorMapper {
         final connection = await _connectionLabel();
         return NetworkException(
           type: NetworkExceptionType.unknown,
-          message: '$connection 网络异常'.trimLeft(),
+          message: currentL10n.networkException(connection).trimLeft(),
           rawError: error,
           stackTrace: error.stackTrace,
         );
@@ -79,7 +80,7 @@ class NetworkErrorMapper {
   static NetworkException parse(Object error, StackTrace stackTrace) {
     return NetworkException(
       type: NetworkExceptionType.parseError,
-      message: '响应解析失败',
+      message: currentL10n.responseParseFailed,
       rawError: error,
       stackTrace: stackTrace,
     );
@@ -88,22 +89,22 @@ class NetworkErrorMapper {
   static Future<String> _connectionLabel() async {
     final connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult.contains(ConnectivityResult.mobile)) {
-      return '正在使用移动流量';
+      return currentL10n.usingMobileData;
     }
     if (connectivityResult.contains(ConnectivityResult.wifi)) {
-      return '正在使用wifi';
+      return currentL10n.usingWifi;
     }
     if (connectivityResult.contains(ConnectivityResult.ethernet)) {
-      return '正在使用局域网';
+      return currentL10n.usingEthernet;
     }
     if (connectivityResult.contains(ConnectivityResult.vpn)) {
-      return '正在使用代理网络';
+      return currentL10n.usingVpn;
     }
     if (connectivityResult.contains(ConnectivityResult.other)) {
-      return '正在使用其他网络';
+      return currentL10n.usingOtherNetwork;
     }
     if (connectivityResult.contains(ConnectivityResult.none)) {
-      return '未连接到任何网络';
+      return currentL10n.notConnected;
     }
     return '';
   }

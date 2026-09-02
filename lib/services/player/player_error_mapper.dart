@@ -1,3 +1,5 @@
+import 'package:kazumi/l10n/l10n.dart';
+
 class PlayerErrorMapper {
   const PlayerErrorMapper._();
 
@@ -8,7 +10,7 @@ class PlayerErrorMapper {
     final message = error.toString();
     if (message.contains('Failed to recognize file format') ||
         (isBuffering && message.contains('Failed to open'))) {
-      return '加载失败, 请尝试更换其他视频来源';
+      return currentL10n.playerLoadFailedTryAnotherSource;
     }
     return null;
   }

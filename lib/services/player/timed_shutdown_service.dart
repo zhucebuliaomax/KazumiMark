@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
 import 'package:kazumi/services/logging/logger.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 class TimedShutdownService {
   static final TimedShutdownService _instance =
@@ -117,17 +118,18 @@ class TimedShutdownService {
       },
       builder: (context) {
         return AlertDialog(
-          title: const Text('定时关闭'),
-          content: const Text('定时时间已到，视频已暂停'),
+          title: Text(currentL10n.timedShutdown),
+          content: Text(currentL10n.timedShutdownExpired),
           actions: [
             TextButton(
               onPressed: () {
                 _isDialogShowing = false;
                 KazumiDialog.dismiss();
                 repeat();
-                KazumiDialog.showToast(message: '已重新开始 $_lastSetMinutes 分钟定时');
+                KazumiDialog.showToast(
+                    message: currentL10n.timerRestarted(_lastSetMinutes));
               },
-              child: const Text('重复'),
+              child: Text(currentL10n.repeat),
             ),
             TextButton(
               onPressed: () {
@@ -135,7 +137,7 @@ class TimedShutdownService {
                 KazumiDialog.dismiss();
               },
               child: Text(
-                '关闭',
+                currentL10n.close,
                 style: TextStyle(color: Theme.of(context).colorScheme.outline),
               ),
             ),
@@ -159,11 +161,11 @@ class TimedShutdownService {
     final hours = totalMinutes ~/ 60;
     final minutes = totalMinutes % 60;
     if (hours > 0 && minutes > 0) {
-      return '$hours 小时 $minutes 分钟';
+      return currentL10n.hoursAndMinutes(hours, minutes);
     } else if (hours > 0) {
-      return '$hours 小时';
+      return currentL10n.hourCount(hours);
     } else {
-      return '$minutes 分钟';
+      return currentL10n.minuteCount(minutes);
     }
   }
 
@@ -171,14 +173,14 @@ class TimedShutdownService {
   /// Uses KazumiDialog to avoid context-related resource leaks
   /// [onExpired] callback is invoked when timer expires (before showing dialog)
   static void showCustomTimerDialog({
-    String title = '自定义定时',
+    String? title,
     bool autoStart = true,
     VoidCallback? onExpired,
     void Function(int)? onResult,
   }) {
     KazumiDialog.show(
       builder: (context) => _CustomTimerDialog(
-        title: title,
+        title: title ?? currentL10n.customTimer,
         autoStart: autoStart,
         onExpired: onExpired,
         onResult: onResult,
@@ -228,15 +230,16 @@ class _CustomTimerDialogState extends State<_CustomTimerDialog> {
   void _confirm() {
     final totalMinutes = _selectedHours * 60 + _selectedMinutes;
     if (totalMinutes <= 0) {
-      KazumiDialog.showToast(message: '请选择有效的时间');
+      KazumiDialog.showToast(message: currentL10n.selectValidTime);
       return;
     }
     KazumiDialog.dismiss();
     if (widget.autoStart) {
       TimedShutdownService().start(totalMinutes, onExpired: widget.onExpired);
       KazumiDialog.showToast(
-        message:
-            '已设置 ${TimedShutdownService().formatMinutesToDisplay(totalMinutes)} 后定时关闭',
+        message: currentL10n.timedShutdownSet(
+          TimedShutdownService().formatMinutesToDisplay(totalMinutes),
+        ),
       );
     }
     widget.onResult?.call(totalMinutes);
@@ -253,7 +256,8 @@ class _CustomTimerDialogState extends State<_CustomTimerDialog> {
             Expanded(
               child: Column(
                 children: [
-                  const Text('时', style: TextStyle(fontSize: 14)),
+                  Text(currentL10n.hoursShort,
+                      style: const TextStyle(fontSize: 14)),
                   const SizedBox(height: 8),
                   Expanded(
                     child: CupertinoPicker(
@@ -283,7 +287,8 @@ class _CustomTimerDialogState extends State<_CustomTimerDialog> {
             Expanded(
               child: Column(
                 children: [
-                  const Text('分', style: TextStyle(fontSize: 14)),
+                  Text(currentL10n.minutesShort,
+                      style: const TextStyle(fontSize: 14)),
                   const SizedBox(height: 8),
                   Expanded(
                     child: CupertinoPicker(
@@ -313,13 +318,13 @@ class _CustomTimerDialogState extends State<_CustomTimerDialog> {
         TextButton(
           onPressed: () => KazumiDialog.dismiss(),
           child: Text(
-            '取消',
+            currentL10n.cancel,
             style: TextStyle(color: Theme.of(context).colorScheme.outline),
           ),
         ),
         TextButton(
           onPressed: _confirm,
-          child: const Text('确定'),
+          child: Text(currentL10n.confirm),
         ),
       ],
     );

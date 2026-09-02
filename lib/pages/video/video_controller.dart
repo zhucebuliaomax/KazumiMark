@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:kazumi/modules/roads/road_module.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/video/video_playback_args.dart';
 import 'package:kazumi/plugins/plugins.dart';
 import 'package:kazumi/pages/history/history_controller.dart';
@@ -354,7 +355,9 @@ abstract class _VideoPageController with Store implements Disposable {
     final titleFromRoad = roadData.identifier[index];
     final episodeTitle = downloadEpisode?.episodeName.isNotEmpty == true
         ? downloadEpisode!.episodeName
-        : (titleFromRoad.isNotEmpty ? titleFromRoad : '第$episodeNumber集');
+        : (titleFromRoad.isNotEmpty
+            ? titleFromRoad
+            : currentL10n.episodeNumber(episodeNumber));
     return EpisodeRef.offline(
       listIndex: episode,
       roadIndex: targetRoad,
@@ -451,7 +454,7 @@ abstract class _VideoPageController with Store implements Disposable {
     if (resolvedEpisode == null) {
       KazumiLogger().e(
           'VideoPageController: failed to resolve online episode. road=$currentRoad, episode=$episode');
-      _failLoading('集数解析失败');
+      _failLoading(currentL10n.episodeParseFailed);
       return;
     }
 
@@ -485,7 +488,7 @@ abstract class _VideoPageController with Store implements Disposable {
     if (resolvedEpisode == null) {
       KazumiLogger().e(
           'VideoPageController: failed to resolve offline episode. road=${selection.road}, episode=${selection.episode}');
-      _failLoading('集数解析失败');
+      _failLoading(currentL10n.episodeParseFailed);
       return;
     }
 
@@ -495,7 +498,7 @@ abstract class _VideoPageController with Store implements Disposable {
       resolvedEpisode.historyEpisodeNumber,
     );
     if (localPath == null) {
-      _failLoading('该集数未下载');
+      _failLoading(currentL10n.episodeNotDownloaded);
       return;
     }
     _applyResolvedSelection(resolvedEpisode);
@@ -563,14 +566,18 @@ abstract class _VideoPageController with Store implements Disposable {
         } else {
           playerController.danmaku.applyUnavailableDanmakuLoad(result);
           if (result.isFailed) {
-            KazumiDialog.showToast(message: '弹幕加载失败，可手动检索');
+            KazumiDialog.showToast(
+              message: currentL10n.danmakuLoadFailedManualSearch,
+            );
           }
         }
       }
     } catch (e) {
       if (session.isActive && danmakuSession.isActive) {
         playerController.danmaku.finishDanmakuLoad(disableDanmaku: true);
-        KazumiDialog.showToast(message: '弹幕加载失败，可手动检索');
+        KazumiDialog.showToast(
+          message: currentL10n.danmakuLoadFailedManualSearch,
+        );
       }
       KazumiLogger().w('VideoPageController: failed to load danmaku', error: e);
     }
@@ -662,14 +669,14 @@ abstract class _VideoPageController with Store implements Disposable {
       if (session.isStale) {
         return;
       }
-      _failLoading('视频解析超时，请重试');
+      _failLoading(currentL10n.videoParseTimeoutRetry);
     } on VideoSourceCancelledException {
       KazumiLogger().i('VideoPageController: video URL resolution cancelled');
     } catch (e) {
       if (session.isStale) {
         return;
       }
-      _failLoading('视频解析失败：${e.toString()}');
+      _failLoading(currentL10n.videoParseFailed(e.toString()));
     }
   }
 
@@ -821,13 +828,14 @@ OfflineRoadListSnapshot buildOfflineRoadListSnapshot(
     displayRoadToOriginalRoad[displayRoad] = originalRoad;
     originalRoadToDisplayRoad[originalRoad] = displayRoad;
     roads.add(Road(
-      name: originalRoad >= 0
-          ? '播放列表${originalRoad + 1}'
-          : '播放列表${displayRoad + 1}',
+      name: currentL10n.playlistNumber(
+        originalRoad >= 0 ? originalRoad + 1 : displayRoad + 1,
+      ),
       data: roadEpisodes.map((e) => e.episodeNumber.toString()).toList(),
       identifier: roadEpisodes
-          .map((e) =>
-              e.episodeName.isNotEmpty ? e.episodeName : '第${e.episodeNumber}集')
+          .map((e) => e.episodeName.isNotEmpty
+              ? e.episodeName
+              : currentL10n.episodeNumber(e.episodeNumber))
           .toList(),
     ));
   }

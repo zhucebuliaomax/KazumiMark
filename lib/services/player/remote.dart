@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dlna_dart/dlna.dart';
 import 'package:flutter/material.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/services/logging/logger.dart';
 
 class RemotePlay {
@@ -13,7 +14,7 @@ class RemotePlay {
     await KazumiDialog.show(builder: (BuildContext context) {
       return StatefulBuilder(builder: (context, setState) {
         return AlertDialog(
-          title: const Text('远程投屏'),
+          title: Text(currentL10n.remoteCasting),
           content: SingleChildScrollView(
             child: Column(
               children: dlnaDevice,
@@ -26,7 +27,7 @@ class RemotePlay {
                 KazumiDialog.dismiss();
               },
               child: Text(
-                '退出',
+                currentL10n.exit,
                 style: TextStyle(color: Theme.of(context).colorScheme.outline),
               ),
             ),
@@ -34,7 +35,7 @@ class RemotePlay {
                 onPressed: () {
                   setState(() {});
                   KazumiDialog.showToast(
-                    message: '开始搜索',
+                    message: currentL10n.startSearching,
                   );
                   dlna.devices.stream.listen((deviceList) {
                     dlnaDevice = [];
@@ -51,7 +52,9 @@ class RemotePlay {
                             onTap: () {
                               try {
                                 KazumiDialog.showToast(
-                                  message: '尝试投屏至 ${value.info.friendlyName}',
+                                  message: currentL10n.castingToDevice(
+                                    value.info.friendlyName,
+                                  ),
                                 );
                                 DLNADevice(value.info).setUrl(video);
                                 DLNADevice(value.info).play();
@@ -60,7 +63,9 @@ class RemotePlay {
                                     'RemotePlay: failed to cast to device',
                                     error: e);
                                 KazumiDialog.showToast(
-                                  message: 'DLNA 异常: $e \n尝试重新进入 DLNA 投屏或切换设备',
+                                  message: currentL10n.dlnaErrorRetry(
+                                    e.toString(),
+                                  ),
                                 );
                               }
                             }));
@@ -74,7 +79,7 @@ class RemotePlay {
                   // });
                 },
                 child: Text(
-                  '搜索',
+                  currentL10n.search,
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.outline),
                 )),

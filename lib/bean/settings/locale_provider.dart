@@ -17,7 +17,13 @@ Locale effectiveAppLocale(
 
 class LocaleProvider extends ChangeNotifier {
   LocaleProvider()
-      : _preference = GStorage.getSetting(SettingsKeys.localePreference);
+      : _preference = GStorage.getSetting(SettingsKeys.localePreference) {
+    _currentLocale = effectiveAppLocale(_preference);
+  }
+
+  static Locale _currentLocale = const Locale('zh');
+
+  static Locale get currentLocale => _currentLocale;
 
   String _preference;
 
@@ -34,6 +40,7 @@ class LocaleProvider extends ChangeNotifier {
   Future<void> setPreference(String preference) async {
     if (_preference == preference) return;
     _preference = preference;
+    _currentLocale = effectiveAppLocale(preference);
     await GStorage.putSetting(SettingsKeys.localePreference, preference);
     notifyListeners();
   }

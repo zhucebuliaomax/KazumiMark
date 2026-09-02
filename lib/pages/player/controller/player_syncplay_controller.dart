@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/player/controller/player_models.dart';
 import 'package:kazumi/services/logging/logger.dart';
 import 'package:kazumi/services/storage/storage.dart';
@@ -97,7 +98,7 @@ abstract class _PlayerSyncPlayController with Store {
     final parsed = parseSyncPlayEndPoint(syncPlayEndPoint);
     if (parsed == null) {
       KazumiDialog.showToast(
-        message: 'SyncPlay: 服务器地址不合法 $syncPlayEndPoint',
+        message: currentL10n.syncPlayInvalidServer(syncPlayEndPoint),
       );
       KazumiLogger().e('SyncPlay: invalid server address $syncPlayEndPoint');
       return;
@@ -124,10 +125,10 @@ abstract class _PlayerSyncPlayController with Store {
           if (error is SyncplayConnectionException) {
             exitRoom();
             KazumiDialog.showToast(
-              message: 'SyncPlay: 同步中断 $message',
+              message: currentL10n.syncPlayInterrupted(message),
               duration: const Duration(seconds: 5),
               showActionButton: true,
-              actionLabel: '重新连接',
+              actionLabel: currentL10n.reconnect,
               onActionPressed: () => createRoom(room, username, changeEpisode),
             );
           }
@@ -141,24 +142,33 @@ abstract class _PlayerSyncPlayController with Store {
           if (message['type'] == 'init') {
             if (message['username'] == '') {
               KazumiDialog.showToast(
-                  message: 'SyncPlay: 您是当前房间中的唯一用户',
-                  duration: const Duration(seconds: 5));
+                message: currentL10n.syncPlayOnlyUser,
+                duration: const Duration(seconds: 5),
+              );
               setPlayingBangumi();
             } else {
               KazumiDialog.showToast(
-                  message:
-                      'SyncPlay: 您不是当前房间中的唯一用户, 当前以用户 ${message['username']} 进度为准');
+                message: currentL10n.syncPlayFollowingUser(
+                  message['username'].toString(),
+                ),
+              );
             }
           }
           if (message['type'] == 'left') {
             KazumiDialog.showToast(
-                message: 'SyncPlay: ${message['username']} 离开了房间',
-                duration: const Duration(seconds: 5));
+              message: currentL10n.syncPlayUserLeft(
+                message['username'].toString(),
+              ),
+              duration: const Duration(seconds: 5),
+            );
           }
           if (message['type'] == 'joined') {
             KazumiDialog.showToast(
-                message: 'SyncPlay: ${message['username']} 加入了房间',
-                duration: const Duration(seconds: 5));
+              message: currentL10n.syncPlayUserJoined(
+                message['username'].toString(),
+              ),
+              duration: const Duration(seconds: 5),
+            );
           }
         },
       );
@@ -176,9 +186,12 @@ abstract class _PlayerSyncPlayController with Store {
             int episode = int.tryParse(match.group(2) ?? '0') ?? 0;
             if (bangumiID != 0 && episode != 0 && episode != currentEpisode()) {
               KazumiDialog.showToast(
-                  message:
-                      'SyncPlay: ${message['setBy'] ?? 'unknown'} 切换到第 $episode 话',
-                  duration: const Duration(seconds: 3));
+                message: currentL10n.syncPlayEpisodeChanged(
+                  (message['setBy'] ?? currentL10n.unknownUser).toString(),
+                  episode,
+                ),
+                duration: const Duration(seconds: 3),
+              );
               changeEpisode(episode, currentRoad: currentRoad());
             }
           }
@@ -220,15 +233,21 @@ abstract class _PlayerSyncPlayController with Store {
             if (message['paused']) {
               if (message['position'] != 0) {
                 KazumiDialog.showToast(
-                    message: 'SyncPlay: ${message['setBy'] ?? 'unknown'} 暂停了播放',
-                    duration: const Duration(seconds: 3));
+                  message: currentL10n.syncPlayPaused(
+                    (message['setBy'] ?? currentL10n.unknownUser).toString(),
+                  ),
+                  duration: const Duration(seconds: 3),
+                );
                 pause(enableSync: false);
               }
             } else {
               if (message['position'] != 0) {
                 KazumiDialog.showToast(
-                    message: 'SyncPlay: ${message['setBy'] ?? 'unknown'} 开始了播放',
-                    duration: const Duration(seconds: 3));
+                  message: currentL10n.syncPlayStarted(
+                    (message['setBy'] ?? currentL10n.unknownUser).toString(),
+                  ),
+                  duration: const Duration(seconds: 3),
+                );
                 play(enableSync: false);
               }
             }
@@ -267,7 +286,7 @@ abstract class _PlayerSyncPlayController with Store {
       await client.disconnect();
       final message = e is SyncplayException ? e.message : e.toString();
       KazumiDialog.showToast(
-        message: 'SyncPlay: 连接失败 $message',
+        message: currentL10n.syncPlayConnectionFailed(message),
         duration: const Duration(seconds: 5),
       );
     }

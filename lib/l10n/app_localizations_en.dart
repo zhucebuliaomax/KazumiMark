@@ -963,4 +963,468 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get systemActive => 'System';
+
+  @override
+  String get badCertificate => 'The certificate is invalid.';
+
+  @override
+  String get serverErrorRetry => 'Server error. Try again later.';
+
+  @override
+  String get requestCancelledRetry => 'The request was cancelled. Try again.';
+
+  @override
+  String get connectionErrorCheckSettings =>
+      'Connection error. Check your network settings.';
+
+  @override
+  String get connectionTimeoutCheckSettings =>
+      'Connection timed out. Check your network settings.';
+
+  @override
+  String get responseTimeoutRetry => 'The response timed out. Try again later.';
+
+  @override
+  String get sendTimeoutCheckSettings =>
+      'The request timed out while sending. Check your network settings.';
+
+  @override
+  String get responseParseTimeoutRetry =>
+      'Response parsing timed out. Try again later.';
+
+  @override
+  String networkException(String connection) {
+    return '$connection Network error';
+  }
+
+  @override
+  String get responseParseFailed => 'Failed to parse the response';
+
+  @override
+  String get usingMobileData => 'Using mobile data.';
+
+  @override
+  String get usingWifi => 'Using Wi-Fi.';
+
+  @override
+  String get usingEthernet => 'Using Ethernet.';
+
+  @override
+  String get usingVpn => 'Using a VPN.';
+
+  @override
+  String get usingOtherNetwork => 'Using another network.';
+
+  @override
+  String get notConnected => 'Not connected to a network.';
+
+  @override
+  String get enterKeyword => 'Enter a keyword';
+
+  @override
+  String get keywordTooLong => 'The keyword is too long';
+
+  @override
+  String get keywordAlreadyExists => 'This keyword already exists';
+
+  @override
+  String get updateCheckFailedRetry =>
+      'Failed to check for updates. Try again later.';
+
+  @override
+  String get playerLoadFailedTryAnotherSource =>
+      'Loading failed. Try another video source.';
+
+  @override
+  String get noAvailableCache => 'No available cache found';
+
+  @override
+  String get onlineSourceUnavailable =>
+      'The online source is unavailable. Choose another source.';
+
+  @override
+  String get launchingExternalPlayer => 'Opening external player';
+
+  @override
+  String get externalPlayerLaunchFailed => 'Failed to open external player';
+
+  @override
+  String get systemAppPickerUnavailable =>
+      'The system app picker is unavailable';
+
+  @override
+  String get deviceUnsupported => 'This device is not supported yet';
+
+  @override
+  String get ruleUnsupported => 'This rule is not supported yet';
+
+  @override
+  String get downloadService => 'Download service';
+
+  @override
+  String get downloadServiceDescription => 'Background video download service';
+
+  @override
+  String get downloading => 'Downloading';
+
+  @override
+  String get preparing => 'Preparing...';
+
+  @override
+  String get pauseAll => 'Pause all';
+
+  @override
+  String get downloadPaused => 'Downloads paused';
+
+  @override
+  String taskCount(int count) {
+    return '$count tasks';
+  }
+
+  @override
+  String downloadingProgress(int active, int total) {
+    return 'Downloading ($active/$total)';
+  }
+
+  @override
+  String get insufficientStorage => 'Insufficient storage';
+
+  @override
+  String get insufficientStorageRetry =>
+      'Insufficient storage. Free some space and try again.';
+
+  @override
+  String get storagePermissionDenied => 'Storage permission was denied';
+
+  @override
+  String get storageReadOnly => 'Storage is read-only';
+
+  @override
+  String storageErrorMessage(String message) {
+    return 'Storage error: $message';
+  }
+
+  @override
+  String get liveStreamDownloadUnsupported =>
+      'Live streams cannot be downloaded (no valid segments)';
+
+  @override
+  String get m3u8NoSegments =>
+      'No downloadable segments found in the M3U8 playlist';
+
+  @override
+  String segmentDownloadFailed(int count) {
+    return 'Failed to download $count segments';
+  }
+
+  @override
+  String insufficientStorageAvailable(String available) {
+    return 'Insufficient storage (available: $available)';
+  }
+
+  @override
+  String get urlNotM3u8 => 'The URL is not an M3U8 playlist';
+
+  @override
+  String get responseTooLargeNotM3u8 =>
+      'The response is too large to be an M3U8 playlist';
+
+  @override
+  String get timedShutdown => 'Sleep timer';
+
+  @override
+  String get timedShutdownExpired => 'The timer ended and the video was paused';
+
+  @override
+  String timerRestarted(int minutes) {
+    return 'Restarted the $minutes-minute timer';
+  }
+
+  @override
+  String get repeat => 'Repeat';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String hoursAndMinutes(int hours, int minutes) {
+    return '$hours hr $minutes min';
+  }
+
+  @override
+  String hourCount(int hours) {
+    return '$hours hr';
+  }
+
+  @override
+  String minuteCount(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String get customTimer => 'Custom timer';
+
+  @override
+  String get selectValidTime => 'Select a valid duration';
+
+  @override
+  String timedShutdownSet(String duration) {
+    return 'Sleep timer set for $duration';
+  }
+
+  @override
+  String get hoursShort => 'hr';
+
+  @override
+  String get minutesShort => 'min';
+
+  @override
+  String get bangumiDeleteUnsupported =>
+      'Bangumi does not support deleting collections';
+
+  @override
+  String get bangumiDeleteExplanation =>
+      'For safety reasons, Bangumi does not provide a delete API. You can mark the collection as “Dropped” both locally and remotely, or delete it locally and open the website to remove it from Bangumi manually.';
+
+  @override
+  String get openWebPage => 'Open website';
+
+  @override
+  String get markAsAbandoned => 'Mark as dropped';
+
+  @override
+  String get bangumiPageOpenFailed => 'Could not open the Bangumi page';
+
+  @override
+  String get bangumiNotInitializedChangeCancelled =>
+      'Bangumi is not initialized. Sync failed and the status change was cancelled';
+
+  @override
+  String get syncingToBangumi => 'Syncing to Bangumi…';
+
+  @override
+  String get syncedToBangumi => 'Synced to Bangumi';
+
+  @override
+  String get bangumiSyncFailedChangeCancelled =>
+      'Bangumi sync failed and the status change was cancelled';
+
+  @override
+  String bangumiSyncFailedChangeCancelledWithError(String error) {
+    return 'Bangumi sync failed and the status change was cancelled: $error';
+  }
+
+  @override
+  String get webDavCollectSyncDisabled => 'WebDAV collection sync is disabled';
+
+  @override
+  String get webDavDisabledOrInvalid =>
+      'WebDAV sync is disabled or its configuration is invalid';
+
+  @override
+  String webDavConnectionFailed(String error) {
+    return 'WebDAV connection failed: $error';
+  }
+
+  @override
+  String get webDavSyncComplete => 'WebDAV sync complete';
+
+  @override
+  String webDavSyncFailed(String error) {
+    return 'WebDAV sync failed: $error';
+  }
+
+  @override
+  String get webDavUploadComplete => 'WebDAV upload complete';
+
+  @override
+  String webDavUploadFailed(String error) {
+    return 'WebDAV upload failed: $error';
+  }
+
+  @override
+  String get bangumiSyncDisabledEnableInSettings =>
+      'Bangumi sync is disabled. Enable it in Settings first';
+
+  @override
+  String get bangumiSyncNotInitializedCheckToken =>
+      'Bangumi sync is enabled but not initialized. Check the token and try again';
+
+  @override
+  String get bangumiSyncComplete => 'Bangumi sync complete';
+
+  @override
+  String get noSyncDifferences =>
+      'No status differences found; nothing to sync';
+
+  @override
+  String bangumiSyncFailed(String error) {
+    return 'Bangumi sync failed: $error';
+  }
+
+  @override
+  String bangumiAccessFailed(String error) {
+    return 'Could not access Bangumi: $error';
+  }
+
+  @override
+  String get enterBangumiAccessToken => 'Enter a Bangumi Access Token first';
+
+  @override
+  String get bangumiOperationInProgress =>
+      'Bangumi: another operation is in progress. Try again later';
+
+  @override
+  String get bangumiUsernameFailed =>
+      'Bangumi: failed to retrieve the username';
+
+  @override
+  String get syncDisabled => 'Sync is disabled';
+
+  @override
+  String get bangumiSyncInProgress => 'Bangumi sync is already in progress';
+
+  @override
+  String get startingBangumiSync => 'Starting Bangumi status sync';
+
+  @override
+  String get uploadingLocalStatus => 'Uploading new local statuses';
+
+  @override
+  String get uploadLocalStatusFailed => 'Failed to upload new local statuses';
+
+  @override
+  String bangumiItemUploadFailed(int id) {
+    return 'Sync failed: could not upload item $id to Bangumi';
+  }
+
+  @override
+  String get fillingMissingLocalStatus => 'Adding statuses missing locally';
+
+  @override
+  String get resolvingConflictsLocalFirst =>
+      'Resolving conflicts with local data taking priority';
+
+  @override
+  String get resolvingConflictsBangumiFirst =>
+      'Resolving conflicts with Bangumi taking priority';
+
+  @override
+  String get bangumiStatusSyncComplete => 'Bangumi status sync complete';
+
+  @override
+  String get enterWebDavUrl => 'Enter a WebDAV URL first';
+
+  @override
+  String episodeNumber(int number) {
+    return 'Episode $number';
+  }
+
+  @override
+  String get episodeParseFailed => 'Could not parse the episode';
+
+  @override
+  String get episodeNotDownloaded => 'This episode has not been downloaded';
+
+  @override
+  String get danmakuLoadFailedManualSearch =>
+      'Failed to load danmaku; you can search manually';
+
+  @override
+  String get videoParseTimeoutRetry => 'Video resolution timed out. Try again';
+
+  @override
+  String videoParseFailed(String error) {
+    return 'Video resolution failed: $error';
+  }
+
+  @override
+  String playlistNumber(int number) {
+    return 'Playlist $number';
+  }
+
+  @override
+  String syncPlayInvalidServer(String endpoint) {
+    return 'SyncPlay: invalid server address $endpoint';
+  }
+
+  @override
+  String syncPlayInterrupted(String message) {
+    return 'SyncPlay: synchronization interrupted: $message';
+  }
+
+  @override
+  String get reconnect => 'Reconnect';
+
+  @override
+  String get syncPlayOnlyUser => 'SyncPlay: you are the only user in this room';
+
+  @override
+  String syncPlayFollowingUser(String username) {
+    return 'SyncPlay: following $username\'s playback position';
+  }
+
+  @override
+  String syncPlayUserLeft(String username) {
+    return 'SyncPlay: $username left the room';
+  }
+
+  @override
+  String syncPlayUserJoined(String username) {
+    return 'SyncPlay: $username joined the room';
+  }
+
+  @override
+  String get unknownUser => 'Unknown user';
+
+  @override
+  String syncPlayEpisodeChanged(String username, int episode) {
+    return 'SyncPlay: $username switched to episode $episode';
+  }
+
+  @override
+  String syncPlayPaused(String username) {
+    return 'SyncPlay: $username paused playback';
+  }
+
+  @override
+  String syncPlayStarted(String username) {
+    return 'SyncPlay: $username started playback';
+  }
+
+  @override
+  String syncPlayConnectionFailed(String message) {
+    return 'SyncPlay: connection failed: $message';
+  }
+
+  @override
+  String playerInternalError(String error, String url) {
+    return 'Internal player error: $error $url';
+  }
+
+  @override
+  String get mobileDataLowMemoryMode =>
+      'Using mobile data; low-memory mode was temporarily enabled to reduce caching';
+
+  @override
+  String get remoteCasting => 'Cast to device';
+
+  @override
+  String get exit => 'Exit';
+
+  @override
+  String get startSearching => 'Searching for devices';
+
+  @override
+  String castingToDevice(String device) {
+    return 'Trying to cast to $device';
+  }
+
+  @override
+  String dlnaErrorRetry(String error) {
+    return 'DLNA error: $error\nReopen casting or try another device';
+  }
+
+  @override
+  String get search => 'Search';
 }

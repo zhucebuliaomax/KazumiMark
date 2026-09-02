@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
+import 'package:kazumi/l10n/l10n.dart';
 import 'package:kazumi/pages/player/controller/player_debug_controller.dart';
 import 'package:kazumi/pages/player/controller/player_super_resolution.dart';
 import 'package:kazumi/services/shaders/shader_asset_service.dart';
@@ -436,9 +437,13 @@ abstract class _PlayerPlaybackController with Store {
                 message: actionableMessage, showActionButton: true);
           } else if (showPlayerError) {
             KazumiDialog.showToast(
-                message: '播放器内部错误 ${event.toString()} ${videoUrl()}',
-                duration: const Duration(seconds: 5),
-                showActionButton: true);
+              message: currentL10n.playerInternalError(
+                event.toString(),
+                videoUrl(),
+              ),
+              duration: const Duration(seconds: 5),
+              showActionButton: true,
+            );
           }
         }
         KazumiLogger().e('PlayerController: Player intent error ${videoUrl()}',
@@ -469,7 +474,9 @@ abstract class _PlayerPlaybackController with Store {
       }
 
       if (cachePolicy.networkForced) {
-        KazumiDialog.showToast(message: '正在使用移动数据，已临时启用低内存模式以减少缓存');
+        KazumiDialog.showToast(
+          message: currentL10n.mobileDataLowMemoryMode,
+        );
       }
 
       return player;

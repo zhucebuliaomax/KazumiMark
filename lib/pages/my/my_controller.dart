@@ -11,6 +11,7 @@ import 'package:kazumi/services/logging/logger.dart';
 import 'package:mobx/mobx.dart';
 import 'package:kazumi/services/storage/storage.dart';
 import 'package:kazumi/services/update/auto_updater.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 part 'my_controller.g.dart';
 
@@ -128,15 +129,15 @@ abstract class _MyController with Store {
 
   void addShieldList(String item) {
     if (item.isEmpty) {
-      KazumiDialog.showToast(message: '请输入关键词');
+      KazumiDialog.showToast(message: currentL10n.enterKeyword);
       return;
     }
     if (item.length > 64) {
-      KazumiDialog.showToast(message: '关键词过长');
+      KazumiDialog.showToast(message: currentL10n.keywordTooLong);
       return;
     }
     if (shieldList.contains(item)) {
-      KazumiDialog.showToast(message: '已存在该关键词');
+      KazumiDialog.showToast(message: currentL10n.keywordAlreadyExists);
       return;
     }
     shieldList.add(item);
@@ -164,7 +165,7 @@ abstract class _MyController with Store {
     } catch (err) {
       KazumiLogger().e('Update: check update failed', error: err);
       if (type == 'manual') {
-        KazumiDialog.showToast(message: '检查更新失败，请稍后重试');
+        KazumiDialog.showToast(message: currentL10n.updateCheckFailedRetry);
       }
       return false;
     }

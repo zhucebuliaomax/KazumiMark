@@ -7,6 +7,7 @@ import 'package:kazumi/plugins/plugins_controller.dart';
 import 'package:kazumi/services/logging/logger.dart';
 import 'package:kazumi/services/plugin/rule_engine_models.dart'
     show RuleCancelToken;
+import 'package:kazumi/l10n/l10n.dart';
 
 sealed class HistoryPlaybackResult {
   const HistoryPlaybackResult();
@@ -44,13 +45,13 @@ class HistoryPlaybackService {
         HistoryEntryKind.offline) {
       final args = _offlineArgs(history);
       return args == null
-          ? const HistoryPlaybackUnavailable('未找到可用缓存')
+          ? HistoryPlaybackUnavailable(currentL10n.noAvailableCache)
           : HistoryPlaybackReady(args);
     }
 
     final args = await _onlineArgs(history, cancelToken);
     return args == null
-        ? const HistoryPlaybackUnavailable('在线源不可用，请重新选择播放源')
+        ? HistoryPlaybackUnavailable(currentL10n.onlineSourceUnavailable)
         : HistoryPlaybackReady(args);
   }
 

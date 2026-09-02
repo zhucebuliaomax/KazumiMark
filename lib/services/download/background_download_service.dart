@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:kazumi/services/logging/logger.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 /// Android 后台下载服务
 ///
@@ -33,8 +34,8 @@ class BackgroundDownloadService {
     FlutterForegroundTask.init(
       androidNotificationOptions: AndroidNotificationOptions(
         channelId: 'kazumi_download_channel',
-        channelName: '下载服务',
-        channelDescription: '视频下载后台服务',
+        channelName: currentL10n.downloadService,
+        channelDescription: currentL10n.downloadServiceDescription,
         channelImportance: NotificationChannelImportance.LOW,
         priority: NotificationPriority.LOW,
         onlyAlertOnce: true,
@@ -104,10 +105,10 @@ class BackgroundDownloadService {
 
     try {
       final result = await FlutterForegroundTask.startService(
-        notificationTitle: '正在下载',
-        notificationText: '准备中...',
+        notificationTitle: currentL10n.downloading,
+        notificationText: currentL10n.preparing,
         notificationButtons: [
-          const NotificationButton(id: 'pause_all', text: '暂停全部'),
+          NotificationButton(id: 'pause_all', text: currentL10n.pauseAll),
         ],
         callback: _backgroundCallback,
       );
@@ -169,11 +170,11 @@ class BackgroundDownloadService {
     String text;
 
     if (activeCount == 0) {
-      title = '下载已暂停';
-      text = '共 $totalCount 个任务';
+      title = currentL10n.downloadPaused;
+      text = currentL10n.taskCount(totalCount);
     } else {
       final percent = (overallProgress * 100).toInt();
-      title = '正在下载 ($activeCount/$totalCount)';
+      title = currentL10n.downloadingProgress(activeCount, totalCount);
       text = '$percent% · $speedText';
     }
 

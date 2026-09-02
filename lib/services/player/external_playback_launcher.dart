@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:kazumi/bean/dialog/dialog_helper.dart';
 import 'package:kazumi/services/player/external_player.dart';
+import 'package:kazumi/l10n/l10n.dart';
 
 class ExternalPlaybackLauncher {
   final String Function() videoUrl;
@@ -20,11 +21,11 @@ class ExternalPlaybackLauncher {
           currentVideoUrl, 'video/mp4')) {
         KazumiDialog.dismiss();
         KazumiDialog.showToast(
-          message: '尝试唤起外部播放器',
+          message: currentL10n.launchingExternalPlayer,
         );
       } else {
         KazumiDialog.showToast(
-          message: '唤起外部播放器失败',
+          message: currentL10n.externalPlayerLaunchFailed,
         );
       }
     } else if (Platform.isMacOS || Platform.isIOS) {
@@ -32,11 +33,11 @@ class ExternalPlaybackLauncher {
           currentVideoUrl, currentReferer)) {
         KazumiDialog.dismiss();
         KazumiDialog.showToast(
-          message: '尝试唤起外部播放器',
+          message: currentL10n.launchingExternalPlayer,
         );
       } else {
         KazumiDialog.showToast(
-          message: '唤起外部播放器失败',
+          message: currentL10n.externalPlayerLaunchFailed,
         );
       }
     } else if (Platform.isLinux && currentReferer.isEmpty) {
@@ -45,22 +46,24 @@ class ExternalPlaybackLauncher {
           await ExternalPlayer.launchLinuxDesktopPlayer(currentVideoUrl);
       switch (result) {
         case LinuxExternalPlayerResult.launched:
-          KazumiDialog.showToast(message: '尝试唤起外部播放器');
+          KazumiDialog.showToast(message: currentL10n.launchingExternalPlayer);
         case LinuxExternalPlayerResult.cancelled:
           break;
         case LinuxExternalPlayerResult.unavailable:
-          KazumiDialog.showToast(message: '系统应用选择器不可用');
+          KazumiDialog.showToast(
+              message: currentL10n.systemAppPickerUnavailable);
         case LinuxExternalPlayerResult.failed:
-          KazumiDialog.showToast(message: '唤起外部播放器失败');
+          KazumiDialog.showToast(
+              message: currentL10n.externalPlayerLaunchFailed);
       }
     } else {
       if (currentReferer.isEmpty) {
         KazumiDialog.showToast(
-          message: '暂不支持该设备',
+          message: currentL10n.deviceUnsupported,
         );
       } else {
         KazumiDialog.showToast(
-          message: '暂不支持该规则',
+          message: currentL10n.ruleUnsupported,
         );
       }
     }

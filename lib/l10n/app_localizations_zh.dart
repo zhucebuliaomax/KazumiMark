@@ -907,4 +907,445 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get systemActive => '系统';
+
+  @override
+  String get badCertificate => '证书有误！';
+
+  @override
+  String get serverErrorRetry => '服务器异常，请稍后重试！';
+
+  @override
+  String get requestCancelledRetry => '请求已被取消，请重新请求';
+
+  @override
+  String get connectionErrorCheckSettings => '连接错误，请检查网络设置';
+
+  @override
+  String get connectionTimeoutCheckSettings => '网络连接超时，请检查网络设置';
+
+  @override
+  String get responseTimeoutRetry => '响应超时，请稍后重试！';
+
+  @override
+  String get sendTimeoutCheckSettings => '发送请求超时，请检查网络设置';
+
+  @override
+  String get responseParseTimeoutRetry => '响应解析超时，请稍后重试！';
+
+  @override
+  String networkException(String connection) {
+    return '$connection 网络异常';
+  }
+
+  @override
+  String get responseParseFailed => '响应解析失败';
+
+  @override
+  String get usingMobileData => '正在使用移动流量';
+
+  @override
+  String get usingWifi => '正在使用 Wi-Fi';
+
+  @override
+  String get usingEthernet => '正在使用局域网';
+
+  @override
+  String get usingVpn => '正在使用代理网络';
+
+  @override
+  String get usingOtherNetwork => '正在使用其他网络';
+
+  @override
+  String get notConnected => '未连接到任何网络';
+
+  @override
+  String get enterKeyword => '请输入关键词';
+
+  @override
+  String get keywordTooLong => '关键词过长';
+
+  @override
+  String get keywordAlreadyExists => '已存在该关键词';
+
+  @override
+  String get updateCheckFailedRetry => '检查更新失败，请稍后重试';
+
+  @override
+  String get playerLoadFailedTryAnotherSource => '加载失败，请尝试更换其他视频来源';
+
+  @override
+  String get noAvailableCache => '未找到可用缓存';
+
+  @override
+  String get onlineSourceUnavailable => '在线源不可用，请重新选择播放源';
+
+  @override
+  String get launchingExternalPlayer => '尝试唤起外部播放器';
+
+  @override
+  String get externalPlayerLaunchFailed => '唤起外部播放器失败';
+
+  @override
+  String get systemAppPickerUnavailable => '系统应用选择器不可用';
+
+  @override
+  String get deviceUnsupported => '暂不支持该设备';
+
+  @override
+  String get ruleUnsupported => '暂不支持该规则';
+
+  @override
+  String get downloadService => '下载服务';
+
+  @override
+  String get downloadServiceDescription => '视频下载后台服务';
+
+  @override
+  String get downloading => '正在下载';
+
+  @override
+  String get preparing => '准备中...';
+
+  @override
+  String get pauseAll => '暂停全部';
+
+  @override
+  String get downloadPaused => '下载已暂停';
+
+  @override
+  String taskCount(int count) {
+    return '共 $count 个任务';
+  }
+
+  @override
+  String downloadingProgress(int active, int total) {
+    return '正在下载（$active/$total）';
+  }
+
+  @override
+  String get insufficientStorage => '存储空间不足';
+
+  @override
+  String get insufficientStorageRetry => '存储空间不足，请清理后重试';
+
+  @override
+  String get storagePermissionDenied => '存储权限被拒绝';
+
+  @override
+  String get storageReadOnly => '存储为只读，无法写入';
+
+  @override
+  String storageErrorMessage(String message) {
+    return '存储错误：$message';
+  }
+
+  @override
+  String get liveStreamDownloadUnsupported => '不支持下载直播流（无有效分片）';
+
+  @override
+  String get m3u8NoSegments => 'M3U8 中未找到可下载的分片';
+
+  @override
+  String segmentDownloadFailed(int count) {
+    return '$count 个分片下载失败';
+  }
+
+  @override
+  String insufficientStorageAvailable(String available) {
+    return '存储空间不足（可用：$available）';
+  }
+
+  @override
+  String get urlNotM3u8 => 'URL 不是 M3U8 播放列表';
+
+  @override
+  String get responseTooLargeNotM3u8 => '响应过大，不是 M3U8 播放列表';
+
+  @override
+  String get timedShutdown => '定时关闭';
+
+  @override
+  String get timedShutdownExpired => '定时时间已到，视频已暂停';
+
+  @override
+  String timerRestarted(int minutes) {
+    return '已重新开始 $minutes 分钟定时';
+  }
+
+  @override
+  String get repeat => '重复';
+
+  @override
+  String get close => '关闭';
+
+  @override
+  String hoursAndMinutes(int hours, int minutes) {
+    return '$hours 小时 $minutes 分钟';
+  }
+
+  @override
+  String hourCount(int hours) {
+    return '$hours 小时';
+  }
+
+  @override
+  String minuteCount(int minutes) {
+    return '$minutes 分钟';
+  }
+
+  @override
+  String get customTimer => '自定义定时';
+
+  @override
+  String get selectValidTime => '请选择有效的时间';
+
+  @override
+  String timedShutdownSet(String duration) {
+    return '已设置 $duration 后定时关闭';
+  }
+
+  @override
+  String get hoursShort => '时';
+
+  @override
+  String get minutesShort => '分';
+
+  @override
+  String get bangumiDeleteUnsupported => 'Bangumi 不支持删除收藏';
+
+  @override
+  String get bangumiDeleteExplanation =>
+      '因为安全考虑，Bangumi 未提供删除接口。您可以把本地和远端收藏标记为“抛弃”，或仅删除本地收藏并打开网页手动删除 Bangumi 数据。';
+
+  @override
+  String get openWebPage => '打开网页';
+
+  @override
+  String get markAsAbandoned => '标记为抛弃';
+
+  @override
+  String get bangumiPageOpenFailed => '无法打开 Bangumi 网页';
+
+  @override
+  String get bangumiNotInitializedChangeCancelled =>
+      'Bangumi 未初始化，同步失败，已取消本次状态修改';
+
+  @override
+  String get syncingToBangumi => '正在同步到 Bangumi…';
+
+  @override
+  String get syncedToBangumi => '已同步到 Bangumi';
+
+  @override
+  String get bangumiSyncFailedChangeCancelled => '同步到 Bangumi 失败，已取消本次状态修改';
+
+  @override
+  String bangumiSyncFailedChangeCancelledWithError(String error) {
+    return '同步到 Bangumi 失败，已取消本次状态修改：$error';
+  }
+
+  @override
+  String get webDavCollectSyncDisabled => '未开启 WebDAV 收藏同步';
+
+  @override
+  String get webDavDisabledOrInvalid => '未开启 WebDAV 同步或配置无效';
+
+  @override
+  String webDavConnectionFailed(String error) {
+    return 'WebDAV 连接失败：$error';
+  }
+
+  @override
+  String get webDavSyncComplete => 'WebDAV 同步完成';
+
+  @override
+  String webDavSyncFailed(String error) {
+    return 'WebDAV 同步失败：$error';
+  }
+
+  @override
+  String get webDavUploadComplete => 'WebDAV 上传完成';
+
+  @override
+  String webDavUploadFailed(String error) {
+    return 'WebDAV 上传失败：$error';
+  }
+
+  @override
+  String get bangumiSyncDisabledEnableInSettings => '未开启 Bangumi 同步，请先在设置中启用';
+
+  @override
+  String get bangumiSyncNotInitializedCheckToken =>
+      'Bangumi 同步已开启但未初始化，请检查 Token 后重试';
+
+  @override
+  String get bangumiSyncComplete => 'Bangumi 同步完成';
+
+  @override
+  String get noSyncDifferences => '未发现状态差异，无需同步';
+
+  @override
+  String bangumiSyncFailed(String error) {
+    return 'Bangumi 同步失败：$error';
+  }
+
+  @override
+  String bangumiAccessFailed(String error) {
+    return 'Bangumi 访问失败：$error';
+  }
+
+  @override
+  String get enterBangumiAccessToken => '请先填写 Bangumi Access Token';
+
+  @override
+  String get bangumiOperationInProgress => 'Bangumi：当前有操作正在进行，请稍后再试';
+
+  @override
+  String get bangumiUsernameFailed => 'Bangumi：获取用户名失败';
+
+  @override
+  String get syncDisabled => '同步已关闭';
+
+  @override
+  String get bangumiSyncInProgress => 'Bangumi 正在同步';
+
+  @override
+  String get startingBangumiSync => '开始同步 Bangumi 状态';
+
+  @override
+  String get uploadingLocalStatus => '正在上传本地新增状态';
+
+  @override
+  String get uploadLocalStatusFailed => '上传本地新增状态失败';
+
+  @override
+  String bangumiItemUploadFailed(int id) {
+    return '同步失败：条目 $id 上传到 Bangumi 失败';
+  }
+
+  @override
+  String get fillingMissingLocalStatus => '正在补全本地缺失状态';
+
+  @override
+  String get resolvingConflictsLocalFirst => '本地优先：正在处理冲突状态';
+
+  @override
+  String get resolvingConflictsBangumiFirst => 'Bangumi 优先：正在处理冲突状态';
+
+  @override
+  String get bangumiStatusSyncComplete => 'Bangumi 状态同步完成';
+
+  @override
+  String get enterWebDavUrl => '请先填写 WebDAV URL';
+
+  @override
+  String episodeNumber(int number) {
+    return '第$number集';
+  }
+
+  @override
+  String get episodeParseFailed => '集数解析失败';
+
+  @override
+  String get episodeNotDownloaded => '该集数未下载';
+
+  @override
+  String get danmakuLoadFailedManualSearch => '弹幕加载失败，可手动检索';
+
+  @override
+  String get videoParseTimeoutRetry => '视频解析超时，请重试';
+
+  @override
+  String videoParseFailed(String error) {
+    return '视频解析失败：$error';
+  }
+
+  @override
+  String playlistNumber(int number) {
+    return '播放列表$number';
+  }
+
+  @override
+  String syncPlayInvalidServer(String endpoint) {
+    return 'SyncPlay：服务器地址不合法 $endpoint';
+  }
+
+  @override
+  String syncPlayInterrupted(String message) {
+    return 'SyncPlay：同步中断 $message';
+  }
+
+  @override
+  String get reconnect => '重新连接';
+
+  @override
+  String get syncPlayOnlyUser => 'SyncPlay：您是当前房间中的唯一用户';
+
+  @override
+  String syncPlayFollowingUser(String username) {
+    return 'SyncPlay：当前以用户 $username 的进度为准';
+  }
+
+  @override
+  String syncPlayUserLeft(String username) {
+    return 'SyncPlay：$username 离开了房间';
+  }
+
+  @override
+  String syncPlayUserJoined(String username) {
+    return 'SyncPlay：$username 加入了房间';
+  }
+
+  @override
+  String get unknownUser => '未知用户';
+
+  @override
+  String syncPlayEpisodeChanged(String username, int episode) {
+    return 'SyncPlay：$username 切换到第 $episode 话';
+  }
+
+  @override
+  String syncPlayPaused(String username) {
+    return 'SyncPlay：$username 暂停了播放';
+  }
+
+  @override
+  String syncPlayStarted(String username) {
+    return 'SyncPlay：$username 开始了播放';
+  }
+
+  @override
+  String syncPlayConnectionFailed(String message) {
+    return 'SyncPlay：连接失败 $message';
+  }
+
+  @override
+  String playerInternalError(String error, String url) {
+    return '播放器内部错误：$error $url';
+  }
+
+  @override
+  String get mobileDataLowMemoryMode => '正在使用移动数据，已临时启用低内存模式以减少缓存';
+
+  @override
+  String get remoteCasting => '远程投屏';
+
+  @override
+  String get exit => '退出';
+
+  @override
+  String get startSearching => '开始搜索';
+
+  @override
+  String castingToDevice(String device) {
+    return '尝试投屏至 $device';
+  }
+
+  @override
+  String dlnaErrorRetry(String error) {
+    return 'DLNA 异常：$error\n请尝试重新进入 DLNA 投屏或切换设备';
+  }
+
+  @override
+  String get search => '搜索';
 }
